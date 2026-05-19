@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { BookOpen } from "lucide-react";
 import { bookService } from "@/lib/services/bookService";
 import { Book } from "@/types";
@@ -8,19 +8,32 @@ import { BookCard } from "@/components/books/BookCard";
 import { EmptyState } from "@/components/books/EmptyState";
 import { Skeleton } from "@/components/ui/skeleton";
 
+const PAGE_SIZE = 24;
+
 export default function AllBooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    bookService.getAllBooks(0, 100).then((data) => {
+    bookService.getAllBooks(0, PAGE_SIZE).then((data) => {
       setBooks(data);
+      setHasMore(data.length === PAGE_SIZE);
       setLoading(false);
     });
   }, []);
 
+  const loadMore = useCallback(async () => {
+    setLoadingMore(true);
+    const data = await bookService.getAllBooks(books.length, PAGE_SIZE);
+    setBooks((prev) => [...prev, ...data]);
+    setHasMore(data.length === PAGE_SIZE);
+    setLoadingMore(false);
+  }, [books.length]);
+
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-jaryq-bg-main">
       <div className="max-w-7xl mx-auto px-8 py-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
@@ -32,11 +45,11 @@ export default function AllBooksPage() {
 
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-black text-[#0F0F0F]">Барлық кітаптар</h1>
-            <p className="text-[#5C5C5C] mt-1">Толық каталог</p>
+            <h1 className="text-3xl font-black text-jaryq-text-primary">Барлық кітаптар</h1>
+            <p className="text-jaryq-text-muted mt-1">Толық каталог</p>
           </div>
           {!loading && books.length > 0 && (
-            <p className="text-sm text-[#888888] shrink-0">{books.length} кітап</p>
+            <p className="text-sm text-jaryq-text-muted shrink-0">{books.length} кітап</p>
           )}
         </div>
 
@@ -45,7 +58,7 @@ export default function AllBooksPage() {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
               {Array.from({ length: 12 }).map((_, i) => (
                 <div key={i} className="space-y-2">
-                  <Skeleton className="aspect-[3/4] rounded-xl" />
+                  <Skeleton className="aspect-3/4 rounded-xl" />
                   <Skeleton className="h-4 w-3/4 rounded" />
                   <Skeleton className="h-3 w-1/2 rounded" />
                 </div>
@@ -55,16 +68,30 @@ export default function AllBooksPage() {
             <EmptyState
               title="Кітап табылмады"
               description="Каталог бос."
-              icon={<BookOpen className="text-[#8B5CF6]" size={36} />}
+              icon={<BookOpen className="text-violet-500" size={36} />}
             />
           ) : (
-            <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
-              {books.map((book) => (
-                <li key={book.id}>
-                  <BookCard book={book} />
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+                {books.map((book) => (
+                  <li key={book.id}>
+                    <BookCard book={book} />
+                  </li>
+                ))}
+              </ul>
+
+              {hasMore && (
+                <div className="flex justify-center mt-10">
+                  <button
+                    onClick={loadMore}
+                    disabled={loadingMore}
+                    className="px-8 py-3 rounded-xl bg-jaryq-bg-card border border-jaryq-border-light text-jaryq-text-primary font-semibold hover:border-jaryq-primary hover:text-jaryq-primary transition-all disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+                  >
+                    {loadingMore ? "Жүктелуде…" : "Көбірек жүктеу"}
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

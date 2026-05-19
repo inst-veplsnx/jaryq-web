@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useId } from "react";
+import { memo, useState, useEffect, useRef, useId } from "react";
 import { ChevronDown, List } from "lucide-react";
 import {
   Play,
@@ -11,6 +11,7 @@ import {
   RotateCw,
 } from "lucide-react";
 import { usePlayerStore } from "@/store/playerStore";
+import { useSettingsStore } from "@/store/settingsStore";
 import { howlerService } from "@/lib/audio/howlerService";
 import { formatTime } from "@/lib/utils";
 import { CoverImage } from "@/components/books/CoverImage";
@@ -25,7 +26,7 @@ interface FullPlayerProps {
   cycleSpeed: () => void;
 }
 
-export function FullPlayer({
+export const FullPlayer = memo(function FullPlayer({
   onClose,
   onLoadChapter,
   togglePlay,
@@ -33,9 +34,10 @@ export function FullPlayer({
   skipNext,
   cycleSpeed,
 }: FullPlayerProps) {
-  const { currentBook, currentChapter, chapterIndex, isPlaying, speed, position, duration, chapters } =
+  const { currentBook, currentChapter, chapterIndex, isPlaying, position, duration, chapters } =
     usePlayerStore();
   const store = usePlayerStore();
+  const { speed } = useSettingsStore();
   const [showChapters, setShowChapters] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
@@ -288,4 +290,4 @@ export function FullPlayer({
       )}
     </div>
   );
-}
+});

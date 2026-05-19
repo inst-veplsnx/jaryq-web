@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import Link from "next/link";
 import { CoverImage } from "./CoverImage";
 import { Book } from "@/types";
@@ -11,7 +12,7 @@ interface BookCardProps {
   progress?: number;
 }
 
-export function BookCard({ book, progress }: BookCardProps) {
+export const BookCard = memo(function BookCard({ book, progress }: BookCardProps) {
   const progressPct =
     progress !== undefined && progress > 0 ? Math.min(100, Math.round(progress)) : null;
   const ariaLabel = [
@@ -90,4 +91,4 @@ export function BookCard({ book, progress }: BookCardProps) {
       </div>
     </Link>
   );
-}
+});

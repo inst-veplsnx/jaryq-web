@@ -17,11 +17,12 @@ interface BookDetailProps {
 
 export function BookDetail({ book, chapters }: BookDetailProps) {
   const { user } = useAuthStore();
-  const playerStore = usePlayerStore();
+  const isPlayerLoading = usePlayerStore((s) => s.isLoading);
+  const currentChapterId = usePlayerStore((s) => s.currentChapter?.id ?? null);
+  const loadChapter = usePlayerStore((s) => s.loadChapter);
   const [isFavorite, setIsFavorite] = useState(false);
   const [favLoading, setFavLoading] = useState(false);
   const [progress, setProgress] = useState<UserProgress | null>(null);
-  const [isLaunching, setIsLaunching] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -47,41 +48,29 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
 
   const launchPlayer = useCallback(
     (chapterIndex = 0, startPosition = 0) => {
-      setIsLaunching(true);
-      playerStore.set({
-        currentBook: book,
-        chapters,
-        chapterIndex,
-        isLoading: true,
-      });
-
-      // Trigger load via the global function exposed by PlayerBar
-      const loadFn = (window as unknown as Record<string, (i: number, p: number) => void>).__jaryq_loadChapter;
-      if (loadFn) {
-        loadFn(chapterIndex, startPosition);
-      }
-      setIsLaunching(false);
+      loadChapter(book, chapters, chapterIndex, startPosition);
     },
-    [book, chapters, playerStore]
+    [book, chapters, loadChapter]
   );
 
   const resumeIndex = progress
     ? chapters.findIndex((c) => c.chapter_number === progress.chapter_number)
     : -1;
-  const resumeChapter =
-    resumeIndex >= 0 ? chapters[resumeIndex] : null;
+  const resumeChapter = resumeIndex >= 0 ? chapters[resumeIndex] : null;
 
   const progressPercent = resumeChapter
     ? (progress!.position / (resumeChapter.duration || 1)) * 100
     : 0;
 
+  const isLaunching = isPlayerLoading;
+
   return (
-    <article className="min-h-screen bg-[#F5F5F5]">
+    <article className="min-h-screen bg-jaryq-bg-main">
       {/* Hero */}
-      <header className="bg-white border-b border-[#E8E8E8]">
+      <header className="bg-jaryq-bg-card border-b border-jaryq-border-light">
         <div className="max-w-3xl mx-auto px-6 py-8">
           <div className="flex gap-6">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <CoverImage
                 src={book.cover_url}
                 alt=""
@@ -92,31 +81,31 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
             </div>
             <div className="flex-1 min-w-0">
               {book.genre && (
-                <span className="text-xs font-bold text-[#F97316] uppercase tracking-widest">
+                <span className="text-xs font-bold text-jaryq-primary uppercase tracking-widest">
                   {book.genre.name}
                 </span>
               )}
-              <h1 className="text-2xl font-black text-[#0F0F0F] mt-1 leading-tight">
+              <h1 className="text-2xl font-black text-jaryq-text-primary mt-1 leading-tight">
                 {book.title}
               </h1>
-              <p className="text-[#3B3B3B] font-medium mt-1">
+              <p className="text-jaryq-text-secondary font-medium mt-1">
                 <span className="sr-only">Автор: </span>
                 {book.author}
               </p>
               {book.narrator && (
-                <p className="text-[#5C5C5C] text-sm italic mt-0.5">
+                <p className="text-jaryq-text-muted text-sm italic mt-0.5">
                   Диктор: {book.narrator}
                 </p>
               )}
               <div className="flex items-center gap-3 mt-3">
                 {book.total_duration && (
-                  <span className="text-sm text-[#5C5C5C]">
+                  <span className="text-sm text-jaryq-text-muted">
                     <span className="sr-only">Ұзақтығы: </span>
                     {formatDuration(book.total_duration)}
                   </span>
                 )}
                 {book.total_chapters && (
-                  <span className="text-sm text-[#5C5C5C]">
+                  <span className="text-sm text-jaryq-text-muted">
                     {book.total_chapters} тарау
                   </span>
                 )}
@@ -126,7 +115,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
               {progress && resumeChapter && (
                 <div className="mt-3">
                   <div
-                    className="h-1.5 bg-[#E8E8E8] rounded-full overflow-hidden w-48"
+                    className="h-1.5 bg-jaryq-border-light rounded-full overflow-hidden w-48"
                     role="progressbar"
                     aria-label="Тыңдау прогресі"
                     aria-valuemin={0}
@@ -134,11 +123,11 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                     aria-valuenow={Math.round(progressPercent)}
                   >
                     <div
-                      className="h-full bg-[#F97316] rounded-full"
+                      className="h-full bg-jaryq-primary rounded-full"
                       style={{ width: `${progressPercent}%` }}
                     />
                   </div>
-                  <p className="text-xs text-[#5C5C5C] mt-1">
+                  <p className="text-xs text-jaryq-text-muted mt-1">
                     {resumeChapter.chapter_number}-тарау •{" "}
                     {formatTime(progress.position)} өткен
                   </p>
@@ -152,12 +141,10 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
             {progress && resumeIndex >= 0 ? (
               <>
                 <button
-                  onClick={() =>
-                    launchPlayer(resumeIndex, progress.position)
-                  }
+                  onClick={() => launchPlayer(resumeIndex, progress.position)}
                   disabled={isLaunching || chapters.length === 0}
                   aria-busy={isLaunching || undefined}
-                  className="flex items-center gap-2 bg-[#F97316] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#EA580C] transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] focus-visible:ring-offset-2"
+                  className="flex items-center gap-2 bg-jaryq-primary text-white font-bold px-6 py-3 rounded-xl hover:bg-jaryq-primary-dark transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
                 >
                   {isLaunching ? (
                     <Loader2 size={18} className="animate-spin" aria-hidden="true" />
@@ -168,7 +155,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                 </button>
                 <button
                   onClick={() => launchPlayer(0, 0)}
-                  className="flex items-center gap-2 bg-white text-[#0F0F0F] font-semibold px-5 py-3 rounded-xl border border-[#E8E8E8] hover:border-[#F97316] hover:text-[#F97316] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] focus-visible:ring-offset-2"
+                  className="flex items-center gap-2 bg-jaryq-bg-card text-jaryq-text-primary font-semibold px-5 py-3 rounded-xl border border-jaryq-border-light hover:border-jaryq-primary hover:text-jaryq-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
                 >
                   Басынан тыңдау
                 </button>
@@ -178,7 +165,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                 onClick={() => launchPlayer(0, 0)}
                 disabled={isLaunching || chapters.length === 0}
                 aria-busy={isLaunching || undefined}
-                className="flex items-center gap-2 bg-[#F97316] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#EA580C] transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] focus-visible:ring-offset-2"
+                className="flex items-center gap-2 bg-jaryq-primary text-white font-bold px-6 py-3 rounded-xl hover:bg-jaryq-primary-dark transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
               >
                 {isLaunching ? (
                   <Loader2 size={18} className="animate-spin" aria-hidden="true" />
@@ -194,10 +181,10 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
               disabled={favLoading || !user}
               aria-pressed={isFavorite}
               className={cn(
-                "flex items-center gap-2 font-semibold px-5 py-3 rounded-xl border transition-all disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] focus-visible:ring-offset-2",
+                "flex items-center gap-2 font-semibold px-5 py-3 rounded-xl border transition-all disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2",
                 isFavorite
-                  ? "bg-[#FDF2F8] text-[#EC4899] border-[#EC4899]/30 hover:bg-[#FDF2F8]"
-                  : "bg-white text-[#5C5C5C] border-[#E8E8E8] hover:border-[#EC4899] hover:text-[#EC4899]"
+                  ? "bg-pink-50 text-pink-500 border-pink-200 hover:bg-pink-50"
+                  : "bg-jaryq-bg-card text-jaryq-text-muted border-jaryq-border-light hover:border-pink-300 hover:text-pink-500"
               )}
             >
               {isFavorite ? (
@@ -214,10 +201,10 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
       {/* Description */}
       {book.description && (
         <section className="max-w-3xl mx-auto px-6 py-6" aria-labelledby="book-desc-heading">
-          <h2 id="book-desc-heading" className="font-bold text-[#0F0F0F] mb-3">
+          <h2 id="book-desc-heading" className="font-bold text-jaryq-text-primary mb-3">
             Сипаттама
           </h2>
-          <p className="text-[#3B3B3B] leading-relaxed text-sm">
+          <p className="text-jaryq-text-secondary leading-relaxed text-sm">
             {book.description}
           </p>
         </section>
@@ -227,17 +214,15 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
       {chapters.length > 0 && (
         <section className="max-w-3xl mx-auto px-6 pb-8" aria-labelledby="book-chapters-heading">
           <div className="flex items-center gap-2 mb-4">
-            <ListMusic size={18} className="text-[#F97316]" aria-hidden="true" />
-            <h2 id="book-chapters-heading" className="font-bold text-[#0F0F0F]">
+            <ListMusic size={18} className="text-jaryq-primary" aria-hidden="true" />
+            <h2 id="book-chapters-heading" className="font-bold text-jaryq-text-primary">
               Тараулар ({chapters.length})
             </h2>
           </div>
-          <ul className="bg-white rounded-2xl border border-[#E8E8E8] overflow-hidden divide-y divide-[#E8E8E8]">
+          <ul className="bg-jaryq-bg-card rounded-2xl border border-jaryq-border-light overflow-hidden divide-y divide-jaryq-border-light">
             {chapters.map((chapter, index) => {
-              const isCurrent =
-                playerStore.currentChapter?.id === chapter.id;
-              const isResume =
-                progress?.chapter_number === chapter.chapter_number;
+              const isCurrent = currentChapterId === chapter.id;
+              const isResume = progress?.chapter_number === chapter.chapter_number;
               const chapterLabel = [
                 `${index + 1}-тарау`,
                 chapter.title,
@@ -252,26 +237,21 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
               return (
                 <li key={chapter.id}>
                   <button
-                    onClick={() =>
-                      launchPlayer(
-                        index,
-                        isResume ? progress!.position : 0
-                      )
-                    }
+                    onClick={() => launchPlayer(index, isResume ? progress!.position : 0)}
                     aria-label={chapterLabel}
                     aria-current={isCurrent ? "true" : undefined}
                     className={cn(
-                      "w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[#F5F5F5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#F97316]",
-                      isCurrent && "bg-[#FFF4ED]"
+                      "w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-jaryq-bg-main transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary",
+                      isCurrent && "bg-jaryq-primary-soft"
                     )}
                   >
                     <div
                       aria-hidden="true"
                       className={cn(
-                        "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0",
+                        "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0",
                         isCurrent
-                          ? "bg-[#F97316] text-white"
-                          : "bg-[#F5F5F5] text-[#5C5C5C]"
+                          ? "bg-jaryq-primary text-white"
+                          : "bg-jaryq-bg-main text-jaryq-text-muted"
                       )}
                     >
                       {index + 1}
@@ -280,15 +260,15 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                       <p
                         className={cn(
                           "text-sm font-medium truncate",
-                          isCurrent ? "text-[#F97316]" : "text-[#0F0F0F]"
+                          isCurrent ? "text-jaryq-primary" : "text-jaryq-text-primary"
                         )}
                       >
                         {chapter.title}
                       </p>
-                      <p className="text-xs text-[#5C5C5C]">
+                      <p className="text-xs text-jaryq-text-muted">
                         {formatDuration(chapter.duration)}
                         {isResume && progress && (
-                          <span className="ml-2 text-[#F97316]">
+                          <span className="ml-2 text-jaryq-primary">
                             • {formatTime(progress.position)} өткен
                           </span>
                         )}
@@ -298,7 +278,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                       size={16}
                       aria-hidden="true"
                       className={cn(
-                        isCurrent ? "text-[#F97316]" : "text-[#888888]"
+                        isCurrent ? "text-jaryq-primary" : "text-jaryq-text-muted"
                       )}
                     />
                   </button>

@@ -6,6 +6,7 @@ import { getSupabaseClient } from "@/lib/supabase/client";
 import { User } from "@/types";
 
 let _authSubscription: { unsubscribe: () => void } | null = null;
+let _initPromise: Promise<void> | null = null;
 
 async function fetchProfile(userId: string): Promise<User | null> {
   try {
@@ -44,36 +45,41 @@ export const useAuthStore = create<AuthState>((set) => ({
   error: null,
 
   initialize: async () => {
+    if (_initPromise) return _initPromise;
     _authSubscription?.unsubscribe();
     _authSubscription = null;
 
-    try {
-      const supabase = getSupabaseClient();
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session?.user) {
-        const profile = await fetchProfile(session.user.id);
-        set({ session, user: profile, loading: false });
-      } else {
-        set({ loading: false });
-      }
-
-      const {
-        data: { subscription },
-      } = supabase.auth.onAuthStateChange(async (_event: string, session: import("@supabase/supabase-js").Session | null) => {
+    _initPromise = (async () => {
+      try {
+        const supabase = getSupabaseClient();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
         if (session?.user) {
           const profile = await fetchProfile(session.user.id);
-          set({ session, user: profile, loading: false, error: null });
+          set({ session, user: profile, loading: false });
         } else {
-          set({ session: null, user: null, loading: false });
+          set({ loading: false });
         }
-      });
 
-      _authSubscription = subscription;
-    } catch {
-      set({ loading: false });
-    }
+        const {
+          data: { subscription },
+        } = supabase.auth.onAuthStateChange(async (_event: string, session: import("@supabase/supabase-js").Session | null) => {
+          if (session?.user) {
+            const profile = await fetchProfile(session.user.id);
+            set({ session, user: profile, loading: false, error: null });
+          } else {
+            set({ session: null, user: null, loading: false });
+          }
+        });
+
+        _authSubscription = subscription;
+      } catch (err: unknown) {
+        set({ loading: false, error: (err as Error)?.message ?? 'Инициализация сәтсіз аяқталды' });
+      }
+    })().finally(() => { _initPromise = null; });
+
+    return _initPromise;
   },
 
   signIn: async (email, password) => {

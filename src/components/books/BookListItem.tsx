@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { CoverImage } from "./CoverImage";
@@ -12,7 +13,7 @@ interface BookListItemProps {
   subtitle?: string;
 }
 
-export function BookListItem({ book, progress, subtitle }: BookListItemProps) {
+export const BookListItem = memo(function BookListItem({ book, progress, subtitle }: BookListItemProps) {
   const progressPct =
     progress !== undefined && progress > 0 ? Math.min(100, Math.round(progress)) : null;
   const ariaLabel = [
@@ -93,4 +94,4 @@ export function BookListItem({ book, progress, subtitle }: BookListItemProps) {
       </div>
     </Link>
   );
-}
+});

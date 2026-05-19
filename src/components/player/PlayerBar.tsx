@@ -9,7 +9,12 @@ import { howlerService } from "@/lib/audio/howlerService";
 import { bookService } from "@/lib/services/bookService";
 import { formatTime } from "@/lib/utils";
 import { CoverImage } from "@/components/books/CoverImage";
-import { FullPlayer } from "./FullPlayer";
+import dynamic from "next/dynamic";
+
+const FullPlayer = dynamic(
+  () => import("./FullPlayer").then((m) => m.FullPlayer),
+  { ssr: false }
+);
 
 const AUTOSAVE_INTERVAL_MS = 30_000;
 const SPEED_STEPS = [0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
@@ -17,9 +22,8 @@ const SPEED_STEPS = [0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
 export function PlayerBar() {
   const store = usePlayerStore();
   const { user } = useAuthStore();
-  const { autoSave } = useSettingsStore();
+  const { autoSave, speed, setSpeed } = useSettingsStore();
   const [showFull, setShowFull] = useState(false);
-  const rafRef = useRef<number>(0);
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
@@ -27,15 +31,20 @@ export function PlayerBar() {
     currentChapter,
     chapterIndex,
     isPlaying,
-    speed,
     position,
     duration,
     chapters,
   } = store;
 
+  // Refs keep loadChapter stable while always reading the latest chapters/speed
+  const chaptersRef = useRef(chapters);
+  const speedRef = useRef(speed);
+  useEffect(() => { chaptersRef.current = chapters; });
+  useEffect(() => { speedRef.current = speed; });
+
   const loadChapter = useCallback(
     (index: number, startPosition = 0) => {
-      const chapter = chapters[index];
+      const chapter = chaptersRef.current[index];
       if (!chapter) return;
 
       store.set({
@@ -51,7 +60,7 @@ export function PlayerBar() {
         chapter.audio_url,
         () => {
           const nextIndex = index + 1;
-          if (nextIndex < chapters.length) {
+          if (nextIndex < chaptersRef.current.length) {
             loadChapter(nextIndex, 0);
           } else {
             store.set({ isPlaying: false });
@@ -63,7 +72,7 @@ export function PlayerBar() {
           if (startPosition > 0) {
             howlerService.seekTo(startPosition);
           }
-          howlerService.setSpeed(speed);
+          howlerService.setSpeed(speedRef.current);
           howlerService.play();
           store.set({ isPlaying: true });
         },
@@ -72,37 +81,43 @@ export function PlayerBar() {
         }
       );
     },
-    [chapters, speed, store]
+    [store]
   );
 
-  // expose loadChapter so BookDetailClient can call it
+  // Register loadChapter with the store so BookDetail can trigger it
   useEffect(() => {
-    (window as unknown as Record<string, unknown>).__jaryq_loadChapter = loadChapter;
+    usePlayerStore.getState().registerLoadChapter(loadChapter);
     return () => {
-      delete (window as unknown as Record<string, unknown>).__jaryq_loadChapter;
+      usePlayerStore.getState().registerLoadChapter(null);
     };
   }, [loadChapter]);
 
-  // RAF position loop
+  // Stable position loop — updates store at 4fps (250ms) to prevent 60fps Zustand re-renders.
+  // The progress bar uses a CSS transition to stay visually smooth at 60fps.
+  const storeSetRef = useRef(store.set);
+  useEffect(() => {
+    storeSetRef.current = store.set;
+  });
   useEffect(() => {
     const tick = () => {
       if (howlerService.isPlaying()) {
-        const pos = howlerService.getPosition();
-        const dur = howlerService.getDuration();
-        store.set({ position: pos, duration: dur });
+        storeSetRef.current({
+          position: howlerService.getPosition(),
+          duration: howlerService.getDuration(),
+        });
       }
-      rafRef.current = requestAnimationFrame(tick);
     };
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [store]);
+    tick();
+    const id = setInterval(tick, 250);
+    return () => clearInterval(id);
+  }, []);
 
-  // Auto-save progress
+  // Auto-save progress — reads position from store (single source of truth)
   useEffect(() => {
     if (!autoSave || !user || !currentBook || !currentChapter) return;
 
     const save = () => {
-      const pos = howlerService.getPosition();
+      const pos = usePlayerStore.getState().position;
       bookService.saveProgress(
         user.id,
         currentBook.id,
@@ -118,7 +133,7 @@ export function PlayerBar() {
     };
   }, [autoSave, user, currentBook, currentChapter]);
 
-  const togglePlay = () => {
+  const togglePlay = useCallback(() => {
     if (isPlaying) {
       howlerService.pause();
       store.set({ isPlaying: false });
@@ -126,34 +141,37 @@ export function PlayerBar() {
       howlerService.play();
       store.set({ isPlaying: true });
     }
-  };
+  }, [isPlaying, store]);
 
-  const skipPrev = () => {
+  const skipPrev = useCallback(() => {
     if (chapterIndex > 0) {
       loadChapter(chapterIndex - 1, 0);
     } else {
       howlerService.seekTo(0);
       store.set({ position: 0 });
     }
-  };
+  }, [chapterIndex, loadChapter, store]);
 
-  const skipNext = () => {
-    if (chapterIndex < chapters.length - 1) {
+  const skipNext = useCallback(() => {
+    if (chapterIndex < chaptersRef.current.length - 1) {
       loadChapter(chapterIndex + 1, 0);
     }
-  };
+  }, [chapterIndex, loadChapter]);
 
-  const cycleSpeed = () => {
-    const idx = SPEED_STEPS.indexOf(speed);
+  const cycleSpeed = useCallback(() => {
+    const idx = SPEED_STEPS.indexOf(speedRef.current);
     const next = SPEED_STEPS[(idx + 1) % SPEED_STEPS.length];
     howlerService.setSpeed(next);
-    store.set({ speed: next });
-  };
+    setSpeed(next);
+  }, [setSpeed]);
 
-  const close = () => {
+  const close = useCallback(() => {
     howlerService.unload();
     store.reset();
-  };
+  }, [store]);
+
+  const openFull = useCallback(() => setShowFull(true), []);
+  const closeFull = useCallback(() => setShowFull(false), []);
 
   if (!currentBook) return null;
 
@@ -164,7 +182,7 @@ export function PlayerBar() {
       {/* Full player sheet */}
       {showFull && (
         <FullPlayer
-          onClose={() => setShowFull(false)}
+          onClose={closeFull}
           onLoadChapter={loadChapter}
           togglePlay={togglePlay}
           skipPrev={skipPrev}
@@ -176,11 +194,11 @@ export function PlayerBar() {
       {/* Mini player bar */}
       <section
         aria-label="Аудио ойнатқыш"
-        className="fixed bottom-0 left-0 right-0 lg:left-60 z-50 bg-white border-t-2 border-[#F97316]/20 shadow-lg"
+        className="fixed bottom-0 left-0 right-0 lg:left-60 z-50 bg-jaryq-bg-card border-t-2 border-jaryq-primary/20 shadow-lg"
       >
         {/* Progress bar */}
         <div
-          className="h-1 bg-[#E8E8E8]"
+          className="h-1 bg-jaryq-border-light"
           role="progressbar"
           aria-label="Тарау прогресі"
           aria-valuemin={0}
@@ -189,7 +207,7 @@ export function PlayerBar() {
           aria-valuetext={`${formatTime(position)} / ${formatTime(duration)}`}
         >
           <div
-            className="h-full bg-[#F97316] transition-none"
+            className="h-full bg-jaryq-primary transition-[width] duration-250 linear"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -204,22 +222,22 @@ export function PlayerBar() {
         <div className="flex items-center gap-3 px-4 h-16 pb-safe">
           {/* Cover + info */}
           <button
-            onClick={() => setShowFull(true)}
+            onClick={openFull}
             aria-label={`Толық ойнатқышты ашу: ${currentBook.title}${currentChapter ? `, ${currentChapter.title}` : ""}`}
-            className="flex items-center gap-3 flex-1 min-w-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] rounded-md"
+            className="flex items-center gap-3 flex-1 min-w-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded-md"
           >
             <CoverImage
               src={currentBook.cover_url}
               alt=""
               width={40}
               height={52}
-              className="rounded-md flex-shrink-0"
+              className="rounded-md shrink-0"
             />
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-[#0F0F0F] text-sm truncate leading-tight">
+              <p className="font-semibold text-jaryq-text-primary text-sm truncate leading-tight">
                 {currentBook.title}
               </p>
-              <p className="text-[#5C5C5C] text-xs truncate">
+              <p className="text-jaryq-text-muted text-xs truncate">
                 {currentChapter?.title || currentBook.author}
               </p>
             </div>
@@ -227,7 +245,7 @@ export function PlayerBar() {
 
           {/* Time */}
           <span
-            className="text-xs text-[#5C5C5C] font-mono hidden xs:block"
+            className="text-xs text-jaryq-text-muted font-mono hidden xs:block"
             aria-hidden="true"
           >
             {formatTime(position)}
@@ -237,7 +255,7 @@ export function PlayerBar() {
           <button
             onClick={cycleSpeed}
             aria-label={`Ойнату жылдамдығы: ${speed} есе. Өзгерту үшін басыңыз.`}
-            className="text-xs font-bold text-[#F97316] bg-[#FFF4ED] px-2 py-1 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+            className="text-xs font-bold text-jaryq-primary bg-jaryq-primary-soft px-2 py-1 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
           >
             <span aria-hidden="true">{speed}x</span>
           </button>
@@ -247,7 +265,7 @@ export function PlayerBar() {
             <button
               onClick={skipPrev}
               aria-label="Алдыңғы тарау"
-              className="w-11 h-11 flex items-center justify-center rounded-full text-[#3B3B3B] hover:bg-[#F5F5F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+              className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
             >
               <SkipBack size={18} aria-hidden="true" />
             </button>
@@ -255,7 +273,7 @@ export function PlayerBar() {
               onClick={togglePlay}
               aria-label={isPlaying ? "Тоқтату" : "Ойнату"}
               aria-pressed={isPlaying}
-              className="w-11 h-11 flex items-center justify-center rounded-full bg-[#F97316] text-white hover:bg-[#EA580C] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] focus-visible:ring-offset-2"
+              className="w-11 h-11 flex items-center justify-center rounded-full bg-jaryq-primary text-white hover:bg-jaryq-primary-dark transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
             >
               {isPlaying ? (
                 <Pause size={20} aria-hidden="true" />
@@ -267,7 +285,7 @@ export function PlayerBar() {
               onClick={skipNext}
               disabled={chapterIndex >= chapters.length - 1}
               aria-label="Келесі тарау"
-              className="w-11 h-11 flex items-center justify-center rounded-full text-[#3B3B3B] hover:bg-[#F5F5F5] disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+              className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
             >
               <SkipForward size={18} aria-hidden="true" />
             </button>
@@ -275,9 +293,9 @@ export function PlayerBar() {
 
           {/* Expand */}
           <button
-            onClick={() => setShowFull(true)}
+            onClick={openFull}
             aria-label="Толық ойнатқышты ашу"
-            className="w-11 h-11 flex items-center justify-center text-[#5C5C5C] hover:text-[#F97316] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] rounded-full"
+            className="w-11 h-11 flex items-center justify-center text-jaryq-text-muted hover:text-jaryq-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded-full"
           >
             <ChevronUp size={18} aria-hidden="true" />
           </button>
@@ -286,7 +304,7 @@ export function PlayerBar() {
           <button
             onClick={close}
             aria-label="Ойнатқышты жабу"
-            className="w-11 h-11 flex items-center justify-center text-[#5C5C5C] hover:text-[#EF4444] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] rounded-full"
+            className="w-11 h-11 flex items-center justify-center text-jaryq-text-muted hover:text-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded-full"
           >
             <X size={16} aria-hidden="true" />
           </button>

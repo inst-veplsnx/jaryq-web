@@ -2,7 +2,7 @@ import { getSupabaseClient } from "@/lib/supabase/client";
 import { Book, Chapter, Favorite, Genre, UserProgress } from "@/types";
 
 export const bookService = {
-  async getNewArrivals(limit = 100): Promise<Book[]> {
+  async getNewArrivals(limit = 20): Promise<Book[]> {
     try {
       const supabase = getSupabaseClient();
       const { data, error } = await supabase
@@ -68,14 +68,15 @@ export const bookService = {
     }
   },
 
-  async getBooksByGenre(genreId: string): Promise<Book[]> {
+  async getBooksByGenre(genreId: string, limit = 50): Promise<Book[]> {
     try {
       const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from("books")
         .select("*, genre:genres(*)")
         .eq("genre_id", genreId)
-        .order("title", { ascending: true });
+        .order("title", { ascending: true })
+        .limit(limit);
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
@@ -162,7 +163,7 @@ export const bookService = {
   ): Promise<void> {
     try {
       const supabase = getSupabaseClient();
-      await supabase.from("user_progress").upsert(
+      const { error } = await supabase.from("user_progress").upsert(
         {
           user_id: userId,
           book_id: bookId,
@@ -173,6 +174,7 @@ export const bookService = {
         },
         { onConflict: "user_id,book_id" }
       );
+      if (error) throw error;
     } catch (error: unknown) {
       console.error("Error saving progress:", (error as Error).message);
     }
@@ -194,6 +196,24 @@ export const bookService = {
       return data;
     } catch (error: unknown) {
       console.error("Error fetching progress:", (error as Error).message);
+      return null;
+    }
+  },
+
+  async getRecentProgress(userId: string): Promise<UserProgress | null> {
+    try {
+      const supabase = getSupabaseClient();
+      const { data, error } = await supabase
+        .from("user_progress")
+        .select("*, book:books(*, genre:genres(*))")
+        .eq("user_id", userId)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    } catch (error: unknown) {
+      console.error("Error fetching recent progress:", (error as Error).message);
       return null;
     }
   },

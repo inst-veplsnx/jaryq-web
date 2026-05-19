@@ -14,47 +14,43 @@ import { formatTime } from "@/lib/utils";
 
 export default function HomePage() {
   const user = useAuthStore((s) => s.user);
-  const playerStore = usePlayerStore();
+  const isPlayerLoading = usePlayerStore((s) => s.isLoading);
+  const loadChapter = usePlayerStore((s) => s.loadChapter);
   const [recentProgress, setRecentProgress] = useState<UserProgress | null>(null);
   const [progressLoading, setProgressLoading] = useState(true);
-  const [isLaunching, setIsLaunching] = useState(false);
   const [newBooks, setNewBooks] = useState<Book[]>([]);
   const [popularBooks, setPopularBooks] = useState<Book[]>([]);
   const [catalogLoading, setCatalogLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
-    bookService.getAllProgress(user.id).then((list) => {
-      setRecentProgress(list[0] ?? null);
+    bookService.getRecentProgress(user.id).then((progress) => {
+      setRecentProgress(progress);
       setProgressLoading(false);
     });
   }, [user]);
 
   useEffect(() => {
-    Promise.all([bookService.getNewArrivals(), bookService.getPopular()]).then(
+    Promise.all([bookService.getNewArrivals(10), bookService.getPopular(10)]).then(
       ([arrivals, popular]) => {
-        setNewBooks(arrivals.slice(0, 10));
-        setPopularBooks(popular.slice(0, 10));
+        setNewBooks(arrivals);
+        setPopularBooks(popular);
         setCatalogLoading(false);
       }
     );
   }, []);
 
   const launchResume = useCallback(async () => {
-    if (!recentProgress?.book || isLaunching) return;
-    setIsLaunching(true);
+    if (!recentProgress?.book || isPlayerLoading) return;
     const book = recentProgress.book;
     const chapters: Chapter[] = await bookService.getChapters(book.id);
-    if (!chapters.length) { setIsLaunching(false); return; }
+    if (!chapters.length) return;
     const resumeIndex = chapters.findIndex(
       (c) => c.chapter_number === recentProgress.chapter_number
     );
     const idx = resumeIndex >= 0 ? resumeIndex : 0;
-    playerStore.set({ currentBook: book, chapters, chapterIndex: idx, isLoading: true });
-    const loadFn = (window as unknown as Record<string, (i: number, p: number) => void>).__jaryq_loadChapter;
-    if (loadFn) loadFn(idx, recentProgress.position ?? 0);
-    setIsLaunching(false);
-  }, [recentProgress, isLaunching, playerStore]);
+    loadChapter(book, chapters, idx, recentProgress.position ?? 0);
+  }, [recentProgress, isPlayerLoading, loadChapter]);
 
   const greetingName = user?.full_name?.split(" ")[0] || "Пайдаланушы";
 
@@ -154,12 +150,12 @@ export default function HomePage() {
 
               <button
                 onClick={launchResume}
-                disabled={isLaunching}
-                aria-busy={isLaunching || undefined}
+                disabled={isPlayerLoading}
+                aria-busy={isPlayerLoading || undefined}
                 aria-label={`${recentProgress.book.title} кітабын жалғастыру`}
                 className="w-12 h-12 flex items-center justify-center rounded-full bg-[#F97316] text-white hover:bg-[#EA580C] active:scale-95 disabled:opacity-60 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] focus-visible:ring-offset-2 flex-shrink-0"
               >
-                {isLaunching ? (
+                {isPlayerLoading ? (
                   <Loader2 size={20} className="animate-spin" aria-hidden="true" />
                 ) : (
                   <Play size={20} className="fill-white" aria-hidden="true" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import Image from "next/image";
 import { BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,7 @@ interface CoverImageProps {
   fill?: boolean;
 }
 
-export function CoverImage({
+export const CoverImage = memo(function CoverImage({
   src,
   alt,
   width = 120,
@@ -63,4 +63,4 @@ export function CoverImage({
       onError={() => setError(true)}
     />
   );
-}
+});
