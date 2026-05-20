@@ -45,11 +45,15 @@ export default function AllBooksPage() {
 
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-black text-jaryq-text-primary">Барлық кітаптар</h1>
+            <h1 className="text-3xl font-black tracking-tight text-jaryq-text-primary">
+              Барлық кітаптар
+            </h1>
             <p className="text-jaryq-text-muted mt-1">Толық каталог</p>
           </div>
           {!loading && books.length > 0 && (
-            <p className="text-sm text-jaryq-text-muted shrink-0">{books.length} кітап</p>
+            <p className="text-sm text-jaryq-text-muted shrink-0 tabular-nums">
+              {books.length} кітап
+            </p>
           )}
         </div>
 
@@ -85,7 +89,7 @@ export default function AllBooksPage() {
                   <button
                     onClick={loadMore}
                     disabled={loadingMore}
-                    className="px-8 py-3 rounded-xl bg-jaryq-bg-card border border-jaryq-border-light text-jaryq-text-primary font-semibold hover:border-jaryq-primary hover:text-jaryq-primary transition-all disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+                    className="px-8 py-3 rounded-xl bg-jaryq-bg-card border border-jaryq-border-light text-jaryq-text-primary font-semibold hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
                   >
                     {loadingMore ? "Жүктелуде…" : "Көбірек жүктеу"}
                   </button>

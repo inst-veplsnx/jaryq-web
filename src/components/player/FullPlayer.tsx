@@ -9,6 +9,8 @@ import {
   SkipForward,
   RotateCcw,
   RotateCw,
+  Gauge,
+  Loader2,
 } from "lucide-react";
 import { usePlayerStore } from "@/store/playerStore";
 import { useSettingsStore } from "@/store/settingsStore";
@@ -34,8 +36,16 @@ export const FullPlayer = memo(function FullPlayer({
   skipNext,
   cycleSpeed,
 }: FullPlayerProps) {
-  const { currentBook, currentChapter, chapterIndex, isPlaying, position, duration, chapters } =
-    usePlayerStore();
+  const {
+    currentBook,
+    currentChapter,
+    chapterIndex,
+    isPlaying,
+    position,
+    duration,
+    chapters,
+    isLoading,
+  } = usePlayerStore();
   const store = usePlayerStore();
   const { speed } = useSettingsStore();
   const [showChapters, setShowChapters] = useState(false);
@@ -105,21 +115,31 @@ export const FullPlayer = memo(function FullPlayer({
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
-      className="fixed inset-0 z-50 bg-gradient-to-b from-[#FFF4ED] via-white to-white flex flex-col overflow-hidden"
+      className="fixed inset-0 z-50 bg-gradient-to-b from-jaryq-primary-soft via-white to-white flex flex-col overflow-hidden"
     >
+      {/* Layered ambient gradient — two drifting blurred orbs */}
+      <div
+        aria-hidden="true"
+        className="absolute top-[18%] left-1/2 -translate-x-1/2 w-72 h-72 bg-jaryq-primary/15 rounded-full blur-3xl pointer-events-none animate-[jaryq-ambient-drift_18s_ease-in-out_infinite] motion-reduce:animate-none"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute top-[42%] right-[12%] w-64 h-64 bg-jaryq-primary-med/25 rounded-full blur-3xl pointer-events-none animate-[jaryq-ambient-drift-alt_24s_ease-in-out_infinite] motion-reduce:animate-none"
+      />
+
       {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-safe pt-4 pb-2">
+      <div className="relative z-10 flex items-center justify-between px-4 pt-safe pt-4 pb-2 backdrop-blur-md bg-white/60 border-b border-jaryq-border-light/50">
         <button
           ref={closeBtnRef}
           onClick={onClose}
           aria-label="Ойнатқышты жабу"
-          className="w-11 h-11 flex items-center justify-center rounded-full text-[#5C5C5C] hover:bg-[#F5F5F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+          className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
         >
           <ChevronDown size={24} aria-hidden="true" />
         </button>
         <p
           id={titleId}
-          className="text-sm font-semibold text-[#0F0F0F] text-center flex-1 px-4 truncate"
+          className="text-sm font-semibold text-jaryq-text-primary text-center flex-1 px-4 truncate"
         >
           {currentChapter?.title || "Тыңдап жатырсыз"}
         </p>
@@ -127,21 +147,21 @@ export const FullPlayer = memo(function FullPlayer({
           onClick={() => setShowChapters(true)}
           aria-label="Тараулар тізімі"
           aria-haspopup="dialog"
-          className="w-11 h-11 flex items-center justify-center rounded-full text-[#5C5C5C] hover:bg-[#F5F5F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+          className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
         >
           <List size={20} aria-hidden="true" />
         </button>
       </div>
 
-      {/* Ambient blur behind cover */}
-      <div
-        aria-hidden="true"
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-64 h-64 bg-[#F97316]/10 rounded-full blur-3xl pointer-events-none"
-      />
-
       {/* Cover */}
       <div className="flex-1 flex flex-col items-center justify-center px-8 py-4 relative">
-        <div className="w-56 h-72 rounded-2xl overflow-hidden shadow-xl mb-6">
+        <div
+          className={`relative w-56 h-72 rounded-2xl overflow-hidden mb-6 shadow-[0_30px_60px_-20px_rgba(249,115,22,0.35)] ${
+            isPlaying
+              ? "animate-[jaryq-cover-breathe_4s_ease-in-out_infinite] motion-reduce:animate-none"
+              : ""
+          }`}
+        >
           <CoverImage
             src={currentBook.cover_url}
             alt=""
@@ -149,31 +169,45 @@ export const FullPlayer = memo(function FullPlayer({
             height={288}
             className="w-full h-full object-cover"
           />
+          {isLoading && (
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 flex items-center justify-center bg-white/40 backdrop-blur-sm"
+            >
+              <Loader2
+                size={36}
+                className="text-jaryq-primary animate-spin motion-reduce:animate-none"
+              />
+            </div>
+          )}
         </div>
 
         {/* Book info */}
         <div className="text-center w-full max-w-xs">
-          <p className="text-[#5C5C5C] text-xs font-semibold uppercase tracking-wide mb-1">
+          <p className="text-jaryq-text-secondary text-xs font-semibold uppercase tracking-wide mb-1">
             {currentBook.author}
           </p>
-          <h2 className="text-xl font-black text-[#0F0F0F] leading-tight mb-1">
+          <h2 className="text-xl font-black tracking-tight text-jaryq-text-primary leading-tight mb-1">
             {currentBook.title}
           </h2>
           {currentBook.narrator && (
-            <p className="text-[#5C5C5C] text-sm italic">
+            <p className="text-jaryq-text-secondary text-sm italic">
               <span className="sr-only">Диктор: </span>
               {currentBook.narrator}
             </p>
           )}
           {chapters.length > 0 && (
-            <div
-              className="mt-2 inline-flex items-center gap-1 bg-[#FFF4ED] text-[#F97316] text-xs font-semibold px-3 py-1 rounded-full"
-              aria-label={`${chapterIndex + 1}-тарау ${chapters.length} тараудан`}
+            <button
+              type="button"
+              onClick={() => setShowChapters(true)}
+              aria-label={`${chapterIndex + 1}-тарау ${chapters.length} тараудан. Тараулар тізімін ашу.`}
+              aria-haspopup="dialog"
+              className="mt-2 inline-flex items-center gap-1 bg-jaryq-primary-soft text-jaryq-primary text-xs font-semibold px-3 py-1 rounded-full transition-all duration-150 active:scale-95 hover:bg-jaryq-primary-med/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
             >
               <span aria-hidden="true">
                 {chapterIndex + 1} / {chapters.length} тарау
               </span>
-            </div>
+            </button>
           )}
         </div>
 
@@ -194,14 +228,18 @@ export const FullPlayer = memo(function FullPlayer({
             aria-valuemax={Math.round(duration) || 1}
             aria-valuenow={Math.round(position)}
             aria-valuetext={`${formatTime(position)} / ${formatTime(duration)}`}
-            className="w-full h-1.5 appearance-none bg-[#E8E8E8] rounded-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-[#F97316] [&::-webkit-slider-thumb]:rounded-full"
+            className="w-full h-1.5 hover:h-2 transition-[height] duration-150 appearance-none rounded-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-jaryq-primary [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:ring-2 [&::-webkit-slider-thumb]:ring-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:duration-150 [&:hover::-webkit-slider-thumb]:scale-125 [&:active::-webkit-slider-thumb]:scale-125 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:bg-jaryq-primary [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white"
             style={{
-              background: `linear-gradient(to right, #F97316 ${progress * 100}%, #E8E8E8 ${progress * 100}%)`,
+              background: `linear-gradient(to right, var(--color-jaryq-primary) ${
+                progress * 100
+              }%, var(--color-jaryq-border-light) ${progress * 100}%)`,
             }}
           />
           <div className="flex justify-between mt-1" aria-hidden="true">
-            <span className="text-xs text-[#5C5C5C] font-mono">{formatTime(position)}</span>
-            <span className="text-xs text-[#5C5C5C] font-mono">
+            <span className="text-xs text-jaryq-text-secondary font-mono tabular-nums">
+              {formatTime(position)}
+            </span>
+            <span className="text-xs text-jaryq-text-secondary font-mono tabular-nums">
               -{formatTime(Math.max(0, duration - position))}
             </span>
           </div>
@@ -212,13 +250,12 @@ export const FullPlayer = memo(function FullPlayer({
           <button
             onClick={() => seekRelative(-30)}
             aria-label="30 секундқа артқа"
-            className="w-12 h-12 flex items-center justify-center rounded-full text-[#3B3B3B] hover:bg-[#F5F5F5] relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+            className="w-12 h-12 flex flex-col items-center justify-center gap-0.5 rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
           >
-            <RotateCcw size={24} aria-hidden="true" />
+            <RotateCcw size={22} aria-hidden="true" strokeWidth={2.25} />
             <span
               aria-hidden="true"
-              className="absolute text-[8px] font-bold text-[#3B3B3B]"
-              style={{ bottom: "11px" }}
+              className="text-[9px] font-bold leading-none -mt-0.5"
             >
               30
             </span>
@@ -226,7 +263,7 @@ export const FullPlayer = memo(function FullPlayer({
           <button
             onClick={skipPrev}
             aria-label="Алдыңғы тарау"
-            className="w-12 h-12 flex items-center justify-center rounded-full text-[#3B3B3B] hover:bg-[#F5F5F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+            className="w-12 h-12 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
           >
             <SkipBack size={26} aria-hidden="true" />
           </button>
@@ -234,32 +271,42 @@ export const FullPlayer = memo(function FullPlayer({
             onClick={togglePlay}
             aria-label={isPlaying ? "Тоқтату" : "Ойнату"}
             aria-pressed={isPlaying}
-            className="w-16 h-16 flex items-center justify-center rounded-full bg-[#F97316] text-white shadow-lg hover:bg-[#EA580C] transition-colors active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] focus-visible:ring-offset-2"
+            className="w-16 h-16 flex items-center justify-center rounded-full bg-jaryq-primary text-white shadow-lg hover:bg-jaryq-primary-dark hover:scale-[1.04] hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.55)] active:scale-95 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
           >
-            {isPlaying ? (
-              <Pause size={28} aria-hidden="true" />
-            ) : (
-              <Play size={28} aria-hidden="true" />
-            )}
+            <span className="relative w-7 h-7 inline-flex items-center justify-center">
+              <Play
+                size={28}
+                aria-hidden="true"
+                className={`absolute transition-all duration-200 motion-reduce:transition-none ${
+                  isPlaying ? "opacity-0 scale-50" : "opacity-100 scale-100"
+                }`}
+              />
+              <Pause
+                size={28}
+                aria-hidden="true"
+                className={`absolute transition-all duration-200 motion-reduce:transition-none ${
+                  isPlaying ? "opacity-100 scale-100" : "opacity-0 scale-50"
+                }`}
+              />
+            </span>
           </button>
           <button
             onClick={skipNext}
             disabled={chapterIndex >= chapters.length - 1}
             aria-label="Келесі тарау"
-            className="w-12 h-12 flex items-center justify-center rounded-full text-[#3B3B3B] hover:bg-[#F5F5F5] disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+            className="w-12 h-12 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-all duration-150 active:scale-95 disabled:opacity-30 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
           >
             <SkipForward size={26} aria-hidden="true" />
           </button>
           <button
             onClick={() => seekRelative(30)}
             aria-label="30 секундқа алға"
-            className="w-12 h-12 flex items-center justify-center rounded-full text-[#3B3B3B] hover:bg-[#F5F5F5] relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+            className="w-12 h-12 flex flex-col items-center justify-center gap-0.5 rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
           >
-            <RotateCw size={24} aria-hidden="true" />
+            <RotateCw size={22} aria-hidden="true" strokeWidth={2.25} />
             <span
               aria-hidden="true"
-              className="absolute text-[8px] font-bold text-[#3B3B3B]"
-              style={{ bottom: "11px" }}
+              className="text-[9px] font-bold leading-none -mt-0.5"
             >
               30
             </span>
@@ -270,9 +317,12 @@ export const FullPlayer = memo(function FullPlayer({
         <button
           onClick={cycleSpeed}
           aria-label={`Ойнату жылдамдығы: ${speed} есе. Өзгерту үшін басыңыз.`}
-          className="mt-5 bg-[#FFF4ED] text-[#F97316] text-sm font-bold px-6 py-2 rounded-full hover:bg-[#FDBA74]/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+          className="mt-5 inline-flex items-center justify-center gap-1.5 bg-jaryq-primary-soft text-jaryq-primary text-sm font-bold px-6 py-2 rounded-full min-w-[150px] transition-all duration-150 active:scale-95 hover:bg-jaryq-primary-med/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
         >
-          <span aria-hidden="true">{speed}x жылдамдық</span>
+          <Gauge size={14} aria-hidden="true" />
+          <span aria-hidden="true" className="tabular-nums">
+            {speed}x жылдамдық
+          </span>
         </button>
       </div>
 

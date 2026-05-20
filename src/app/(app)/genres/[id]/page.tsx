@@ -30,20 +30,22 @@ export default function GenreBooksPage({
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
-      <div className="bg-white border-b border-[#E8E8E8] px-6 py-5">
+    <div className="min-h-screen bg-jaryq-bg-main">
+      <div className="bg-white border-b border-jaryq-border-light px-6 py-5">
         <div className="flex items-center gap-3">
           <div
             aria-hidden="true"
-            className="w-10 h-10 bg-[#F0F9FF] rounded-xl flex items-center justify-center"
+            className="w-10 h-10 bg-jaryq-primary-soft rounded-xl flex items-center justify-center ring-1 ring-jaryq-primary/15"
           >
-            <span className="text-xl">{genre?.icon || "📚"}</span>
+            <Layers size={20} className="text-jaryq-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-black text-[#0F0F0F]">
+            <h1 className="text-xl font-black tracking-tight text-jaryq-text-primary">
               {genre?.name || "Жанр"}
             </h1>
-            <p className="text-sm text-[#5C5C5C]">{books.length} кітап</p>
+            <p className="text-sm text-jaryq-text-secondary tabular-nums">
+              {books.length} кітап
+            </p>
           </div>
         </div>
       </div>

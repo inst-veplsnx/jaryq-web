@@ -55,24 +55,24 @@ export default function HomePage() {
   const greetingName = user?.full_name?.split(" ")[0] || "Пайдаланушы";
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-jaryq-bg-main">
       <div className="max-w-7xl mx-auto px-8 py-10 space-y-12">
 
         {/* Greeting */}
         <div>
-          <p className="text-sm text-[#888888] mb-1">Сәлем,</p>
-          <h1 className="text-4xl font-black text-[#0F0F0F]">
+          <p className="text-sm text-jaryq-text-muted mb-1">Сәлем,</p>
+          <h1 className="text-4xl font-black tracking-tight text-jaryq-text-primary">
             {greetingName}
             <span aria-hidden="true"> 👋</span>
           </h1>
-          <p className="text-[#5C5C5C] mt-2">Бүгін не тыңдайсыз?</p>
+          <p className="text-jaryq-text-secondary mt-2">Бүгін не тыңдайсыз?</p>
         </div>
 
         {/* Continue Listening */}
         {progressLoading ? (
           <section aria-label="Жалғастыру жүктелуде">
             <Skeleton className="h-3 w-24 rounded mb-3" />
-            <div className="flex items-center gap-5 bg-white rounded-2xl p-5 border border-[#E8E8E8] max-w-2xl">
+            <div className="flex items-center gap-5 bg-white rounded-2xl p-5 border border-jaryq-border-light max-w-2xl">
               <Skeleton className="w-20 h-[108px] rounded-xl flex-shrink-0" />
               <div className="flex-1 space-y-3">
                 <Skeleton className="h-5 w-3/4 rounded" />
@@ -86,36 +86,38 @@ export default function HomePage() {
           <section aria-labelledby="continue-heading">
             <h2
               id="continue-heading"
-              className="text-xs font-semibold text-[#888888] uppercase tracking-widest mb-3"
+              className="text-xs font-semibold text-jaryq-text-muted uppercase tracking-widest mb-3"
             >
               Жалғастыру
             </h2>
-            <div className="flex items-center gap-5 bg-white rounded-2xl p-5 border border-[#F97316]/20 shadow-sm max-w-2xl hover:shadow-md transition-shadow">
+            <div className="group flex items-center gap-5 bg-white rounded-2xl p-5 border border-jaryq-primary/20 shadow-sm max-w-2xl hover:shadow-lg hover:border-jaryq-primary/40 transition-all duration-200 motion-reduce:transition-none">
               <Link
                 href={`/books/${recentProgress.book.id}`}
                 aria-label={`${recentProgress.book.title} кітабына өту`}
                 tabIndex={-1}
-                className="flex-shrink-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+                className="flex-shrink-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
               >
-                <CoverImage
-                  src={recentProgress.book.cover_url}
-                  alt=""
-                  width={80}
-                  height={108}
-                  className="rounded-xl"
-                />
+                <span className="block rounded-xl overflow-hidden ring-1 ring-black/5 shadow-sm transition-transform duration-300 group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100">
+                  <CoverImage
+                    src={recentProgress.book.cover_url}
+                    alt=""
+                    width={80}
+                    height={108}
+                    className="rounded-xl block"
+                  />
+                </span>
               </Link>
 
               <div className="flex-1 min-w-0">
                 <Link
                   href={`/books/${recentProgress.book.id}`}
-                  className="group focus-visible:outline-none"
+                  className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded"
                 >
-                  <p className="font-bold text-[#0F0F0F] text-base truncate group-hover:text-[#F97316] transition-colors">
+                  <p className="font-bold tracking-tight text-jaryq-text-primary text-base truncate hover:text-jaryq-primary transition-colors duration-150 motion-reduce:transition-none">
                     {recentProgress.book.title}
                   </p>
                 </Link>
-                <p className="text-sm text-[#5C5C5C] truncate mt-1">
+                <p className="text-sm text-jaryq-text-secondary truncate mt-1 tabular-nums">
                   {recentProgress.chapter_number}-тарау
                   {recentProgress.position
                     ? ` • ${formatTime(recentProgress.position)} өткен`
@@ -135,10 +137,10 @@ export default function HomePage() {
                         )
                       : 0
                   }
-                  className="mt-3 h-1.5 bg-[#E8E8E8] rounded-full overflow-hidden"
+                  className="mt-3 h-1.5 bg-jaryq-border-light rounded-full overflow-hidden"
                 >
                   <div
-                    className="h-full bg-[#F97316] rounded-full"
+                    className="h-full bg-jaryq-primary rounded-full transition-[width] duration-300 motion-reduce:transition-none"
                     style={{
                       width: recentProgress.book.total_duration
                         ? `${Math.min(100, (recentProgress.position / recentProgress.book.total_duration) * 100)}%`
@@ -153,10 +155,14 @@ export default function HomePage() {
                 disabled={isPlayerLoading}
                 aria-busy={isPlayerLoading || undefined}
                 aria-label={`${recentProgress.book.title} кітабын жалғастыру`}
-                className="w-12 h-12 flex items-center justify-center rounded-full bg-[#F97316] text-white hover:bg-[#EA580C] active:scale-95 disabled:opacity-60 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] focus-visible:ring-offset-2 flex-shrink-0"
+                className="w-12 h-12 flex items-center justify-center rounded-full bg-jaryq-primary text-white shadow-sm hover:bg-jaryq-primary-dark hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.55)] hover:scale-[1.05] active:scale-95 disabled:opacity-60 disabled:hover:scale-100 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 flex-shrink-0 motion-reduce:transition-none motion-reduce:hover:scale-100"
               >
                 {isPlayerLoading ? (
-                  <Loader2 size={20} className="animate-spin" aria-hidden="true" />
+                  <Loader2
+                    size={20}
+                    className="animate-spin motion-reduce:animate-none"
+                    aria-hidden="true"
+                  />
                 ) : (
                   <Play size={20} className="fill-white" aria-hidden="true" />
                 )}
@@ -169,14 +175,22 @@ export default function HomePage() {
         {(catalogLoading || newBooks.length > 0) && (
           <section aria-labelledby="new-arrivals-heading">
             <div className="flex items-center justify-between mb-5">
-              <h2 id="new-arrivals-heading" className="text-xl font-black text-[#0F0F0F]">
+              <h2
+                id="new-arrivals-heading"
+                className="text-xl font-black tracking-tight text-jaryq-text-primary"
+              >
                 Жаңа кітаптар
               </h2>
               <Link
                 href="/new-arrivals"
-                className="flex items-center gap-1 text-sm font-semibold text-[#F97316] hover:text-[#EA580C] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] rounded"
+                className="group inline-flex items-center gap-1 text-sm font-semibold text-jaryq-primary hover:text-jaryq-primary-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded motion-reduce:transition-none"
               >
-                Барлығы <ArrowRight size={14} aria-hidden="true" />
+                Барлығы
+                <ArrowRight
+                  size={14}
+                  aria-hidden="true"
+                  className="transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+                />
               </Link>
             </div>
             {catalogLoading ? (
@@ -209,14 +223,22 @@ export default function HomePage() {
         {(catalogLoading || popularBooks.length > 0) && (
           <section aria-labelledby="popular-heading">
             <div className="flex items-center justify-between mb-5">
-              <h2 id="popular-heading" className="text-xl font-black text-[#0F0F0F]">
+              <h2
+                id="popular-heading"
+                className="text-xl font-black tracking-tight text-jaryq-text-primary"
+              >
                 Танымал
               </h2>
               <Link
                 href="/popular"
-                className="flex items-center gap-1 text-sm font-semibold text-[#F97316] hover:text-[#EA580C] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] rounded"
+                className="group inline-flex items-center gap-1 text-sm font-semibold text-jaryq-primary hover:text-jaryq-primary-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded motion-reduce:transition-none"
               >
-                Барлығы <ArrowRight size={14} aria-hidden="true" />
+                Барлығы
+                <ArrowRight
+                  size={14}
+                  aria-hidden="true"
+                  className="transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+                />
               </Link>
             </div>
             {catalogLoading ? (

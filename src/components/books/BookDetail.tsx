@@ -100,13 +100,15 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
         <div className="max-w-3xl mx-auto px-6 py-8">
           <div className="flex gap-6">
             <div className="shrink-0">
-              <CoverImage
-                src={book.cover_url}
-                alt=""
-                width={120}
-                height={160}
-                className="rounded-xl shadow-lg"
-              />
+              <span className="block rounded-xl overflow-hidden ring-1 ring-black/5 shadow-[0_20px_40px_-15px_rgba(249,115,22,0.35)]">
+                <CoverImage
+                  src={book.cover_url}
+                  alt=""
+                  width={120}
+                  height={160}
+                  className="rounded-xl"
+                />
+              </span>
             </div>
             <div className="flex-1 min-w-0">
               {book.genre && (
@@ -114,7 +116,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                   {book.genre.name}
                 </span>
               )}
-              <h1 className="text-2xl font-black text-jaryq-text-primary mt-1 leading-tight">
+              <h1 className="text-2xl font-black tracking-tight text-jaryq-text-primary mt-1 leading-tight">
                 {book.title}
               </h1>
               <p className="text-jaryq-text-secondary font-medium mt-1">
@@ -174,10 +176,10 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                   disabled={isLaunching || chapters.length === 0}
                   aria-busy={isLaunching || undefined}
                   aria-pressed={showsPauseOnResume}
-                  className="flex items-center gap-2 bg-jaryq-primary text-white font-bold px-6 py-3 rounded-xl hover:bg-jaryq-primary-dark transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
+                  className="flex items-center gap-2 bg-jaryq-primary text-white font-bold px-6 py-3 rounded-xl shadow-sm hover:bg-jaryq-primary-dark hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
                 >
                   {isLaunching ? (
-                    <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+                    <Loader2 size={18} className="animate-spin motion-reduce:animate-none" aria-hidden="true" />
                   ) : showsPauseOnResume ? (
                     <Pause size={18} className="fill-white" aria-hidden="true" />
                   ) : (
@@ -189,7 +191,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                 </button>
                 <button
                   onClick={() => launchPlayer(0, 0)}
-                  className="flex items-center gap-2 bg-jaryq-bg-card text-jaryq-text-primary font-semibold px-5 py-3 rounded-xl border border-jaryq-border-light hover:border-jaryq-primary hover:text-jaryq-primary transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
+                  className="flex items-center gap-2 bg-jaryq-bg-card text-jaryq-text-primary font-semibold px-5 py-3 rounded-xl border border-jaryq-border-light hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                 >
                   Басынан тыңдау
                 </button>
@@ -200,10 +202,10 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                 disabled={isLaunching || chapters.length === 0}
                 aria-busy={isLaunching || undefined}
                 aria-pressed={showsPauseOnStart}
-                className="flex items-center gap-2 bg-jaryq-primary text-white font-bold px-6 py-3 rounded-xl hover:bg-jaryq-primary-dark transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
+                className="flex items-center gap-2 bg-jaryq-primary text-white font-bold px-6 py-3 rounded-xl shadow-sm hover:bg-jaryq-primary-dark hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
               >
                 {isLaunching ? (
-                  <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+                  <Loader2 size={18} className="animate-spin motion-reduce:animate-none" aria-hidden="true" />
                 ) : showsPauseOnStart ? (
                   <Pause size={18} className="fill-white" aria-hidden="true" />
                 ) : (
@@ -218,16 +220,16 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
               disabled={favLoading || !user}
               aria-pressed={isFavorite}
               className={cn(
-                "flex items-center gap-2 font-semibold px-5 py-3 rounded-xl border transition-all disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2",
+                "flex items-center gap-2 font-semibold px-5 py-3 rounded-xl border active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
                 isFavorite
-                  ? "bg-pink-50 text-pink-500 border-pink-200 hover:bg-pink-50"
-                  : "bg-jaryq-bg-card text-jaryq-text-muted border-jaryq-border-light hover:border-pink-300 hover:text-pink-500"
+                  ? "bg-pink-50 text-pink-500 border-pink-200 hover:bg-pink-100"
+                  : "bg-jaryq-bg-card text-jaryq-text-muted border-jaryq-border-light hover:border-pink-300 hover:text-pink-500 hover:bg-pink-50/40"
               )}
             >
               {isFavorite ? (
-                <HeartOff size={18} aria-hidden="true" />
+                <HeartOff size={18} aria-hidden="true" className="transition-transform duration-200 motion-reduce:transition-none" />
               ) : (
-                <Heart size={18} aria-hidden="true" />
+                <Heart size={18} aria-hidden="true" className="transition-transform duration-200 motion-reduce:transition-none" />
               )}
               {isFavorite ? "Алып тастау" : "Таңдаулыға"}
             </button>
@@ -286,17 +288,17 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                     aria-current={isCurrent ? "true" : undefined}
                     aria-pressed={isCurrentPlaying}
                     className={cn(
-                      "w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-jaryq-bg-main transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary",
+                      "group w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-jaryq-bg-main active:bg-jaryq-primary-soft/60 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary motion-reduce:transition-none",
                       isCurrent && "bg-jaryq-primary-soft"
                     )}
                   >
                     <div
                       aria-hidden="true"
                       className={cn(
-                        "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0",
+                        "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all duration-150 motion-reduce:transition-none",
                         isCurrent
-                          ? "bg-jaryq-primary text-white"
-                          : "bg-jaryq-bg-main text-jaryq-text-muted"
+                          ? "bg-jaryq-primary text-white shadow-sm"
+                          : "bg-jaryq-bg-main text-jaryq-text-muted group-hover:bg-jaryq-primary-soft group-hover:text-jaryq-primary"
                       )}
                     >
                       {index + 1}

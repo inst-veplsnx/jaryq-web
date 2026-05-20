@@ -21,11 +21,11 @@ export function Header({ title, showSearch = true }: HeaderProps) {
   };
 
   return (
-    <header className="lg:hidden sticky top-0 z-20 bg-white border-b border-[#E8E8E8] px-4 h-14 flex items-center justify-between">
+    <header className="lg:hidden sticky top-0 z-20 bg-white/85 backdrop-blur-md border-b border-jaryq-border-light px-4 h-14 flex items-center justify-between">
       <Link
         href="/home"
         aria-label="JARYQ бастапқы бетке"
-        className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+        className="inline-flex items-center gap-2 rounded-md transition-transform duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
       >
         <Image
           src="/logo.png"
@@ -36,9 +36,11 @@ export function Header({ title, showSearch = true }: HeaderProps) {
           aria-hidden="true"
         />
         {title ? (
-          <span className="font-bold text-[#0F0F0F]">{title}</span>
+          <span className="font-bold tracking-tight text-jaryq-text-primary">
+            {title}
+          </span>
         ) : (
-          <span className="text-lg font-black text-[#0F0F0F] tracking-tight">
+          <span className="text-lg font-black text-jaryq-text-primary tracking-tight">
             JARYQ
           </span>
         )}
@@ -49,7 +51,7 @@ export function Header({ title, showSearch = true }: HeaderProps) {
           <Link
             href="/search"
             aria-label="Іздеу"
-            className="w-11 h-11 flex items-center justify-center rounded-lg text-[#5C5C5C] hover:bg-[#F5F5F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+            className="w-11 h-11 flex items-center justify-center rounded-lg text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
           >
             <Search size={20} aria-hidden="true" />
           </Link>
@@ -57,7 +59,7 @@ export function Header({ title, showSearch = true }: HeaderProps) {
         {user && (
           <button
             onClick={handleSignOut}
-            className="w-11 h-11 flex items-center justify-center rounded-lg text-[#5C5C5C] hover:bg-[#FEF2F2] hover:text-[#EF4444] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+            className="w-11 h-11 flex items-center justify-center rounded-lg text-jaryq-text-secondary hover:bg-red-50 hover:text-red-500 transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
             aria-label="Шығу"
           >
             <LogOut size={18} aria-hidden="true" />

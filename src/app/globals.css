@@ -133,6 +133,28 @@ html.jaryq-large-text {
   }
 }
 
+/* Player polish keyframes. The block above neutralizes these for users
+   with prefers-reduced-motion, so no per-component guards are needed. */
+@keyframes jaryq-cover-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.015); }
+}
+
+@keyframes jaryq-ambient-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(20px, -10px, 0); }
+}
+
+@keyframes jaryq-ambient-drift-alt {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(-24px, 16px, 0); }
+}
+
+@keyframes jaryq-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
 /* Visually hidden but accessible to screen readers — used by .sr-only utility
    and works even outside Tailwind contexts. */
 .sr-only {

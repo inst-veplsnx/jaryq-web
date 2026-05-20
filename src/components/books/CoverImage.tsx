@@ -28,12 +28,15 @@ export const CoverImage = memo(function CoverImage({
     return (
       <div
         className={cn(
-          "flex items-center justify-center bg-[#FFF4ED] rounded-lg",
+          "flex items-center justify-center bg-gradient-to-br from-jaryq-primary-soft to-jaryq-primary-med/30 rounded-lg",
           className
         )}
         style={fill ? undefined : { width, height }}
       >
-        <BookOpen className="text-[#F97316] opacity-40" size={width ? width * 0.35 : 32} />
+        <BookOpen
+          className="text-jaryq-primary opacity-40"
+          size={width ? width * 0.35 : 32}
+        />
       </div>
     );
   }

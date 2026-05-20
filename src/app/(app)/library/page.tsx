@@ -24,7 +24,7 @@ export default function LibraryPage() {
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-jaryq-bg-main">
       <div className="max-w-5xl mx-auto px-8 py-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
@@ -36,11 +36,15 @@ export default function LibraryPage() {
 
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-black text-[#0F0F0F]">Кітап сөресі</h1>
-            <p className="text-[#5C5C5C] mt-1">Тыңдап жатқандарыңыз</p>
+            <h1 className="text-3xl font-black tracking-tight text-jaryq-text-primary">
+              Кітап сөресі
+            </h1>
+            <p className="text-jaryq-text-secondary mt-1">Тыңдап жатқандарыңыз</p>
           </div>
           {!loading && progressList.length > 0 && (
-            <p className="text-sm text-[#888888] shrink-0">{progressList.length} кітап</p>
+            <p className="text-sm text-jaryq-text-muted shrink-0 tabular-nums">
+              {progressList.length} кітап
+            </p>
           )}
         </div>
 
@@ -55,7 +59,7 @@ export default function LibraryPage() {
             <EmptyState
               title="Кітап сөресі бос"
               description="Аудиокітапты тыңдай бастасаңыз, прогресс осында сақталады."
-              icon={<BookMarked className="text-[#22C55E]" size={36} />}
+              icon={<BookMarked className="text-green-500" size={36} />}
             />
           ) : (
             <ul className="grid grid-cols-1 lg:grid-cols-2 gap-3">

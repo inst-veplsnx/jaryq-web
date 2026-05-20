@@ -42,21 +42,25 @@ export default function LoginPage() {
           alt="JARYQ"
           width={80}
           height={80}
-          className="rounded-2xl mb-4"
+          className="rounded-2xl mb-4 shadow-[0_20px_40px_-15px_rgba(249,115,22,0.4)]"
           priority
         />
-        <h1 className="text-2xl font-black text-[#0F0F0F]">JARYQ-ке кіру</h1>
-        <p className="text-[#5C5C5C] text-sm mt-1">Аудиокітаптар платформасы</p>
+        <h1 className="text-2xl font-black tracking-tight text-jaryq-text-primary">
+          JARYQ-ке кіру
+        </h1>
+        <p className="text-jaryq-text-secondary text-sm mt-1">
+          Аудиокітаптар платформасы
+        </p>
       </div>
 
       {/* Card */}
-      <div className="bg-white rounded-3xl p-8 shadow-xl border border-[#E8E8E8]">
+      <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-jaryq-border-light">
         <form onSubmit={handleSubmit} className="space-y-5" noValidate>
           {/* Email */}
           <div>
             <label
               htmlFor={emailId}
-              className="block text-sm font-semibold text-[#0F0F0F] mb-1.5"
+              className="block text-sm font-semibold text-jaryq-text-primary mb-1.5"
             >
               Email
             </label>
@@ -71,7 +75,7 @@ export default function LoginPage() {
               aria-required="true"
               aria-invalid={error ? "true" : undefined}
               aria-describedby={error ? errorId : undefined}
-              className="w-full px-4 py-3 border border-[#E8E8E8] rounded-xl text-[#0F0F0F] placeholder:text-[#888888] focus:outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/40 transition-all bg-[#FAFAFA]"
+              className="w-full px-4 py-3 border border-jaryq-border-light rounded-xl text-jaryq-text-primary placeholder:text-jaryq-text-muted focus:outline-none focus:border-jaryq-primary focus:ring-2 focus:ring-jaryq-primary/40 transition-all duration-150 bg-jaryq-bg-main/60 hover:bg-jaryq-bg-main motion-reduce:transition-none"
             />
           </div>
 
@@ -79,7 +83,7 @@ export default function LoginPage() {
           <div>
             <label
               htmlFor={passwordId}
-              className="block text-sm font-semibold text-[#0F0F0F] mb-1.5"
+              className="block text-sm font-semibold text-jaryq-text-primary mb-1.5"
             >
               Пароль
             </label>
@@ -95,7 +99,7 @@ export default function LoginPage() {
                 aria-required="true"
                 aria-invalid={error ? "true" : undefined}
                 aria-describedby={error ? errorId : undefined}
-                className="w-full px-4 py-3 border border-[#E8E8E8] rounded-xl text-[#0F0F0F] placeholder:text-[#888888] focus:outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/40 transition-all bg-[#FAFAFA] pr-12"
+                className="w-full px-4 py-3 border border-jaryq-border-light rounded-xl text-jaryq-text-primary placeholder:text-jaryq-text-muted focus:outline-none focus:border-jaryq-primary focus:ring-2 focus:ring-jaryq-primary/40 transition-all duration-150 bg-jaryq-bg-main/60 hover:bg-jaryq-bg-main pr-12 motion-reduce:transition-none"
               />
               <button
                 type="button"
@@ -103,7 +107,7 @@ export default function LoginPage() {
                 aria-label={showPassword ? "Парольді жасыру" : "Парольді көрсету"}
                 aria-pressed={showPassword}
                 aria-controls={passwordId}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full text-[#5C5C5C] hover:text-[#F97316] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:text-jaryq-primary hover:bg-jaryq-primary-soft transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
               >
                 {showPassword ? (
                   <EyeOff size={18} aria-hidden="true" />
@@ -120,7 +124,7 @@ export default function LoginPage() {
               id={errorId}
               role="alert"
               aria-live="assertive"
-              className="bg-[#FEF2F2] text-[#DC2626] text-sm px-4 py-3 rounded-xl border border-[#FECACA]"
+              className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl border border-red-200"
             >
               {error}
             </div>
@@ -131,11 +135,15 @@ export default function LoginPage() {
             type="submit"
             disabled={loading || !email || !password}
             aria-busy={loading || undefined}
-            className="w-full bg-[#F97316] text-white font-bold py-3.5 rounded-xl hover:bg-[#EA580C] disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] focus-visible:ring-offset-2"
+            className="w-full bg-jaryq-primary text-white font-bold py-3.5 rounded-xl shadow-sm hover:bg-jaryq-primary-dark hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.55)] hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-200 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
           >
             {loading ? (
               <>
-                <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+                <Loader2
+                  size={18}
+                  className="animate-spin motion-reduce:animate-none"
+                  aria-hidden="true"
+                />
                 <span>Кіру...</span>
               </>
             ) : (
@@ -144,11 +152,11 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-sm text-[#5C5C5C] mt-6">
+        <p className="text-center text-sm text-jaryq-text-secondary mt-6">
           Есептік жазбаңыз жоқ па?{" "}
           <Link
             href="/register"
-            className="text-[#F97316] font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] rounded"
+            className="text-jaryq-primary font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded"
           >
             Тіркелу
           </Link>

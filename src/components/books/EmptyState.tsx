@@ -14,13 +14,23 @@ export function EmptyState({ title, description, icon }: EmptyStateProps) {
     >
       <div
         aria-hidden="true"
-        className="w-20 h-20 rounded-full bg-[#FFF4ED] flex items-center justify-center mb-4"
+        className="relative w-20 h-20 rounded-full bg-gradient-to-br from-jaryq-primary-soft to-jaryq-primary-med/30 flex items-center justify-center mb-4 shadow-sm ring-1 ring-jaryq-primary/10"
       >
-        {icon || <BookOpen className="text-[#F97316]" size={36} />}
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 rounded-full bg-jaryq-primary/10 blur-xl"
+        />
+        <span className="relative">
+          {icon || <BookOpen className="text-jaryq-primary" size={36} />}
+        </span>
       </div>
-      <h3 className="text-lg font-semibold text-[#0F0F0F] mb-2">{title}</h3>
+      <h3 className="text-lg font-bold tracking-tight text-jaryq-text-primary mb-2">
+        {title}
+      </h3>
       {description && (
-        <p className="text-[#5C5C5C] text-sm max-w-xs">{description}</p>
+        <p className="text-jaryq-text-secondary text-sm max-w-xs leading-relaxed">
+          {description}
+        </p>
       )}
     </div>
   );

@@ -60,9 +60,9 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-jaryq-bg-main">
       {/* Search bar — sticky */}
-      <div className="bg-white border-b border-[#E8E8E8] px-8 py-4 sticky top-0 z-10">
+      <div className="bg-white/85 backdrop-blur-md border-b border-jaryq-border-light px-8 py-4 sticky top-0 z-10">
         <div className="max-w-2xl relative">
           <label htmlFor={searchInputId} className="sr-only">
             Кітап іздеу
@@ -70,7 +70,7 @@ export default function SearchPage() {
           <Search
             size={18}
             aria-hidden="true"
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-[#888888]"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-jaryq-text-muted"
           />
           <input
             id={searchInputId}
@@ -81,13 +81,13 @@ export default function SearchPage() {
             autoFocus
             aria-controls={statusId}
             aria-describedby={statusId}
-            className="w-full pl-11 pr-12 py-3 bg-[#F5F5F5] border border-[#E8E8E8] rounded-xl text-[#0F0F0F] placeholder:text-[#888888] focus:outline-none focus:border-[#F97316] focus:ring-2 focus:ring-[#F97316]/40 transition-all"
+            className="w-full pl-11 pr-12 py-3 bg-jaryq-bg-main border border-jaryq-border-light rounded-xl text-jaryq-text-primary placeholder:text-jaryq-text-muted focus:outline-none focus:border-jaryq-primary focus:ring-2 focus:ring-jaryq-primary/40 transition-all duration-150 motion-reduce:transition-none"
           />
           {query && (
             <button
               onClick={clearSearch}
               aria-label="Іздеуді тазалау"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-[#E8E8E8] text-[#5C5C5C] hover:bg-[#F97316] hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-jaryq-border-light text-jaryq-text-secondary hover:bg-jaryq-primary hover:text-white active:scale-90 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
             >
               <X size={14} aria-hidden="true" />
             </button>
@@ -102,7 +102,7 @@ export default function SearchPage() {
 
         {loading && (
           <div className="flex items-center justify-center py-12" aria-hidden="true">
-            <div className="w-8 h-8 border-2 border-[#F97316] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-jaryq-primary border-t-transparent rounded-full animate-spin motion-reduce:animate-none" />
           </div>
         )}
 
@@ -110,7 +110,7 @@ export default function SearchPage() {
           <EmptyState
             title="Нәтиже табылмады"
             description={`"${query}" бойынша кітап табылмады. Басқа сөздермен іздеп көріңіз.`}
-            icon={<Search className="text-[#F97316]" size={36} />}
+            icon={<Search className="text-jaryq-primary" size={36} />}
           />
         )}
 
@@ -118,14 +118,18 @@ export default function SearchPage() {
           <div className="text-center py-20">
             <div
               aria-hidden="true"
-              className="w-20 h-20 rounded-full bg-[#FFF4ED] flex items-center justify-center mx-auto mb-4"
+              className="relative w-20 h-20 rounded-full bg-gradient-to-br from-jaryq-primary-soft to-jaryq-primary-med/30 flex items-center justify-center mx-auto mb-4 shadow-sm ring-1 ring-jaryq-primary/10"
             >
-              <Search size={32} className="text-[#F97316]" />
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 rounded-full bg-jaryq-primary/10 blur-xl"
+              />
+              <Search size={32} className="relative text-jaryq-primary" />
             </div>
-            <p className="text-[#0F0F0F] font-semibold text-lg mb-2">
+            <p className="text-jaryq-text-primary font-bold tracking-tight text-lg mb-2">
               Іздеуді бастаңыз
             </p>
-            <p className="text-[#5C5C5C] text-sm">
+            <p className="text-jaryq-text-secondary text-sm">
               Кітап атауын, автор немесе диктор атын енгізіңіз
             </p>
           </div>
@@ -133,7 +137,7 @@ export default function SearchPage() {
 
         {!loading && results.length > 0 && (
           <div>
-            <p className="text-sm text-[#888888] mb-4" aria-hidden="true">
+            <p className="text-sm text-jaryq-text-muted mb-4 tabular-nums" aria-hidden="true">
               {results.length} нәтиже табылды
             </p>
             <ul className="grid grid-cols-1 lg:grid-cols-2 gap-3">

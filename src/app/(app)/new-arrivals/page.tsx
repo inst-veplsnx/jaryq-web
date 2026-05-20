@@ -20,7 +20,7 @@ export default function NewArrivalsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-jaryq-bg-main">
       <div className="max-w-7xl mx-auto px-8 py-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
@@ -31,8 +31,10 @@ export default function NewArrivalsPage() {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-3xl font-black text-[#0F0F0F]">Жаңа кітаптар</h1>
-          <p className="text-[#5C5C5C] mt-1">Соңғы қосылған</p>
+          <h1 className="text-3xl font-black tracking-tight text-jaryq-text-primary">
+            Жаңа кітаптар
+          </h1>
+          <p className="text-jaryq-text-secondary mt-1">Соңғы қосылған</p>
         </div>
 
         <div aria-busy={loading || undefined}>
@@ -49,7 +51,7 @@ export default function NewArrivalsPage() {
           ) : books.length === 0 ? (
             <EmptyState
               title="Жаңа кітаптар жоқ"
-              icon={<Sparkles className="text-[#F97316]" size={36} />}
+              icon={<Sparkles className="text-jaryq-primary" size={36} />}
             />
           ) : (
             <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">

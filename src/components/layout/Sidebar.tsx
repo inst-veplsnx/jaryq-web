@@ -33,6 +33,9 @@ const catalogNav = [
   { href: "/favorites", icon: Heart, label: "Таңдаулы" },
 ];
 
+const linkBase =
+  "group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none";
+
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
@@ -47,14 +50,14 @@ export function Sidebar() {
   return (
     <aside
       aria-label="Бүйір мәзір"
-      className="hidden lg:flex flex-col w-60 h-screen fixed left-0 top-0 bg-white border-r border-[#E8E8E8] z-30"
+      className="hidden lg:flex flex-col w-60 h-screen fixed left-0 top-0 bg-white border-r border-jaryq-border-light z-30"
     >
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-[#E8E8E8]">
+      <div className="px-6 py-5 border-b border-jaryq-border-light">
         <Link
           href="/home"
           aria-label="JARYQ бастапқы бетке"
-          className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+          className="inline-flex items-center gap-2 rounded-md transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none motion-reduce:hover:scale-100"
         >
           <Image
             src="/logo.png"
@@ -63,7 +66,7 @@ export function Sidebar() {
             height={32}
             className="rounded-lg"
           />
-          <span className="text-xl font-black text-[#0F0F0F] tracking-tight">
+          <span className="text-xl font-black text-jaryq-text-primary tracking-tight">
             JARYQ
           </span>
         </Link>
@@ -81,13 +84,27 @@ export function Sidebar() {
                     href={href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all active:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]",
+                      linkBase,
                       active
-                        ? "bg-[#FFF4ED] text-[#F97316]"
-                        : "text-[#3B3B3B] hover:bg-[#F5F5F5] hover:text-[#0F0F0F]"
+                        ? "bg-jaryq-primary-soft text-jaryq-primary"
+                        : "text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary"
                     )}
                   >
-                    <Icon size={18} aria-hidden="true" />
+                    {/* Active indicator rail */}
+                    {active && (
+                      <span
+                        aria-hidden="true"
+                        className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-jaryq-primary"
+                      />
+                    )}
+                    <Icon
+                      size={18}
+                      aria-hidden="true"
+                      className={cn(
+                        "transition-transform duration-150 motion-reduce:transition-none",
+                        active && "scale-110"
+                      )}
+                    />
                     {label}
                   </Link>
                 </li>
@@ -99,7 +116,7 @@ export function Sidebar() {
         <div className="pt-4">
           <h2
             id="sidebar-catalog-heading"
-            className="px-3 text-[10px] font-semibold text-[#5C5C5C] uppercase tracking-widest mb-2"
+            className="px-3 text-[10px] font-semibold text-jaryq-text-secondary uppercase tracking-widest mb-2"
           >
             Каталог
           </h2>
@@ -114,13 +131,26 @@ export function Sidebar() {
                       href={href}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all active:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]",
+                        linkBase,
                         active
-                          ? "bg-[#FFF4ED] text-[#F97316]"
-                          : "text-[#3B3B3B] hover:bg-[#F5F5F5] hover:text-[#0F0F0F]"
+                          ? "bg-jaryq-primary-soft text-jaryq-primary"
+                          : "text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary"
                       )}
                     >
-                      <Icon size={18} aria-hidden="true" />
+                      {active && (
+                        <span
+                          aria-hidden="true"
+                          className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full bg-jaryq-primary"
+                        />
+                      )}
+                      <Icon
+                        size={18}
+                        aria-hidden="true"
+                        className={cn(
+                          "transition-transform duration-150 motion-reduce:transition-none",
+                          active && "scale-110"
+                        )}
+                      />
                       {label}
                     </Link>
                   </li>
@@ -133,34 +163,36 @@ export function Sidebar() {
 
       {/* User footer */}
       {user && (
-        <div className="border-t border-[#E8E8E8]">
+        <div className="border-t border-jaryq-border-light">
           {/* User info */}
           <div className="px-4 pt-3 pb-2">
-            <p className="text-[10px] font-semibold text-[#888888] uppercase tracking-widest px-1 mb-2">
+            <p className="text-[10px] font-semibold text-jaryq-text-muted uppercase tracking-widest px-1 mb-2">
               Аккаунт
             </p>
             <div className="flex items-center gap-3">
               <div
                 aria-hidden="true"
-                className="w-8 h-8 rounded-full bg-[#F97316] flex items-center justify-center flex-shrink-0"
+                className="w-8 h-8 rounded-full bg-jaryq-primary flex items-center justify-center flex-shrink-0 ring-2 ring-jaryq-primary-soft"
               >
                 <span className="text-white text-sm font-bold">
                   {(user.full_name || user.email || "?")[0].toUpperCase()}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-[#0F0F0F] truncate">
+                <p className="text-sm font-semibold tracking-tight text-jaryq-text-primary truncate">
                   {user.full_name || "Пайдаланушы"}
                 </p>
-                <p className="text-xs text-[#5C5C5C] truncate">{user.email}</p>
+                <p className="text-xs text-jaryq-text-secondary truncate">
+                  {user.email}
+                </p>
               </div>
             </div>
           </div>
           {/* Logout — visually separated destructive action */}
-          <div className="px-4 pb-4 pt-1 border-t border-[#E8E8E8]">
+          <div className="px-4 pb-4 pt-1 border-t border-jaryq-border-light">
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-[#EF4444] bg-[#FEF2F2]/60 hover:bg-[#FEF2F2] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EF4444]"
+              className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-red-500 bg-red-50/60 hover:bg-red-50 transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 motion-reduce:transition-none"
             >
               <LogOut size={16} aria-hidden="true" />
               Шығу

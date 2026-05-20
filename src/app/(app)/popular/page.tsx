@@ -20,7 +20,7 @@ export default function PopularPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
+    <div className="min-h-screen bg-jaryq-bg-main">
       <div className="max-w-7xl mx-auto px-8 py-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
@@ -31,8 +31,10 @@ export default function PopularPage() {
         </div>
 
         <div className="mb-8">
-          <h1 className="text-3xl font-black text-[#0F0F0F]">Танымал</h1>
-          <p className="text-[#5C5C5C] mt-1">Көп тыңдалған кітаптар</p>
+          <h1 className="text-3xl font-black tracking-tight text-jaryq-text-primary">
+            Танымал
+          </h1>
+          <p className="text-jaryq-text-secondary mt-1">Көп тыңдалған кітаптар</p>
         </div>
 
         <div aria-busy={loading || undefined}>
@@ -49,7 +51,7 @@ export default function PopularPage() {
           ) : books.length === 0 ? (
             <EmptyState
               title="Танымал кітаптар жоқ"
-              icon={<Flame className="text-[#EF4444]" size={36} />}
+              icon={<Flame className="text-red-500" size={36} />}
             />
           ) : (
             <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
