@@ -20,23 +20,19 @@ const AUTOSAVE_INTERVAL_MS = 30_000;
 const SPEED_STEPS = [0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
 
 export function PlayerBar() {
-  const store = usePlayerStore();
+  const currentBook = usePlayerStore((s) => s.currentBook);
+  const currentChapter = usePlayerStore((s) => s.currentChapter);
+  const chapterIndex = usePlayerStore((s) => s.chapterIndex);
+  const isPlaying = usePlayerStore((s) => s.isPlaying);
+  const position = usePlayerStore((s) => s.position);
+  const duration = usePlayerStore((s) => s.duration);
+  const chapters = usePlayerStore((s) => s.chapters);
   const { user } = useAuthStore();
   const { autoSave, speed, setSpeed } = useSettingsStore();
   const [showFull, setShowFull] = useState(false);
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const {
-    currentBook,
-    currentChapter,
-    chapterIndex,
-    isPlaying,
-    position,
-    duration,
-    chapters,
-  } = store;
-
-  // Refs keep loadChapter stable while always reading the latest chapters/speed
+  // Refs keep callbacks stable while always reading the latest chapters/speed
   const chaptersRef = useRef(chapters);
   const speedRef = useRef(speed);
   useEffect(() => { chaptersRef.current = chapters; });
@@ -47,10 +43,10 @@ export function PlayerBar() {
       const chapter = chaptersRef.current[index];
       if (!chapter) return;
 
-      store.set({
+      usePlayerStore.setState({
         currentChapter: chapter,
         chapterIndex: index,
-        isPlaying: false,
+        isPlaying: true,
         isLoading: true,
         position: startPosition,
         duration: 0,
@@ -63,25 +59,27 @@ export function PlayerBar() {
           if (nextIndex < chaptersRef.current.length) {
             loadChapter(nextIndex, 0);
           } else {
-            store.set({ isPlaying: false });
+            usePlayerStore.setState({ isPlaying: false });
           }
         },
         () => {
           const dur = howlerService.getDuration();
-          store.set({ isLoading: false, duration: dur });
+          usePlayerStore.setState({ isLoading: false, duration: dur });
           if (startPosition > 0) {
             howlerService.seekTo(startPosition);
           }
           howlerService.setSpeed(speedRef.current);
-          howlerService.play();
-          store.set({ isPlaying: true });
         },
         () => {
-          store.set({ isLoading: false });
+          usePlayerStore.setState({ isLoading: false, isPlaying: false });
         }
       );
+      // Call play synchronously so the browser preserves the user-gesture
+      // context from the click that triggered this load. Howler queues the
+      // play action and runs it as soon as the audio is ready.
+      howlerService.play();
     },
-    [store]
+    []
   );
 
   // Register loadChapter with the store so BookDetail can trigger it
@@ -92,16 +90,12 @@ export function PlayerBar() {
     };
   }, [loadChapter]);
 
-  // Stable position loop — updates store at 4fps (250ms) to prevent 60fps Zustand re-renders.
+  // Position tick — updates store at 4fps (250ms) to prevent 60fps Zustand re-renders.
   // The progress bar uses a CSS transition to stay visually smooth at 60fps.
-  const storeSetRef = useRef(store.set);
-  useEffect(() => {
-    storeSetRef.current = store.set;
-  });
   useEffect(() => {
     const tick = () => {
       if (howlerService.isPlaying()) {
-        storeSetRef.current({
+        usePlayerStore.setState({
           position: howlerService.getPosition(),
           duration: howlerService.getDuration(),
         });
@@ -134,29 +128,25 @@ export function PlayerBar() {
   }, [autoSave, user, currentBook, currentChapter]);
 
   const togglePlay = useCallback(() => {
-    if (isPlaying) {
-      howlerService.pause();
-      store.set({ isPlaying: false });
-    } else {
-      howlerService.play();
-      store.set({ isPlaying: true });
-    }
-  }, [isPlaying, store]);
+    usePlayerStore.getState().togglePlay();
+  }, []);
 
   const skipPrev = useCallback(() => {
-    if (chapterIndex > 0) {
-      loadChapter(chapterIndex - 1, 0);
+    const idx = usePlayerStore.getState().chapterIndex;
+    if (idx > 0) {
+      loadChapter(idx - 1, 0);
     } else {
       howlerService.seekTo(0);
-      store.set({ position: 0 });
+      usePlayerStore.setState({ position: 0 });
     }
-  }, [chapterIndex, loadChapter, store]);
+  }, [loadChapter]);
 
   const skipNext = useCallback(() => {
-    if (chapterIndex < chaptersRef.current.length - 1) {
-      loadChapter(chapterIndex + 1, 0);
+    const idx = usePlayerStore.getState().chapterIndex;
+    if (idx < chaptersRef.current.length - 1) {
+      loadChapter(idx + 1, 0);
     }
-  }, [chapterIndex, loadChapter]);
+  }, [loadChapter]);
 
   const cycleSpeed = useCallback(() => {
     const idx = SPEED_STEPS.indexOf(speedRef.current);
@@ -167,8 +157,8 @@ export function PlayerBar() {
 
   const close = useCallback(() => {
     howlerService.unload();
-    store.reset();
-  }, [store]);
+    usePlayerStore.getState().reset();
+  }, []);
 
   const openFull = useCallback(() => setShowFull(true), []);
   const closeFull = useCallback(() => setShowFull(false), []);

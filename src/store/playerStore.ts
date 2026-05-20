@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 import { Book, Chapter } from "@/types";
+import { howlerService } from "@/lib/audio/howlerService";
 
 interface PlayerState {
   currentBook: Book | null;
@@ -21,6 +22,7 @@ interface PlayerStore extends PlayerState {
   _loadChapterFn: ((index: number, startPosition: number) => void) | null;
   registerLoadChapter: (fn: ((index: number, startPosition: number) => void) | null) => void;
   loadChapter: (book: Book, chapters: Chapter[], index: number, startPosition?: number) => void;
+  togglePlay: () => void;
 }
 
 const initialState: PlayerState = {
@@ -59,5 +61,15 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     }
     set({ isLoading: true });
     fn(index, startPosition);
+  },
+  togglePlay: () => {
+    const playing = get().isPlaying;
+    if (playing) {
+      howlerService.pause();
+      set({ isPlaying: false });
+    } else {
+      howlerService.play();
+      set({ isPlaying: true });
+    }
   },
 }));
