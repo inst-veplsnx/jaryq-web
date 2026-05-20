@@ -52,7 +52,7 @@ export default function HomePage() {
     loadChapter(book, chapters, idx, recentProgress.position ?? 0);
   }, [recentProgress, isPlayerLoading, loadChapter]);
 
-  const greetingName = user?.full_name?.split(" ")[0] || "Пайдаланушы";
+  const greetingName = user?.full_name?.trim() || "Пайдаланушы";
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">

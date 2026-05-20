@@ -4,8 +4,8 @@ import { Play, ArrowRight } from "lucide-react";
 export function CTA() {
   return (
     <section className="py-24 px-4 bg-gradient-to-br from-[#F97316] to-[#EA580C]">
-      <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 leading-tight">
+      <div className="max-w-4xl mx-auto text-center jaryq-reveal">
+        <h2 className="font-display text-4xl lg:text-6xl font-black text-white mb-6 leading-[1.05] tracking-tight">
           Бүгін бастаңыз.
           <br />
           Тегін. Шексіз.

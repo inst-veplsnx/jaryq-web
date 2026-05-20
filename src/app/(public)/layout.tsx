@@ -7,13 +7,13 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#FFFBF5]">
       <a href="#main-content" className="jaryq-skip-link">
         Мазмұнға өту
       </a>
       <nav
         aria-label="Негізгі мәзір"
-        className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-[#E8E8E8]"
+        className="sticky top-0 z-40 bg-[#FFFBF5]/80 backdrop-blur-md border-b border-[#F0E7DC]"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link
