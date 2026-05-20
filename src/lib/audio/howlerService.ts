@@ -4,6 +4,14 @@ import { Howl } from "howler";
 
 let howl: Howl | null = null;
 let onEndCallback: (() => void) | null = null;
+let loadTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+function clearLoadTimeout() {
+  if (loadTimeoutId !== null) {
+    clearTimeout(loadTimeoutId);
+    loadTimeoutId = null;
+  }
+}
 
 export const howlerService = {
   load(
@@ -19,7 +27,14 @@ export const howlerService = {
       howl = null;
     }
 
+    clearLoadTimeout();
     onEndCallback = onEnd;
+
+    // Safety net: if the browser never fires onload or onloaderror
+    // (CORS silent failure, hanging request, etc.) resolve after 15 s.
+    loadTimeoutId = setTimeout(() => {
+      onError?.("timeout");
+    }, 15_000);
 
     howl = new Howl({
       src: [url],
@@ -29,9 +44,11 @@ export const howlerService = {
         onEndCallback?.();
       },
       onload: () => {
+        clearLoadTimeout();
         onLoad?.();
       },
       onloaderror: (_id: number, error: unknown) => {
+        clearLoadTimeout();
         onError?.(error);
       },
     });
@@ -74,6 +91,7 @@ export const howlerService = {
   },
 
   unload(): void {
+    clearLoadTimeout();
     if (howl) {
       howl.unload();
       howl = null;

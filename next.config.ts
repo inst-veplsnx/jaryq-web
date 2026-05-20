@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 import bundleAnalyzer from "@next/bundle-analyzer";
 
 const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === "true" });
@@ -11,11 +12,11 @@ const SUPABASE_HOST = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 const csp = [
   "default-src 'self'",
-  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://*.r2.cloudflarestorage.com https://pub-*.r2.dev`,
+  `connect-src 'self' https://${SUPABASE_HOST} wss://${SUPABASE_HOST} https://*.r2.cloudflarestorage.com https://*.r2.dev`,
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' data: blob: https://${SUPABASE_HOST} https://*.r2.cloudflarestorage.com https://pub-*.r2.dev`,
-  "media-src 'self' blob: https://*.r2.cloudflarestorage.com https://pub-*.r2.dev",
+  `img-src 'self' data: blob: https://${SUPABASE_HOST} https://*.r2.cloudflarestorage.com https://*.r2.dev`,
+  "media-src 'self' blob: https://*.r2.cloudflarestorage.com https://*.r2.dev",
   "font-src 'self' data:",
   "object-src 'none'",
   "base-uri 'self'",
@@ -24,6 +25,9 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   async headers() {
     return [
       {
@@ -49,7 +53,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: SUPABASE_HOST },
       { protocol: "https", hostname: "**.r2.cloudflarestorage.com" },
-      { protocol: "https", hostname: "pub-*.r2.dev" },
+      { protocol: "https", hostname: "*.r2.dev" },
     ],
   },
 };

@@ -13,6 +13,7 @@ interface PlayerState {
   duration: number;
   chapters: Chapter[];
   isLoading: boolean;
+  error: string | null;
   _pendingLoad: { index: number; startPosition: number } | null;
 }
 
@@ -34,6 +35,7 @@ const initialState: PlayerState = {
   duration: 0,
   chapters: [],
   isLoading: false,
+  error: null,
   _pendingLoad: null,
 };
 

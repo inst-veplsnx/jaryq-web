@@ -27,20 +27,22 @@ export function PlayerBar() {
   const position = usePlayerStore((s) => s.position);
   const duration = usePlayerStore((s) => s.duration);
   const chapters = usePlayerStore((s) => s.chapters);
+  const playerError = usePlayerStore((s) => s.error);
   const { user } = useAuthStore();
   const { autoSave, speed, setSpeed } = useSettingsStore();
   const [showFull, setShowFull] = useState(false);
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Refs keep callbacks stable while always reading the latest chapters/speed
-  const chaptersRef = useRef(chapters);
+  // Speed ref keeps the callback stable while always reading the latest value
   const speedRef = useRef(speed);
-  useEffect(() => { chaptersRef.current = chapters; });
   useEffect(() => { speedRef.current = speed; });
 
   const loadChapter = useCallback(
     (index: number, startPosition = 0) => {
-      const chapter = chaptersRef.current[index];
+      // Read chapters directly from the store: the parent's `loadChapter`
+      // updates `chapters` and calls us synchronously, so any ref/state
+      // derived from React render would still be stale here.
+      const chapter = usePlayerStore.getState().chapters[index];
       if (!chapter) return;
 
       usePlayerStore.setState({
@@ -48,6 +50,7 @@ export function PlayerBar() {
         chapterIndex: index,
         isPlaying: true,
         isLoading: true,
+        error: null,
         position: startPosition,
         duration: 0,
       });
@@ -56,7 +59,7 @@ export function PlayerBar() {
         chapter.audio_url,
         () => {
           const nextIndex = index + 1;
-          if (nextIndex < chaptersRef.current.length) {
+          if (nextIndex < usePlayerStore.getState().chapters.length) {
             loadChapter(nextIndex, 0);
           } else {
             usePlayerStore.setState({ isPlaying: false });
@@ -71,7 +74,11 @@ export function PlayerBar() {
           howlerService.setSpeed(speedRef.current);
         },
         () => {
-          usePlayerStore.setState({ isLoading: false, isPlaying: false });
+          usePlayerStore.setState({
+            isLoading: false,
+            isPlaying: false,
+            error: "Аудио жүктелмеді. Суретіңіздегі сілтемені тексеріңіз.",
+          });
         }
       );
       // Call play synchronously so the browser preserves the user-gesture
@@ -143,7 +150,7 @@ export function PlayerBar() {
 
   const skipNext = useCallback(() => {
     const idx = usePlayerStore.getState().chapterIndex;
-    if (idx < chaptersRef.current.length - 1) {
+    if (idx < usePlayerStore.getState().chapters.length - 1) {
       loadChapter(idx + 1, 0);
     }
   }, [loadChapter]);
@@ -186,6 +193,13 @@ export function PlayerBar() {
         aria-label="Аудио ойнатқыш"
         className="fixed bottom-0 left-0 right-0 lg:left-60 z-50 bg-jaryq-bg-card border-t-2 border-jaryq-primary/20 shadow-lg"
       >
+        {/* Error banner */}
+        {playerError && (
+          <p className="text-xs text-red-400 text-center py-1 px-4 bg-red-950/30">
+            {playerError}
+          </p>
+        )}
+
         {/* Progress bar */}
         <div
           className="h-1 bg-jaryq-border-light"
