@@ -40,7 +40,7 @@ export function PlayerBar() {
   useEffect(() => { speedRef.current = speed; }, [speed]);
 
   const loadChapter = useCallback(
-    (index: number, startPosition = 0) => {
+    function loadChapterImpl(index: number, startPosition = 0) {
       // Read chapters directly from the store: the parent's `loadChapter`
       // updates `chapters` and calls us synchronously, so any ref/state
       // derived from React render would still be stale here.
@@ -62,7 +62,7 @@ export function PlayerBar() {
         () => {
           const nextIndex = index + 1;
           if (nextIndex < usePlayerStore.getState().chapters.length) {
-            loadChapter(nextIndex, 0);
+            loadChapterImpl(nextIndex, 0);
           } else {
             usePlayerStore.setState({ isPlaying: false });
           }
