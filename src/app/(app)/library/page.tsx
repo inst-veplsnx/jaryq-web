@@ -26,7 +26,7 @@ export default function LibraryPage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
             ? "Кітап сөресі жүктелуде…"

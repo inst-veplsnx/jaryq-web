@@ -124,8 +124,12 @@ export const FullPlayer = memo(function FullPlayer({
         className="jaryq-blob-drift-alt absolute top-[42%] right-[12%] w-64 h-64 bg-jaryq-primary-med/25 rounded-full blur-3xl pointer-events-none"
       />
 
-      {/* Header */}
-      <div className="relative z-10 flex items-center justify-between px-4 pt-safe pt-4 pb-2 backdrop-blur-md bg-white/60 border-b border-jaryq-border-light/50">
+      {/* Header — top padding uses max() so devices with a notch get more
+          than 1rem; everyone else gets exactly 1rem. */}
+      <div
+        className="relative z-10 flex items-center justify-between px-4 pb-2 backdrop-blur-md bg-white/60 border-b border-jaryq-border-light/50"
+        style={{ paddingTop: "max(env(safe-area-inset-top), 1rem)" }}
+      >
         <button
           ref={closeBtnRef}
           onClick={onClose}
@@ -151,7 +155,7 @@ export const FullPlayer = memo(function FullPlayer({
       </div>
 
       {/* Cover */}
-      <div className="flex-1 flex flex-col items-center justify-center px-8 py-4 relative">
+      <div className="flex-1 flex flex-col items-center justify-center px-4 sm:px-8 py-4 relative">
         <div
           className={`relative w-56 h-72 rounded-2xl overflow-hidden mb-6 ${
             isPlaying
@@ -244,7 +248,7 @@ export const FullPlayer = memo(function FullPlayer({
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-4 mt-6">
+        <div className="flex items-center gap-2 sm:gap-4 mt-6">
           <button
             onClick={() => seekRelative(-30)}
             aria-label="30 секундқа артқа"
@@ -269,7 +273,7 @@ export const FullPlayer = memo(function FullPlayer({
             onClick={togglePlay}
             aria-label={isPlaying ? "Тоқтату" : "Ойнату"}
             aria-pressed={isPlaying}
-            className="w-16 h-16 flex items-center justify-center rounded-full jaryq-gradient-cta text-white hover:scale-[1.05] active:scale-95 transition-transform duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+            className="w-16 h-16 flex items-center justify-center rounded-full jaryq-gradient-cta text-white hover:scale-[1.05] active:scale-95 transition-transform duration-(--duration-jaryq-base) ease-jaryq-spring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
             style={{ boxShadow: "var(--shadow-jaryq-glow)" }}
           >
             <span className="relative w-7 h-7 inline-flex items-center justify-center">

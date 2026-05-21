@@ -46,7 +46,7 @@ function SwitchRow({ label, description, checked, onChange }: SwitchRowProps) {
           aria-describedby={descId}
           onClick={() => onChange(!checked)}
           className={cn(
-            "relative shrink-0 w-12 h-7 rounded-full transition-colors duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-out)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
+            "relative shrink-0 w-12 h-7 rounded-full transition-colors duration-(--duration-jaryq-base) ease-jaryq-out active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
             checked ? "bg-jaryq-primary" : "bg-jaryq-border-light"
           )}
           style={{
@@ -59,7 +59,7 @@ function SwitchRow({ label, description, checked, onChange }: SwitchRowProps) {
           <span
             aria-hidden="true"
             className={cn(
-              "absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] motion-reduce:transition-none",
+              "absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-transform duration-(--duration-jaryq-base) ease-jaryq-spring motion-reduce:transition-none",
               checked ? "translate-x-5" : "translate-x-0"
             )}
             style={{ boxShadow: "0 2px 6px rgba(0,0,0,0.18)" }}
@@ -78,7 +78,7 @@ export default function SettingsPage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-3xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
         <PageHeader
           icon={Settings}
           title="Баптаулар"
@@ -133,7 +133,7 @@ export default function SettingsPage() {
                     aria-label={`${s} есе жылдамдық`}
                     onClick={() => setSpeed(s)}
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-bold transition-[background-color,color,box-shadow,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
+                      "px-4 py-2 rounded-full text-sm font-bold transition-[background-color,color,box-shadow,transform] duration-(--duration-jaryq-fast) ease-jaryq-out active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
                       active
                         ? "jaryq-gradient-cta text-white"
                         : "bg-jaryq-bg-main text-jaryq-text-secondary hover:bg-jaryq-primary-soft hover:text-jaryq-primary"

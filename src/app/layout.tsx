@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/layout/AuthProvider";
@@ -20,6 +20,12 @@ const playfair = Playfair_Display({
   weight: ["500", "600", "700", "800", "900"],
   display: "swap",
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "JARYQ — Аудиокітаптар платформасы",
@@ -44,7 +50,7 @@ export default function RootLayout({
       lang="kk"
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} h-full`}
     >
-      <body className="min-h-full bg-[#F5F5F5]">
+      <body className="min-h-full bg-jaryq-bg-main">
         <AuthProvider>
           {children}
           <Toaster />

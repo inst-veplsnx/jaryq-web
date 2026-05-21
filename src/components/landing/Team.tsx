@@ -32,7 +32,7 @@ export function Team() {
               {/* Avatar */}
               <div
                 aria-hidden="true"
-                className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden jaryq-gradient-cta-radial flex items-center justify-center transition-transform duration-[var(--duration-jaryq-base)] group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden jaryq-gradient-cta-radial flex items-center justify-center transition-transform duration-(--duration-jaryq-base) group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                 style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
               >
                 {member.photoUrl ? (

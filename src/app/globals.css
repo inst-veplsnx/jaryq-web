@@ -124,11 +124,21 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-[#F5F5F5] text-[#0F0F0F] antialiased;
+    @apply bg-jaryq-bg-main text-jaryq-text-primary antialiased;
   }
   html {
     @apply font-sans;
   }
+}
+
+/* iOS safe-area helpers — Tailwind v4 doesn't ship these.
+   Applied additively so callers can keep their own `pb-*`/`pt-*` and
+   the safe-area inset stacks on top. */
+@utility pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
+}
+@utility pt-safe {
+  padding-top: max(env(safe-area-inset-top), 0px);
 }
 
 /* Scrollbar styling */

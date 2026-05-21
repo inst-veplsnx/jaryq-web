@@ -97,8 +97,8 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
     <article className="min-h-screen bg-jaryq-bg-main">
       {/* Hero */}
       <header className="bg-jaryq-bg-card border-b border-jaryq-border-light">
-        <div className="max-w-3xl mx-auto px-6 py-8">
-          <div className="flex gap-6">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          <div className="flex gap-4 sm:gap-6">
             <div className="shrink-0">
               <span
                 className="block rounded-xl overflow-hidden ring-1 ring-black/5"
@@ -107,9 +107,9 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                 <CoverImage
                   src={book.cover_url}
                   alt=""
-                  width={120}
-                  height={160}
-                  className="rounded-xl"
+                  width={96}
+                  height={128}
+                  className="rounded-xl w-24 h-32 sm:w-30 sm:h-40"
                 />
               </span>
             </div>
@@ -149,7 +149,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
               {progress && resumeChapter && (
                 <div className="mt-3">
                   <div
-                    className="h-1.5 bg-jaryq-border-light rounded-full overflow-hidden w-48"
+                    className="h-1.5 bg-jaryq-border-light rounded-full overflow-hidden w-full max-w-48"
                     role="progressbar"
                     aria-label="Тыңдау прогресі"
                     aria-valuemin={0}
@@ -179,7 +179,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                   disabled={isLaunching || chapters.length === 0}
                   aria-busy={isLaunching || undefined}
                   aria-pressed={showsPauseOnResume}
-                  className="flex items-center gap-2 jaryq-gradient-cta text-white font-bold px-6 py-3 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-[transform,box-shadow] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] disabled:opacity-50 disabled:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+                  className="flex items-center gap-2 jaryq-gradient-cta text-white font-bold px-6 py-3 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-[transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-spring disabled:opacity-50 disabled:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
                   style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
                 >
                   {isLaunching ? (
@@ -195,7 +195,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                 </button>
                 <button
                   onClick={() => launchPlayer(0, 0)}
-                  className="flex items-center gap-2 bg-jaryq-bg-card text-jaryq-text-primary font-semibold px-5 py-3 rounded-xl border border-jaryq-border-light hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                  className="flex items-center gap-2 bg-jaryq-bg-card text-jaryq-text-primary font-semibold px-5 py-3 rounded-xl border border-jaryq-border-light hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-(--duration-jaryq-base) ease-jaryq-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                   style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
                 >
                   Басынан тыңдау
@@ -225,7 +225,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
               disabled={favLoading || !user}
               aria-pressed={isFavorite}
               className={cn(
-                "group/fav flex items-center gap-2 font-semibold px-5 py-3 rounded-xl border active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-out)] disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
+                "group/fav flex items-center gap-2 font-semibold px-5 py-3 rounded-xl border active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-(--duration-jaryq-base) ease-jaryq-out disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
                 isFavorite
                   ? "bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100"
                   : "bg-jaryq-bg-card text-jaryq-text-muted border-jaryq-border-light hover:border-rose-300 hover:text-rose-600 hover:bg-rose-50/40"
@@ -236,13 +236,13 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                 <HeartOff
                   size={18}
                   aria-hidden="true"
-                  className="transition-transform duration-[var(--duration-jaryq-base)] group-hover/fav:scale-110 motion-reduce:transition-none motion-reduce:group-hover/fav:scale-100"
+                  className="transition-transform duration-(--duration-jaryq-base) group-hover/fav:scale-110 motion-reduce:transition-none motion-reduce:group-hover/fav:scale-100"
                 />
               ) : (
                 <Heart
                   size={18}
                   aria-hidden="true"
-                  className="transition-transform duration-[var(--duration-jaryq-base)] group-hover/fav:scale-110 motion-reduce:transition-none motion-reduce:group-hover/fav:scale-100"
+                  className="transition-transform duration-(--duration-jaryq-base) group-hover/fav:scale-110 motion-reduce:transition-none motion-reduce:group-hover/fav:scale-100"
                 />
               )}
               {isFavorite ? "Алып тастау" : "Таңдаулыға"}
@@ -253,7 +253,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
 
       {/* Description */}
       {book.description && (
-        <section className="max-w-3xl mx-auto px-6 py-6" aria-labelledby="book-desc-heading">
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 py-6" aria-labelledby="book-desc-heading">
           <h2 id="book-desc-heading" className="font-bold text-jaryq-text-primary mb-3">
             Сипаттама
           </h2>
@@ -265,7 +265,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
 
       {/* Chapters */}
       {chapters.length > 0 && (
-        <section className="max-w-3xl mx-auto px-6 pb-8" aria-labelledby="book-chapters-heading">
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-8" aria-labelledby="book-chapters-heading">
           <div className="flex items-center gap-2 mb-4">
             <ListMusic size={18} className="text-jaryq-primary" aria-hidden="true" />
             <h2 id="book-chapters-heading" className="font-bold text-jaryq-text-primary">

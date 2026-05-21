@@ -11,7 +11,7 @@ import { SkeletonCover, SkeletonText } from "@/components/ui/skeleton";
 
 const PAGE_SIZE = 24;
 const BOOK_GRID =
-  "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5";
+  "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-5";
 
 export default function AllBooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -37,7 +37,7 @@ export default function AllBooksPage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
             ? "Кітаптар жүктелуде…"
@@ -85,7 +85,7 @@ export default function AllBooksPage() {
                   <button
                     onClick={loadMore}
                     disabled={loadingMore}
-                    className="px-8 py-3 rounded-xl bg-jaryq-bg-card border border-jaryq-border-light text-jaryq-text-primary font-semibold hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+                    className="px-8 py-3 rounded-xl bg-jaryq-bg-card border border-jaryq-border-light text-jaryq-text-primary font-semibold hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-(--duration-jaryq-fast) ease-jaryq-out disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
                     style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
                   >
                     {loadingMore ? "Жүктелуде…" : "Көбірек жүктеу"}

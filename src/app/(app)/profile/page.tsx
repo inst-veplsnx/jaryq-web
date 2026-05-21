@@ -53,7 +53,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-3xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10 space-y-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10 pb-10 space-y-8">
 
         {/* User card */}
         <div
@@ -91,7 +91,7 @@ export default function ProfilePage() {
                 <span
                   aria-hidden="true"
                   className={cn(
-                    "w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform duration-[var(--duration-jaryq-base)] group-hover:scale-110 group-hover:rotate-[-4deg] motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0",
+                    "w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform duration-(--duration-jaryq-base) group-hover:scale-110 group-hover:-rotate-4 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0",
                     bgClass
                   )}
                 >
@@ -109,7 +109,7 @@ export default function ProfilePage() {
         {/* Sign out */}
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-500 bg-white border border-jaryq-border-light hover:bg-red-50 hover:border-red-500/30 active:scale-[0.98] transition-[background-color,border-color,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 motion-reduce:transition-none"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-500 bg-white border border-jaryq-border-light hover:bg-red-50 hover:border-red-500/30 active:scale-[0.98] transition-[background-color,border-color,transform] duration-(--duration-jaryq-fast) ease-jaryq-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 motion-reduce:transition-none"
         >
           <LogOut size={16} aria-hidden="true" />
           Шығу

@@ -239,7 +239,7 @@ export function PlayerBar() {
       {/* Mini player bar */}
       <section
         aria-label="Аудио ойнатқыш"
-        className="fixed bottom-0 left-0 right-0 lg:left-60 z-50 bg-jaryq-bg-card/95 backdrop-blur-md border-t-2 border-jaryq-primary/20"
+        className="fixed bottom-0 left-0 right-0 lg:left-60 z-50 bg-jaryq-bg-card/95 backdrop-blur-md border-t-2 border-jaryq-primary/20 pb-safe"
         style={{ boxShadow: "0 -12px 28px -10px rgba(15,15,15,0.12), var(--shadow-jaryq-md)" }}
       >
         {/* Error banner */}
@@ -297,7 +297,7 @@ export function PlayerBar() {
             : ""}
         </div>
 
-        <div className="flex items-center gap-3 px-4 h-16 pb-safe">
+        <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 h-16">
           {/* Cover + info */}
           <button
             onClick={openFull}
@@ -336,7 +336,7 @@ export function PlayerBar() {
           </button>
 
           {/* Time + speed group (secondary metadata, subordinated) */}
-          <div className="flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-2">
             <span
               className="text-[11px] text-jaryq-text-muted font-mono tabular-nums"
               aria-hidden="true"
@@ -357,7 +357,7 @@ export function PlayerBar() {
             <button
               onClick={skipPrev}
               aria-label="Алдыңғы тарау"
-              className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-transform duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+              className="hidden sm:flex w-11 h-11 items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-transform duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
             >
               <SkipBack size={18} aria-hidden="true" />
             </button>
@@ -365,7 +365,7 @@ export function PlayerBar() {
               onClick={togglePlay}
               aria-label={isPlaying ? "Тоқтату" : "Ойнату"}
               aria-pressed={isPlaying}
-              className="w-11 h-11 flex items-center justify-center rounded-full jaryq-gradient-cta text-white hover:scale-[1.05] active:scale-95 transition-transform duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+              className="w-11 h-11 flex items-center justify-center rounded-full jaryq-gradient-cta text-white hover:scale-[1.05] active:scale-95 transition-transform duration-(--duration-jaryq-base) ease-jaryq-spring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
               style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
             >
               <span className="relative w-5 h-5 inline-flex items-center justify-center">
@@ -389,17 +389,18 @@ export function PlayerBar() {
               onClick={skipNext}
               disabled={chapterIndex >= chapters.length - 1}
               aria-label="Келесі тарау"
-              className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-transform duration-150 active:scale-95 disabled:opacity-30 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+              className="hidden sm:flex w-11 h-11 items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-transform duration-150 active:scale-95 disabled:opacity-30 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
             >
               <SkipForward size={18} aria-hidden="true" />
             </button>
           </div>
 
-          {/* Expand */}
+          {/* Expand — redundant on mobile since the cover/info button also opens
+              the full player; keep it for tablet/desktop. */}
           <button
             onClick={openFull}
             aria-label="Толық ойнатқышты ашу"
-            className="w-11 h-11 flex items-center justify-center text-jaryq-text-muted hover:text-jaryq-primary transition-transform duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded-full motion-reduce:transition-none"
+            className="hidden sm:flex w-11 h-11 items-center justify-center text-jaryq-text-muted hover:text-jaryq-primary transition-transform duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded-full motion-reduce:transition-none"
           >
             <ChevronUp size={18} aria-hidden="true" />
           </button>

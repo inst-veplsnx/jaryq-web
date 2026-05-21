@@ -102,7 +102,7 @@ export function Features() {
               >
                 <div
                   aria-hidden="true"
-                  className={`w-12 h-12 ${t.bg} rounded-xl flex items-center justify-center mb-4 ring-1 ${t.ring} transition-transform duration-[var(--duration-jaryq-base)] group-hover:scale-110 group-hover:rotate-[-4deg] motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0`}
+                  className={`w-12 h-12 ${t.bg} rounded-xl flex items-center justify-center mb-4 ring-1 ${t.ring} transition-transform duration-(--duration-jaryq-base) group-hover:scale-110 group-hover:-rotate-4 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0`}
                 >
                   <Icon size={22} className={t.icon} />
                 </div>

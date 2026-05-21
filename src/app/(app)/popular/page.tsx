@@ -10,7 +10,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { SkeletonCover, SkeletonText } from "@/components/ui/skeleton";
 
 const BOOK_GRID =
-  "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5";
+  "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-5";
 
 export default function PopularPage() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -25,7 +25,7 @@ export default function PopularPage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
             ? "Танымал кітаптар жүктелуде…"

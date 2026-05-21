@@ -81,7 +81,7 @@ export function ChapterList({
           ref={closeBtnRef}
           onClick={onClose}
           aria-label="Тараулар тізімін жабу"
-          className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary active:scale-95 transition-[background-color,color,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+          className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary active:scale-95 transition-[background-color,color,transform] duration-(--duration-jaryq-fast) ease-jaryq-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
         >
           <X size={20} aria-hidden="true" />
         </button>
@@ -96,7 +96,7 @@ export function ChapterList({
                 aria-current={active ? "true" : undefined}
                 aria-label={`${index + 1}-тарау, ${chapter.title}, ұзақтығы ${formatDuration(chapter.duration)}${active ? ", қазір ойналуда" : ""}`}
                 className={cn(
-                  "w-full flex items-center gap-3 px-4 py-3 text-left transition-colors duration-[var(--duration-jaryq-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary",
+                  "w-full flex items-center gap-3 px-4 py-3 text-left transition-colors duration-(--duration-jaryq-fast) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary",
                   active
                     ? "bg-jaryq-primary-soft"
                     : "hover:bg-jaryq-bg-main"
@@ -105,7 +105,7 @@ export function ChapterList({
                 <div
                   aria-hidden="true"
                   className={cn(
-                    "w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 tabular-nums transition-colors duration-[var(--duration-jaryq-fast)]",
+                    "w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 tabular-nums transition-colors duration-(--duration-jaryq-fast)",
                     active
                       ? "text-white"
                       : "bg-jaryq-bg-main text-jaryq-text-secondary"

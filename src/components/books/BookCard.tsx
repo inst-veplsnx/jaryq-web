@@ -38,12 +38,12 @@ export const BookCard = memo(function BookCard({ book, progress }: BookCardProps
             src={book.cover_url}
             alt=""
             fill
-            className="w-full h-full transition-transform duration-[var(--duration-jaryq-slow)] ease-[var(--ease-jaryq-out)] group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            className="w-full h-full transition-transform duration-(--duration-jaryq-slow) ease-jaryq-out group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           />
           {/* Cover bottom fade for legibility of overlay chips */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-[var(--duration-jaryq-base)] motion-reduce:transition-none"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-(--duration-jaryq-base) motion-reduce:transition-none"
           />
           {book.is_new && (
             <div className="absolute top-2 left-2" aria-hidden="true">

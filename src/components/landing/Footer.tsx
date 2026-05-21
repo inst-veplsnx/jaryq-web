@@ -24,7 +24,7 @@ const links = {
 
 export function Footer() {
   return (
-    <footer className="bg-[#0F0F0F] text-white py-16 px-4">
+    <footer className="bg-jaryq-text-primary text-white py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
@@ -44,7 +44,7 @@ export function Footer() {
               />
               <span className="text-2xl font-black tracking-tight">JARYQ</span>
             </Link>
-            <p className="text-[#D4D4D4] text-sm leading-relaxed">
+            <p className="text-neutral-300 text-sm leading-relaxed">
               Қазақ тіліндегі аудиокітаптардың ең үлкен платформасы. Тегін.
               Барлығы үшін.
             </p>
@@ -53,7 +53,7 @@ export function Footer() {
           {/* Links */}
           {Object.entries(links).map(([section, items]) => (
             <nav key={section} aria-label={section}>
-              <h2 className="font-bold text-sm uppercase tracking-widest text-[#D4D4D4] mb-4">
+              <h2 className="font-bold text-sm uppercase tracking-widest text-neutral-300 mb-4">
                 {section}
               </h2>
               <ul className="space-y-2">
@@ -61,7 +61,7 @@ export function Footer() {
                   <li key={label}>
                     <Link
                       href={href}
-                      className="text-[#A3A3A3] hover:text-white hover:translate-x-0.5 text-sm inline-flex items-center transition-[color,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded motion-reduce:transition-none motion-reduce:hover:translate-x-0"
+                      className="text-neutral-400 hover:text-white hover:translate-x-0.5 text-sm inline-flex items-center transition-[color,transform] duration-(--duration-jaryq-fast) ease-jaryq-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded motion-reduce:transition-none motion-reduce:hover:translate-x-0"
                     >
                       {label}
                     </Link>
@@ -73,10 +73,10 @@ export function Footer() {
         </div>
 
         <div className="pt-8 border-t border-[#3B3B3B]/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[#A3A3A3] text-sm">
+          <p className="text-neutral-400 text-sm">
             © {new Date().getFullYear()} JARYQ. Барлық құқықтар сақталған.
           </p>
-          <p className="text-[#A3A3A3] text-sm inline-flex items-center gap-1.5">
+          <p className="text-neutral-400 text-sm inline-flex items-center gap-1.5">
             Жасалды
             <Heart
               size={14}

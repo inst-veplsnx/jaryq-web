@@ -63,7 +63,7 @@ export default function SearchPage() {
     <div className="min-h-screen bg-jaryq-bg-main">
       {/* Search bar — sticky */}
       <div
-        className="bg-white/85 backdrop-blur-md border-b border-jaryq-border-light px-6 lg:px-8 py-4 sticky top-0 z-10"
+        className="bg-white/85 backdrop-blur-md border-b border-jaryq-border-light px-4 sm:px-6 lg:px-8 py-4 sticky top-0 z-10"
         style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
       >
         <div className="max-w-2xl mx-auto relative">
@@ -84,13 +84,13 @@ export default function SearchPage() {
             autoFocus
             aria-controls={statusId}
             aria-describedby={statusId}
-            className="w-full pl-11 pr-12 py-3 bg-jaryq-bg-main border border-jaryq-border-light rounded-xl text-jaryq-text-primary placeholder:text-jaryq-text-muted focus:outline-none focus:border-jaryq-primary focus:ring-2 focus:ring-jaryq-primary/40 focus:bg-white transition-[background-color,border-color,box-shadow] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] motion-reduce:transition-none"
+            className="w-full pl-11 pr-12 py-3 bg-jaryq-bg-main border border-jaryq-border-light rounded-xl text-jaryq-text-primary placeholder:text-jaryq-text-muted focus:outline-none focus:border-jaryq-primary focus:ring-2 focus:ring-jaryq-primary/40 focus:bg-white transition-[background-color,border-color,box-shadow] duration-(--duration-jaryq-fast) ease-jaryq-out motion-reduce:transition-none"
           />
           {query && (
             <button
               onClick={clearSearch}
               aria-label="Іздеуді тазалау"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-jaryq-border-light text-jaryq-text-secondary hover:bg-jaryq-primary hover:text-white active:scale-90 transition-[background-color,color,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-jaryq-border-light text-jaryq-text-secondary hover:bg-jaryq-primary hover:text-white active:scale-90 transition-[background-color,color,transform] duration-(--duration-jaryq-fast) ease-jaryq-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
             >
               <X size={14} aria-hidden="true" />
             </button>
@@ -98,7 +98,7 @@ export default function SearchPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 lg:px-8 pt-6 lg:pt-8 pb-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 lg:pt-8 pb-10">
         <div id={statusId} role="status" aria-live="polite" className="sr-only">
           {statusMessage}
         </div>

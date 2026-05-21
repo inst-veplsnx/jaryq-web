@@ -9,11 +9,11 @@ export function Hero() {
       {/* Decorative ambient blobs */}
       <div
         aria-hidden="true"
-        className="jaryq-blob-drift absolute top-0 right-0 w-[600px] h-[600px] bg-jaryq-primary/10 rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none blur-3xl"
+        className="jaryq-blob-drift absolute top-0 right-0 w-150 h-150 bg-jaryq-primary/10 rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="jaryq-blob-drift-alt absolute bottom-0 left-0 w-[420px] h-[420px] bg-jaryq-primary-med/20 rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none blur-3xl"
+        className="jaryq-blob-drift-alt absolute bottom-0 left-0 w-105 h-105 bg-jaryq-primary-med/20 rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none blur-3xl"
       />
       {/* Fine grain overlay — adds tactile depth without noise */}
       <div
@@ -48,21 +48,21 @@ export function Hero() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/register"
-              className="group/cta inline-flex items-center gap-2 jaryq-gradient-cta text-white font-bold px-8 py-4 rounded-2xl transition-[transform,box-shadow] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-out)] hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
+              className="group/cta inline-flex items-center gap-2 jaryq-gradient-cta text-white font-bold px-8 py-4 rounded-2xl transition-[transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-out hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
               style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
             >
               <Play size={18} className="fill-white" aria-hidden="true" />
               Тыңдауды бастау
               <span
                 aria-hidden="true"
-                className="inline-block transition-transform duration-[var(--duration-jaryq-base)] group-hover/cta:translate-x-0.5"
+                className="inline-block transition-transform duration-(--duration-jaryq-base) group-hover/cta:translate-x-0.5"
               >
                 <ArrowRight size={16} />
               </span>
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 bg-white text-jaryq-text-primary font-bold px-8 py-4 rounded-2xl border-2 border-jaryq-border-warm transition-[border-color,color,transform,box-shadow] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-out)] hover:border-jaryq-primary hover:text-jaryq-primary hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 bg-white text-jaryq-text-primary font-bold px-8 py-4 rounded-2xl border-2 border-jaryq-border-warm transition-[border-color,color,transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-out hover:border-jaryq-primary hover:text-jaryq-primary hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
               style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
             >
               Кіру
@@ -70,7 +70,7 @@ export function Hero() {
           </div>
 
           {/* Trust micro-copy */}
-          <p className="mt-5 inline-flex items-center gap-2 text-sm text-[#475569]">
+          <p className="mt-5 inline-flex items-center gap-2 text-sm text-slate-600">
             <Sparkles size={14} className="text-jaryq-primary" aria-hidden="true" />
             Тегін · Тіркеу 30 секундта · Несие картасы керек емес
           </p>
@@ -97,7 +97,7 @@ export function Hero() {
           className="relative flex justify-center items-center jaryq-reveal jaryq-reveal-delay-2"
           aria-hidden="true"
         >
-          <div className="relative w-[340px] h-[440px]">
+          <div className="relative w-85 h-110">
             {/* Waveform behind the covers */}
             <svg
               viewBox="0 0 360 360"
@@ -132,7 +132,7 @@ export function Hero() {
 
             {/* Back cover — slate ink */}
             <div
-              className="absolute top-6 -left-2 w-48 h-64 rounded-2xl bg-gradient-to-br from-[#1E293B] to-[#0F172A] -rotate-[10deg] flex flex-col justify-end p-4 border border-white/10"
+              className="absolute top-6 -left-2 w-48 h-64 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 -rotate-10 flex flex-col justify-end p-4 border border-white/10"
               style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
             >
               <div className="h-1 w-10 bg-jaryq-primary rounded-full mb-3" />
@@ -144,7 +144,7 @@ export function Hero() {
 
             {/* Middle cover — cream */}
             <div
-              className="absolute top-2 right-0 w-48 h-64 rounded-2xl bg-gradient-to-br from-[#FFF4ED] to-[#FDBA74] rotate-[8deg] flex flex-col justify-end p-4 border border-jaryq-border-warm"
+              className="absolute top-2 right-0 w-48 h-64 rounded-2xl bg-gradient-to-br from-jaryq-primary-soft to-jaryq-primary-med rotate-8 flex flex-col justify-end p-4 border border-jaryq-border-warm"
               style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
             >
               <div className="h-1 w-10 bg-jaryq-ink rounded-full mb-3" />
@@ -192,14 +192,14 @@ export function Hero() {
 
             {/* Floating badges */}
             <div
-              className="absolute -right-4 top-4 bg-white rounded-2xl px-3 py-2 border border-jaryq-border-warm rotate-[6deg]"
+              className="absolute -right-4 top-4 bg-white rounded-2xl px-3 py-2 border border-jaryq-border-warm rotate-6"
               style={{ boxShadow: "var(--shadow-jaryq-md)" }}
             >
               <p className="text-xs font-bold text-jaryq-text-primary">3-тарау</p>
               <p className="text-[10px] text-jaryq-text-muted tabular-nums">47:23 қалды</p>
             </div>
             <div
-              className="absolute -left-6 bottom-12 bg-jaryq-ink text-white rounded-2xl px-3 py-2 -rotate-[6deg]"
+              className="absolute -left-6 bottom-12 bg-jaryq-ink text-white rounded-2xl px-3 py-2 -rotate-6"
               style={{ boxShadow: "var(--shadow-jaryq-md)" }}
             >
               <p className="text-xs font-bold tabular-nums">1.5x жылдам</p>

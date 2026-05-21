@@ -145,7 +145,7 @@ export default function LoginPage() {
             type="submit"
             disabled={loading || !email || !password}
             aria-busy={loading || undefined}
-            className="w-full jaryq-gradient-cta text-white font-bold py-3.5 rounded-xl hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-[transform,box-shadow] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+            className="w-full jaryq-gradient-cta text-white font-bold py-3.5 rounded-xl hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-[transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-spring flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
             style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
           >
             {loading ? (

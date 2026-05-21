@@ -83,7 +83,7 @@ export function ContinueListeningCard({
         disabled={isLoading}
         aria-busy={isLoading || undefined}
         aria-label={`${progress.book.title} кітабын жалғастыру`}
-        className="w-12 h-12 flex items-center justify-center rounded-full jaryq-gradient-cta text-white hover:scale-[1.06] active:scale-95 disabled:opacity-60 disabled:hover:scale-100 transition-transform duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 flex-shrink-0 motion-reduce:transition-none motion-reduce:hover:scale-100"
+        className="w-12 h-12 flex items-center justify-center rounded-full jaryq-gradient-cta text-white hover:scale-[1.06] active:scale-95 disabled:opacity-60 disabled:hover:scale-100 transition-transform duration-(--duration-jaryq-base) ease-jaryq-spring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 flex-shrink-0 motion-reduce:transition-none motion-reduce:hover:scale-100"
         style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
       >
         {isLoading ? (

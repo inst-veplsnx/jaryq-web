@@ -12,7 +12,7 @@ export function MainContent({ children }: { children: React.ReactNode }) {
       tabIndex={-1}
       className={cn(
         "flex-1 lg:ml-60 overflow-y-auto lg:pb-24 focus:outline-none transition-all duration-200",
-        hasPlayer ? "pb-[140px]" : "pb-20"
+        hasPlayer ? "pb-35" : "pb-20"
       )}
     >
       {children}
