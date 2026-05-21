@@ -43,7 +43,7 @@ src/
 ├── lib/               # Supabase clients, audio service, team data, helpers
 ├── store/             # Zustand stores
 ├── types/             # Shared TS types
-└── middleware.ts      # Route protection for app pages
+└── proxy.ts           # Route protection for app pages (Next.js 16 middleware)
 ```
 
 ## Getting Started
@@ -109,7 +109,7 @@ Route groups split the app into three areas:
 - **`(auth)/`** — login and register
 - **`(app)/`** — protected pages (home, books, genres, favorites, library, search, profile, …)
 
-`src/middleware.ts` redirects unauthenticated users away from `(app)/` routes.
+`src/proxy.ts` (Next.js 16's renamed middleware) redirects unauthenticated users away from `(app)/` routes.
 
 ## Audio Player
 

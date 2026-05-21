@@ -1,14 +1,13 @@
 import type { NextConfig } from "next";
 import path from "path";
 import bundleAnalyzer from "@next/bundle-analyzer";
+import { requireEnv } from "./src/lib/env";
 
 const withBundleAnalyzer = bundleAnalyzer({ enabled: process.env.ANALYZE === "true" });
 
 const isDev = process.env.NODE_ENV === "development";
 
-const SUPABASE_HOST = process.env.NEXT_PUBLIC_SUPABASE_URL
-  ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
-  : "gadnsdnbflexvggcghji.supabase.co";
+const SUPABASE_HOST = new URL(requireEnv("NEXT_PUBLIC_SUPABASE_URL")).hostname;
 
 const csp = [
   "default-src 'self'",

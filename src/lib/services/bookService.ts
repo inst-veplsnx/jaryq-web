@@ -1,4 +1,5 @@
 import { getSupabaseClient } from "@/lib/supabase/client";
+import { logger } from "@/lib/logger";
 import { Book, Chapter, Favorite, Genre, UserProgress } from "@/types";
 
 export const bookService = {
@@ -14,7 +15,7 @@ export const bookService = {
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
-      console.error("Error fetching new arrivals:", (error as Error).message);
+      logger.error("Error fetching new arrivals:", (error as Error).message);
       return [];
     }
   },
@@ -31,7 +32,7 @@ export const bookService = {
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
-      console.error("Error fetching popular books:", (error as Error).message);
+      logger.error("Error fetching popular books:", (error as Error).message);
       return [];
     }
   },
@@ -47,7 +48,7 @@ export const bookService = {
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
-      console.error("Error fetching all books:", (error as Error).message);
+      logger.error("Error fetching all books:", (error as Error).message);
       return [];
     }
   },
@@ -63,7 +64,7 @@ export const bookService = {
       if (error) throw error;
       return data;
     } catch (error: unknown) {
-      console.error("Error fetching book:", (error as Error).message);
+      logger.error("Error fetching book:", (error as Error).message);
       return null;
     }
   },
@@ -80,7 +81,7 @@ export const bookService = {
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
-      console.error(
+      logger.error(
         "Error fetching books by genre:",
         (error as Error).message
       );
@@ -102,7 +103,7 @@ export const bookService = {
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
-      console.error("Error searching books:", (error as Error).message);
+      logger.error("Error searching books:", (error as Error).message);
       return [];
     }
   },
@@ -118,7 +119,7 @@ export const bookService = {
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
-      console.error("Error fetching chapters:", (error as Error).message);
+      logger.error("Error fetching chapters:", (error as Error).message);
       return [];
     }
   },
@@ -133,7 +134,7 @@ export const bookService = {
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
-      console.error("Error fetching genres:", (error as Error).message);
+      logger.error("Error fetching genres:", (error as Error).message);
       return [];
     }
   },
@@ -149,7 +150,7 @@ export const bookService = {
       if (error) throw error;
       return data;
     } catch (error: unknown) {
-      console.error("Error fetching genre:", (error as Error).message);
+      logger.error("Error fetching genre:", (error as Error).message);
       return null;
     }
   },
@@ -176,7 +177,7 @@ export const bookService = {
       );
       if (error) throw error;
     } catch (error: unknown) {
-      console.error("Error saving progress:", (error as Error).message);
+      logger.error("Error saving progress:", (error as Error).message);
     }
   },
 
@@ -195,7 +196,7 @@ export const bookService = {
       if (error) throw error;
       return data;
     } catch (error: unknown) {
-      console.error("Error fetching progress:", (error as Error).message);
+      logger.error("Error fetching progress:", (error as Error).message);
       return null;
     }
   },
@@ -213,7 +214,7 @@ export const bookService = {
       if (error) throw error;
       return data;
     } catch (error: unknown) {
-      console.error("Error fetching recent progress:", (error as Error).message);
+      logger.error("Error fetching recent progress:", (error as Error).message);
       return null;
     }
   },
@@ -229,7 +230,7 @@ export const bookService = {
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
-      console.error("Error fetching all progress:", (error as Error).message);
+      logger.error("Error fetching all progress:", (error as Error).message);
       return [];
     }
   },
@@ -245,7 +246,7 @@ export const bookService = {
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
-      console.error("Error fetching favorites:", (error as Error).message);
+      logger.error("Error fetching favorites:", (error as Error).message);
       return [];
     }
   },

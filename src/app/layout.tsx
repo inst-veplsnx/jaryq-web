@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin", "cyrillic"],
-  weight: ["500", "600", "700", "800", "900"],
+  weight: ["700", "800", "900"],
   display: "swap",
 });
 
@@ -27,7 +27,10 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "JARYQ — Аудиокітаптар платформасы",
   description:
     "JARYQ — Қазақстандағы ең үлкен аудиокітаптар платформасы. Мыңдаған кітаптарды тыңдаңыз.",
