@@ -86,7 +86,7 @@ export function Sidebar() {
                     className={cn(
                       linkBase,
                       active
-                        ? "bg-jaryq-primary-soft text-jaryq-primary"
+                        ? "bg-jaryq-primary-soft text-jaryq-primary shadow-[inset_0_-1px_0_rgba(249,115,22,0.08)]"
                         : "text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary"
                     )}
                   >

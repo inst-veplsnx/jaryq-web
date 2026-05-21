@@ -21,7 +21,10 @@ export function Header({ title, showSearch = true }: HeaderProps) {
   };
 
   return (
-    <header className="lg:hidden sticky top-0 z-20 bg-white/85 backdrop-blur-md border-b border-jaryq-border-light px-4 h-14 flex items-center justify-between">
+    <header
+      className="lg:hidden sticky top-0 z-20 bg-white/85 backdrop-blur-md border-b border-jaryq-border-light px-4 h-14 flex items-center justify-between"
+      style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
+    >
       <Link
         href="/home"
         aria-label="JARYQ бастапқы бетке"

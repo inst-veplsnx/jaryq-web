@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useRef, useState, useCallback } from "react";
-import { Search, X } from "lucide-react";
+import { Search, X, Loader2 } from "lucide-react";
 import { bookService } from "@/lib/services/bookService";
 import { Book } from "@/types";
 import { BookListItem } from "@/components/books/BookListItem";
@@ -62,8 +62,11 @@ export default function SearchPage() {
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
       {/* Search bar — sticky */}
-      <div className="bg-white/85 backdrop-blur-md border-b border-jaryq-border-light px-8 py-4 sticky top-0 z-10">
-        <div className="max-w-2xl relative">
+      <div
+        className="bg-white/85 backdrop-blur-md border-b border-jaryq-border-light px-6 lg:px-8 py-4 sticky top-0 z-10"
+        style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
+      >
+        <div className="max-w-2xl mx-auto relative">
           <label htmlFor={searchInputId} className="sr-only">
             Кітап іздеу
           </label>
@@ -81,13 +84,13 @@ export default function SearchPage() {
             autoFocus
             aria-controls={statusId}
             aria-describedby={statusId}
-            className="w-full pl-11 pr-12 py-3 bg-jaryq-bg-main border border-jaryq-border-light rounded-xl text-jaryq-text-primary placeholder:text-jaryq-text-muted focus:outline-none focus:border-jaryq-primary focus:ring-2 focus:ring-jaryq-primary/40 transition-all duration-150 motion-reduce:transition-none"
+            className="w-full pl-11 pr-12 py-3 bg-jaryq-bg-main border border-jaryq-border-light rounded-xl text-jaryq-text-primary placeholder:text-jaryq-text-muted focus:outline-none focus:border-jaryq-primary focus:ring-2 focus:ring-jaryq-primary/40 focus:bg-white transition-[background-color,border-color,box-shadow] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] motion-reduce:transition-none"
           />
           {query && (
             <button
               onClick={clearSearch}
               aria-label="Іздеуді тазалау"
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-jaryq-border-light text-jaryq-text-secondary hover:bg-jaryq-primary hover:text-white active:scale-90 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full bg-jaryq-border-light text-jaryq-text-secondary hover:bg-jaryq-primary hover:text-white active:scale-90 transition-[background-color,color,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
             >
               <X size={14} aria-hidden="true" />
             </button>
@@ -95,14 +98,20 @@ export default function SearchPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-8 py-8">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8 pt-6 lg:pt-8 pb-10">
         <div id={statusId} role="status" aria-live="polite" className="sr-only">
           {statusMessage}
         </div>
 
         {loading && (
-          <div className="flex items-center justify-center py-12" aria-hidden="true">
-            <div className="w-8 h-8 border-2 border-jaryq-primary border-t-transparent rounded-full animate-spin motion-reduce:animate-none" />
+          <div
+            className="flex items-center justify-center py-16"
+            aria-hidden="true"
+          >
+            <Loader2
+              size={28}
+              className="text-jaryq-primary animate-spin motion-reduce:animate-none"
+            />
           </div>
         )}
 
@@ -110,34 +119,26 @@ export default function SearchPage() {
           <EmptyState
             title="Нәтиже табылмады"
             description={`"${query}" бойынша кітап табылмады. Басқа сөздермен іздеп көріңіз.`}
-            icon={<Search className="text-jaryq-primary" size={36} />}
+            icon={<Search size={36} />}
+            tone="default"
           />
         )}
 
         {!loading && !searched && (
-          <div className="text-center py-20">
-            <div
-              aria-hidden="true"
-              className="relative w-20 h-20 rounded-full bg-gradient-to-br from-jaryq-primary-soft to-jaryq-primary-med/30 flex items-center justify-center mx-auto mb-4 shadow-sm ring-1 ring-jaryq-primary/10"
-            >
-              <span
-                aria-hidden="true"
-                className="absolute inset-0 rounded-full bg-jaryq-primary/10 blur-xl"
-              />
-              <Search size={32} className="relative text-jaryq-primary" />
-            </div>
-            <p className="text-jaryq-text-primary font-bold tracking-tight text-lg mb-2">
-              Іздеуді бастаңыз
-            </p>
-            <p className="text-jaryq-text-secondary text-sm">
-              Кітап атауын, автор немесе диктор атын енгізіңіз
-            </p>
-          </div>
+          <EmptyState
+            title="Іздеуді бастаңыз"
+            description="Кітап атауын, автор немесе диктор атын енгізіңіз"
+            icon={<Search size={36} />}
+            tone="default"
+          />
         )}
 
         {!loading && results.length > 0 && (
           <div>
-            <p className="text-sm text-jaryq-text-muted mb-4 tabular-nums" aria-hidden="true">
+            <p
+              className="text-sm text-jaryq-text-muted mb-4 tabular-nums"
+              aria-hidden="true"
+            >
               {results.length} нәтиже табылды
             </p>
             <ul className="grid grid-cols-1 lg:grid-cols-2 gap-3">

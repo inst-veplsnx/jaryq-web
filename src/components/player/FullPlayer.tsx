@@ -36,18 +36,15 @@ export const FullPlayer = memo(function FullPlayer({
   skipNext,
   cycleSpeed,
 }: FullPlayerProps) {
-  const {
-    currentBook,
-    currentChapter,
-    chapterIndex,
-    isPlaying,
-    position,
-    duration,
-    chapters,
-    isLoading,
-  } = usePlayerStore();
-  const store = usePlayerStore();
-  const { speed } = useSettingsStore();
+  const currentBook = usePlayerStore((s) => s.currentBook);
+  const currentChapter = usePlayerStore((s) => s.currentChapter);
+  const chapterIndex = usePlayerStore((s) => s.chapterIndex);
+  const isPlaying = usePlayerStore((s) => s.isPlaying);
+  const position = usePlayerStore((s) => s.position);
+  const duration = usePlayerStore((s) => s.duration);
+  const chapters = usePlayerStore((s) => s.chapters);
+  const isLoading = usePlayerStore((s) => s.isLoading);
+  const speed = useSettingsStore((s) => s.speed);
   const [showChapters, setShowChapters] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
@@ -98,13 +95,13 @@ export const FullPlayer = memo(function FullPlayer({
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPos = parseFloat(e.target.value);
     howlerService.seekTo(newPos);
-    store.set({ position: newPos });
+    usePlayerStore.setState({ position: newPos });
   };
 
   const seekRelative = (delta: number) => {
     const newPos = Math.max(0, Math.min(duration, position + delta));
     howlerService.seekTo(newPos);
-    store.set({ position: newPos });
+    usePlayerStore.setState({ position: newPos });
   };
 
   if (!currentBook) return null;
@@ -115,16 +112,16 @@ export const FullPlayer = memo(function FullPlayer({
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
-      className="fixed inset-0 z-50 bg-gradient-to-b from-jaryq-primary-soft via-white to-white flex flex-col overflow-hidden"
+      className="fixed inset-0 z-50 jaryq-gradient-warm flex flex-col overflow-hidden"
     >
       {/* Layered ambient gradient — two drifting blurred orbs */}
       <div
         aria-hidden="true"
-        className="absolute top-[18%] left-1/2 -translate-x-1/2 w-72 h-72 bg-jaryq-primary/15 rounded-full blur-3xl pointer-events-none animate-[jaryq-ambient-drift_18s_ease-in-out_infinite] motion-reduce:animate-none"
+        className="jaryq-blob-drift absolute top-[18%] left-1/2 -translate-x-1/2 w-72 h-72 bg-jaryq-primary/15 rounded-full blur-3xl pointer-events-none"
       />
       <div
         aria-hidden="true"
-        className="absolute top-[42%] right-[12%] w-64 h-64 bg-jaryq-primary-med/25 rounded-full blur-3xl pointer-events-none animate-[jaryq-ambient-drift-alt_24s_ease-in-out_infinite] motion-reduce:animate-none"
+        className="jaryq-blob-drift-alt absolute top-[42%] right-[12%] w-64 h-64 bg-jaryq-primary-med/25 rounded-full blur-3xl pointer-events-none"
       />
 
       {/* Header */}
@@ -156,11 +153,12 @@ export const FullPlayer = memo(function FullPlayer({
       {/* Cover */}
       <div className="flex-1 flex flex-col items-center justify-center px-8 py-4 relative">
         <div
-          className={`relative w-56 h-72 rounded-2xl overflow-hidden mb-6 shadow-[0_30px_60px_-20px_rgba(249,115,22,0.35)] ${
+          className={`relative w-56 h-72 rounded-2xl overflow-hidden mb-6 ${
             isPlaying
               ? "animate-[jaryq-cover-breathe_4s_ease-in-out_infinite] motion-reduce:animate-none"
               : ""
           }`}
+          style={{ boxShadow: "var(--shadow-jaryq-lg), var(--shadow-jaryq-glow)" }}
         >
           <CoverImage
             src={currentBook.cover_url}
@@ -187,7 +185,7 @@ export const FullPlayer = memo(function FullPlayer({
           <p className="text-jaryq-text-secondary text-xs font-semibold uppercase tracking-wide mb-1">
             {currentBook.author}
           </p>
-          <h2 className="text-xl font-black tracking-tight text-jaryq-text-primary leading-tight mb-1">
+          <h2 className="font-display text-2xl lg:text-3xl font-black tracking-tight text-jaryq-text-primary leading-[1.1] mb-1">
             {currentBook.title}
           </h2>
           {currentBook.narrator && (
@@ -230,7 +228,7 @@ export const FullPlayer = memo(function FullPlayer({
             aria-valuetext={`${formatTime(position)} / ${formatTime(duration)}`}
             className="w-full h-1.5 hover:h-2 transition-[height] duration-150 appearance-none rounded-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-jaryq-primary [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:ring-2 [&::-webkit-slider-thumb]:ring-white [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:duration-150 [&:hover::-webkit-slider-thumb]:scale-125 [&:active::-webkit-slider-thumb]:scale-125 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:bg-jaryq-primary [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white"
             style={{
-              background: `linear-gradient(to right, var(--color-jaryq-primary) ${
+              background: `linear-gradient(to right, var(--color-jaryq-primary) 0%, var(--color-jaryq-primary-dark) ${
                 progress * 100
               }%, var(--color-jaryq-border-light) ${progress * 100}%)`,
             }}
@@ -271,7 +269,8 @@ export const FullPlayer = memo(function FullPlayer({
             onClick={togglePlay}
             aria-label={isPlaying ? "Тоқтату" : "Ойнату"}
             aria-pressed={isPlaying}
-            className="w-16 h-16 flex items-center justify-center rounded-full bg-jaryq-primary text-white shadow-lg hover:bg-jaryq-primary-dark hover:scale-[1.04] hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.55)] active:scale-95 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+            className="w-16 h-16 flex items-center justify-center rounded-full jaryq-gradient-cta text-white hover:scale-[1.05] active:scale-95 transition-transform duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+            style={{ boxShadow: "var(--shadow-jaryq-glow)" }}
           >
             <span className="relative w-7 h-7 inline-flex items-center justify-center">
               <Play

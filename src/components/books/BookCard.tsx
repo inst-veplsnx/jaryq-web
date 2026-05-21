@@ -32,24 +32,33 @@ export const BookCard = memo(function BookCard({ book, progress }: BookCardProps
       aria-label={ariaLabel}
       className="group block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
     >
-      <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-jaryq-border-light hover:shadow-lg hover:-translate-y-0.5 hover:border-jaryq-primary/30 active:scale-[0.98] active:translate-y-0 transition-all duration-200 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+      <div className="jaryq-card jaryq-card-hover overflow-hidden active:scale-[0.98] motion-reduce:hover:translate-y-0">
         <div className="relative aspect-[3/4] overflow-hidden bg-jaryq-primary-soft">
           <CoverImage
             src={book.cover_url}
             alt=""
             fill
-            className="w-full h-full transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+            className="w-full h-full transition-transform duration-[var(--duration-jaryq-slow)] ease-[var(--ease-jaryq-out)] group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          />
+          {/* Cover bottom fade for legibility of overlay chips */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-[var(--duration-jaryq-base)] motion-reduce:transition-none"
           />
           {book.is_new && (
             <div className="absolute top-2 left-2" aria-hidden="true">
-              <Badge className="bg-jaryq-primary text-white text-xs px-2 py-0.5 rounded-full border-0 shadow-sm">
+              <Badge variant="default" size="sm" className="border-0">
                 Жаңа
               </Badge>
             </div>
           )}
           {book.is_popular && !book.is_new && (
             <div className="absolute top-2 left-2" aria-hidden="true">
-              <Badge className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full border-0 shadow-sm">
+              <Badge
+                variant="default"
+                size="sm"
+                className="bg-rose-600 hover:bg-rose-600 border-0"
+              >
                 Танымал
               </Badge>
             </div>
@@ -81,7 +90,7 @@ export const BookCard = memo(function BookCard({ book, progress }: BookCardProps
                 className="h-1 bg-jaryq-border-light rounded-full overflow-hidden"
               >
                 <div
-                  className="h-full bg-jaryq-primary rounded-full transition-[width] duration-300 motion-reduce:transition-none"
+                  className="h-full jaryq-gradient-cta rounded-full transition-[width] duration-300 motion-reduce:transition-none"
                   style={{ width: `${progressPct}%` }}
                 />
               </div>

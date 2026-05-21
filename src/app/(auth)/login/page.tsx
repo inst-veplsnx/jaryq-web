@@ -37,15 +37,22 @@ export default function LoginPage() {
     <div className="w-full max-w-sm">
       {/* Logo */}
       <div className="flex flex-col items-center mb-8">
-        <Image
-          src="/logo.png"
-          alt="JARYQ"
-          width={80}
-          height={80}
-          className="rounded-2xl mb-4 shadow-[0_20px_40px_-15px_rgba(249,115,22,0.4)]"
-          priority
-        />
-        <h1 className="text-2xl font-black tracking-tight text-jaryq-text-primary">
+        <div className="relative mb-4">
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 rounded-2xl blur-2xl bg-jaryq-primary/30"
+          />
+          <Image
+            src="/logo.png"
+            alt="JARYQ"
+            width={80}
+            height={80}
+            className="relative rounded-2xl"
+            priority
+            style={{ boxShadow: "var(--shadow-jaryq-glow)" }}
+          />
+        </div>
+        <h1 className="font-display text-2xl lg:text-3xl font-black tracking-tight text-jaryq-text-primary">
           JARYQ-ке кіру
         </h1>
         <p className="text-jaryq-text-secondary text-sm mt-1">
@@ -54,7 +61,10 @@ export default function LoginPage() {
       </div>
 
       {/* Card */}
-      <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-jaryq-border-light">
+      <div
+        className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-jaryq-border-light"
+        style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
+      >
         <form onSubmit={handleSubmit} className="space-y-5" noValidate>
           {/* Email */}
           <div>
@@ -135,7 +145,8 @@ export default function LoginPage() {
             type="submit"
             disabled={loading || !email || !password}
             aria-busy={loading || undefined}
-            className="w-full bg-jaryq-primary text-white font-bold py-3.5 rounded-xl shadow-sm hover:bg-jaryq-primary-dark hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.55)] hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-200 flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+            className="w-full jaryq-gradient-cta text-white font-bold py-3.5 rounded-xl hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-[transform,box-shadow] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+            style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
           >
             {loading ? (
               <>

@@ -33,8 +33,8 @@ export const BookListItem = memo(function BookListItem({ book, progress, subtitl
       aria-label={ariaLabel}
       className="group block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
     >
-      <div className="flex items-center gap-3 p-3 bg-white rounded-xl border border-jaryq-border-light hover:border-jaryq-primary/30 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] active:translate-y-0 transition-all duration-200 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
-        <span className="relative shrink-0 overflow-hidden rounded-lg ring-1 ring-black/5 shadow-sm">
+      <div className="jaryq-card jaryq-card-hover flex items-center gap-3 p-3 active:scale-[0.99] motion-reduce:hover:translate-y-0">
+        <span className="relative shrink-0 overflow-hidden rounded-lg ring-1 ring-black/5" style={{ boxShadow: "var(--shadow-jaryq-xs)" }}>
           <CoverImage
             src={book.cover_url}
             alt=""
@@ -81,7 +81,7 @@ export const BookListItem = memo(function BookListItem({ book, progress, subtitl
                 className="h-1 bg-jaryq-border-light rounded-full overflow-hidden"
               >
                 <div
-                  className="h-full bg-jaryq-primary rounded-full transition-[width] duration-300 motion-reduce:transition-none"
+                  className="h-full jaryq-gradient-cta rounded-full transition-[width] duration-300 motion-reduce:transition-none"
                   style={{ width: `${progressPct}%` }}
                 />
               </div>

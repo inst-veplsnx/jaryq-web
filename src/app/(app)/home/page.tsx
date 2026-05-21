@@ -1,16 +1,15 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import Link from "next/link";
-import { Play, Loader2, ArrowRight } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { usePlayerStore } from "@/store/playerStore";
 import { bookService } from "@/lib/services/bookService";
 import { UserProgress, Chapter, Book } from "@/types";
-import { CoverImage } from "@/components/books/CoverImage";
 import { BookCard } from "@/components/books/BookCard";
-import { Skeleton } from "@/components/ui/skeleton";
-import { formatTime } from "@/lib/utils";
+import { ContinueListeningCard } from "@/components/books/ContinueListeningCard";
+import { SectionTitle } from "@/components/layout/SectionTitle";
+import { SkeletonText, SkeletonCover } from "@/components/ui/skeleton";
 
 export default function HomePage() {
   const user = useAuthStore((s) => s.user);
@@ -56,150 +55,69 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-7xl mx-auto px-8 py-10 space-y-12">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10 space-y-12">
 
         {/* Greeting */}
         <div>
-          <p className="text-sm text-jaryq-text-muted mb-1">Сәлем,</p>
-          <h1 className="text-4xl font-black tracking-tight text-jaryq-text-primary">
-            {greetingName}
-            <span aria-hidden="true"> 👋</span>
+          <p className="text-xs font-semibold uppercase tracking-widest text-jaryq-text-muted mb-2">
+            Сәлем,
+          </p>
+          <h1 className="font-display text-3xl lg:text-4xl font-black tracking-tight text-jaryq-text-primary leading-[1.1] flex items-center gap-3">
+            <span>{greetingName}</span>
+            <Sparkles
+              aria-hidden="true"
+              className="text-jaryq-primary"
+              size={28}
+            />
           </h1>
-          <p className="text-jaryq-text-secondary mt-2">Бүгін не тыңдайсыз?</p>
+          <p className="text-jaryq-text-secondary mt-2 text-sm lg:text-base">
+            Бүгін не тыңдайсыз?
+          </p>
         </div>
 
         {/* Continue Listening */}
         {progressLoading ? (
           <section aria-label="Жалғастыру жүктелуде">
-            <Skeleton className="h-3 w-24 rounded mb-3" />
-            <div className="flex items-center gap-5 bg-white rounded-2xl p-5 border border-jaryq-border-light max-w-2xl">
-              <Skeleton className="w-20 h-[108px] rounded-xl flex-shrink-0" />
+            <SkeletonText className="h-3 w-24 mb-3" />
+            <div className="flex items-center gap-5 jaryq-card p-5 max-w-2xl">
+              <SkeletonCover className="w-20 aspect-[3/4] flex-shrink-0" />
               <div className="flex-1 space-y-3">
-                <Skeleton className="h-5 w-3/4 rounded" />
-                <Skeleton className="h-4 w-1/2 rounded" />
-                <Skeleton className="h-1.5 w-full rounded-full" />
+                <SkeletonText className="h-5 w-3/4" />
+                <SkeletonText className="h-4 w-1/2" />
+                <SkeletonText className="h-1.5 w-full rounded-full" />
               </div>
-              <Skeleton className="w-12 h-12 rounded-full flex-shrink-0" />
+              <div className="w-12 h-12 jaryq-shimmer rounded-full flex-shrink-0" />
             </div>
           </section>
         ) : recentProgress?.book ? (
           <section aria-labelledby="continue-heading">
-            <h2
-              id="continue-heading"
-              className="text-xs font-semibold text-jaryq-text-muted uppercase tracking-widest mb-3"
-            >
+            <SectionTitle id="continue-heading" variant="eyebrow">
               Жалғастыру
-            </h2>
-            <div className="group flex items-center gap-5 bg-white rounded-2xl p-5 border border-jaryq-primary/20 shadow-sm max-w-2xl hover:shadow-lg hover:border-jaryq-primary/40 transition-all duration-200 motion-reduce:transition-none">
-              <Link
-                href={`/books/${recentProgress.book.id}`}
-                aria-label={`${recentProgress.book.title} кітабына өту`}
-                tabIndex={-1}
-                className="flex-shrink-0 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
-              >
-                <span className="block rounded-xl overflow-hidden ring-1 ring-black/5 shadow-sm transition-transform duration-300 group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100">
-                  <CoverImage
-                    src={recentProgress.book.cover_url}
-                    alt=""
-                    width={80}
-                    height={108}
-                    className="rounded-xl block"
-                  />
-                </span>
-              </Link>
-
-              <div className="flex-1 min-w-0">
-                <Link
-                  href={`/books/${recentProgress.book.id}`}
-                  className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded"
-                >
-                  <p className="font-bold tracking-tight text-jaryq-text-primary text-base truncate hover:text-jaryq-primary transition-colors duration-150 motion-reduce:transition-none">
-                    {recentProgress.book.title}
-                  </p>
-                </Link>
-                <p className="text-sm text-jaryq-text-secondary truncate mt-1 tabular-nums">
-                  {recentProgress.chapter_number}-тарау
-                  {recentProgress.position
-                    ? ` • ${formatTime(recentProgress.position)} өткен`
-                    : ""}
-                </p>
-                <div
-                  role="progressbar"
-                  aria-label="Тыңдау прогресі"
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={
-                    recentProgress.book.total_duration
-                      ? Math.round(
-                          (recentProgress.position /
-                            recentProgress.book.total_duration) *
-                            100
-                        )
-                      : 0
-                  }
-                  className="mt-3 h-1.5 bg-jaryq-border-light rounded-full overflow-hidden"
-                >
-                  <div
-                    className="h-full bg-jaryq-primary rounded-full transition-[width] duration-300 motion-reduce:transition-none"
-                    style={{
-                      width: recentProgress.book.total_duration
-                        ? `${Math.min(100, (recentProgress.position / recentProgress.book.total_duration) * 100)}%`
-                        : "0%",
-                    }}
-                  />
-                </div>
-              </div>
-
-              <button
-                onClick={launchResume}
-                disabled={isPlayerLoading}
-                aria-busy={isPlayerLoading || undefined}
-                aria-label={`${recentProgress.book.title} кітабын жалғастыру`}
-                className="w-12 h-12 flex items-center justify-center rounded-full bg-jaryq-primary text-white shadow-sm hover:bg-jaryq-primary-dark hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.55)] hover:scale-[1.05] active:scale-95 disabled:opacity-60 disabled:hover:scale-100 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 flex-shrink-0 motion-reduce:transition-none motion-reduce:hover:scale-100"
-              >
-                {isPlayerLoading ? (
-                  <Loader2
-                    size={20}
-                    className="animate-spin motion-reduce:animate-none"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <Play size={20} className="fill-white" aria-hidden="true" />
-                )}
-              </button>
-            </div>
+            </SectionTitle>
+            <ContinueListeningCard
+              progress={recentProgress as UserProgress & { book: Book }}
+              isLoading={isPlayerLoading}
+              onResume={launchResume}
+            />
           </section>
         ) : null}
 
         {/* New arrivals */}
         {(catalogLoading || newBooks.length > 0) && (
           <section aria-labelledby="new-arrivals-heading">
-            <div className="flex items-center justify-between mb-5">
-              <h2
-                id="new-arrivals-heading"
-                className="text-xl font-black tracking-tight text-jaryq-text-primary"
-              >
-                Жаңа кітаптар
-              </h2>
-              <Link
-                href="/new-arrivals"
-                className="group inline-flex items-center gap-1 text-sm font-semibold text-jaryq-primary hover:text-jaryq-primary-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded motion-reduce:transition-none"
-              >
-                Барлығы
-                <ArrowRight
-                  size={14}
-                  aria-hidden="true"
-                  className="transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
-                />
-              </Link>
-            </div>
+            <SectionTitle
+              id="new-arrivals-heading"
+              href="/new-arrivals"
+            >
+              Жаңа кітаптар
+            </SectionTitle>
             {catalogLoading ? (
               <div className="flex gap-4 overflow-hidden" aria-hidden="true">
                 {Array.from({ length: 7 }).map((_, i) => (
                   <div key={i} className="flex-none w-40 space-y-2">
-                    <Skeleton className="aspect-[3/4] rounded-xl" />
-                    <Skeleton className="h-4 w-3/4 rounded" />
-                    <Skeleton className="h-3 w-1/2 rounded" />
+                    <SkeletonCover />
+                    <SkeletonText className="h-4 w-3/4" />
+                    <SkeletonText className="h-3 w-1/2" />
                   </div>
                 ))}
               </div>
@@ -222,32 +140,16 @@ export default function HomePage() {
         {/* Popular */}
         {(catalogLoading || popularBooks.length > 0) && (
           <section aria-labelledby="popular-heading">
-            <div className="flex items-center justify-between mb-5">
-              <h2
-                id="popular-heading"
-                className="text-xl font-black tracking-tight text-jaryq-text-primary"
-              >
-                Танымал
-              </h2>
-              <Link
-                href="/popular"
-                className="group inline-flex items-center gap-1 text-sm font-semibold text-jaryq-primary hover:text-jaryq-primary-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded motion-reduce:transition-none"
-              >
-                Барлығы
-                <ArrowRight
-                  size={14}
-                  aria-hidden="true"
-                  className="transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
-                />
-              </Link>
-            </div>
+            <SectionTitle id="popular-heading" href="/popular">
+              Танымал
+            </SectionTitle>
             {catalogLoading ? (
               <div className="flex gap-4 overflow-hidden" aria-hidden="true">
                 {Array.from({ length: 7 }).map((_, i) => (
                   <div key={i} className="flex-none w-40 space-y-2">
-                    <Skeleton className="aspect-[3/4] rounded-xl" />
-                    <Skeleton className="h-4 w-3/4 rounded" />
-                    <Skeleton className="h-3 w-1/2 rounded" />
+                    <SkeletonCover />
+                    <SkeletonText className="h-4 w-3/4" />
+                    <SkeletonText className="h-3 w-1/2" />
                   </div>
                 ))}
               </div>

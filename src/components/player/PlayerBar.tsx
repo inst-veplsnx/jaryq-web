@@ -37,7 +37,7 @@ export function PlayerBar() {
 
   // Speed ref keeps the callback stable while always reading the latest value
   const speedRef = useRef(speed);
-  useEffect(() => { speedRef.current = speed; });
+  useEffect(() => { speedRef.current = speed; }, [speed]);
 
   const loadChapter = useCallback(
     (index: number, startPosition = 0) => {
@@ -101,7 +101,9 @@ export function PlayerBar() {
 
   // Position tick — updates store at 4fps (250ms) to prevent 60fps Zustand re-renders.
   // The progress bar uses a CSS transition to stay visually smooth at 60fps.
+  // Gated on isPlaying so the interval doesn't run forever when nothing is playing.
   useEffect(() => {
+    if (!isPlaying) return;
     const tick = () => {
       if (howlerService.isPlaying()) {
         usePlayerStore.setState({
@@ -113,7 +115,7 @@ export function PlayerBar() {
     tick();
     const id = setInterval(tick, 250);
     return () => clearInterval(id);
-  }, []);
+  }, [isPlaying]);
 
   // Auto-save progress — reads position from store (single source of truth)
   useEffect(() => {
@@ -237,7 +239,8 @@ export function PlayerBar() {
       {/* Mini player bar */}
       <section
         aria-label="Аудио ойнатқыш"
-        className="fixed bottom-0 left-0 right-0 lg:left-60 z-50 bg-jaryq-bg-card border-t-2 border-jaryq-primary/20 shadow-lg"
+        className="fixed bottom-0 left-0 right-0 lg:left-60 z-50 bg-jaryq-bg-card/95 backdrop-blur-md border-t-2 border-jaryq-primary/20"
+        style={{ boxShadow: "0 -12px 28px -10px rgba(15,15,15,0.12), var(--shadow-jaryq-md)" }}
       >
         {/* Error banner */}
         {playerError && (
@@ -272,7 +275,7 @@ export function PlayerBar() {
               </div>
             ) : (
               <div
-                className="h-full bg-jaryq-primary transition-[width] duration-250 linear motion-reduce:transition-none"
+                className="h-full jaryq-gradient-cta transition-[width] duration-250 linear motion-reduce:transition-none"
                 style={{ width: `${progress}%` }}
               />
             )}
@@ -362,7 +365,8 @@ export function PlayerBar() {
               onClick={togglePlay}
               aria-label={isPlaying ? "Тоқтату" : "Ойнату"}
               aria-pressed={isPlaying}
-              className="w-11 h-11 flex items-center justify-center rounded-full bg-jaryq-primary text-white shadow-sm hover:bg-jaryq-primary-dark hover:shadow-md hover:scale-[1.03] active:scale-95 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+              className="w-11 h-11 flex items-center justify-center rounded-full jaryq-gradient-cta text-white hover:scale-[1.05] active:scale-95 transition-transform duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+              style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
             >
               <span className="relative w-5 h-5 inline-flex items-center justify-center">
                 <Play

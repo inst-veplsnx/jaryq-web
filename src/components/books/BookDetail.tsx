@@ -16,7 +16,7 @@ interface BookDetailProps {
 }
 
 export function BookDetail({ book, chapters }: BookDetailProps) {
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
   const isPlayerLoading = usePlayerStore((s) => s.isLoading);
   const isPlaying = usePlayerStore((s) => s.isPlaying);
   const currentBookId = usePlayerStore((s) => s.currentBook?.id ?? null);
@@ -100,7 +100,10 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
         <div className="max-w-3xl mx-auto px-6 py-8">
           <div className="flex gap-6">
             <div className="shrink-0">
-              <span className="block rounded-xl overflow-hidden ring-1 ring-black/5 shadow-[0_20px_40px_-15px_rgba(249,115,22,0.35)]">
+              <span
+                className="block rounded-xl overflow-hidden ring-1 ring-black/5"
+                style={{ boxShadow: "var(--shadow-jaryq-glow)" }}
+              >
                 <CoverImage
                   src={book.cover_url}
                   alt=""
@@ -116,7 +119,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                   {book.genre.name}
                 </span>
               )}
-              <h1 className="text-2xl font-black tracking-tight text-jaryq-text-primary mt-1 leading-tight">
+              <h1 className="font-display text-2xl lg:text-3xl font-black tracking-tight text-jaryq-text-primary mt-1 leading-[1.1]">
                 {book.title}
               </h1>
               <p className="text-jaryq-text-secondary font-medium mt-1">
@@ -154,7 +157,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                     aria-valuenow={Math.round(progressPercent)}
                   >
                     <div
-                      className="h-full bg-jaryq-primary rounded-full"
+                      className="h-full jaryq-gradient-cta rounded-full"
                       style={{ width: `${progressPercent}%` }}
                     />
                   </div>
@@ -176,7 +179,8 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                   disabled={isLaunching || chapters.length === 0}
                   aria-busy={isLaunching || undefined}
                   aria-pressed={showsPauseOnResume}
-                  className="flex items-center gap-2 bg-jaryq-primary text-white font-bold px-6 py-3 rounded-xl shadow-sm hover:bg-jaryq-primary-dark hover:shadow-[0_10px_30px_-10px_rgba(249,115,22,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+                  className="flex items-center gap-2 jaryq-gradient-cta text-white font-bold px-6 py-3 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-[transform,box-shadow] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-spring)] disabled:opacity-50 disabled:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+                  style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
                 >
                   {isLaunching ? (
                     <Loader2 size={18} className="animate-spin motion-reduce:animate-none" aria-hidden="true" />
@@ -191,7 +195,8 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
                 </button>
                 <button
                   onClick={() => launchPlayer(0, 0)}
-                  className="flex items-center gap-2 bg-jaryq-bg-card text-jaryq-text-primary font-semibold px-5 py-3 rounded-xl border border-jaryq-border-light hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                  className="flex items-center gap-2 bg-jaryq-bg-card text-jaryq-text-primary font-semibold px-5 py-3 rounded-xl border border-jaryq-border-light hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                  style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
                 >
                   Басынан тыңдау
                 </button>
@@ -220,16 +225,25 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
               disabled={favLoading || !user}
               aria-pressed={isFavorite}
               className={cn(
-                "flex items-center gap-2 font-semibold px-5 py-3 rounded-xl border active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
+                "group/fav flex items-center gap-2 font-semibold px-5 py-3 rounded-xl border active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-out)] disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
                 isFavorite
-                  ? "bg-pink-50 text-pink-500 border-pink-200 hover:bg-pink-100"
-                  : "bg-jaryq-bg-card text-jaryq-text-muted border-jaryq-border-light hover:border-pink-300 hover:text-pink-500 hover:bg-pink-50/40"
+                  ? "bg-rose-50 text-rose-600 border-rose-200 hover:bg-rose-100"
+                  : "bg-jaryq-bg-card text-jaryq-text-muted border-jaryq-border-light hover:border-rose-300 hover:text-rose-600 hover:bg-rose-50/40"
               )}
+              style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
             >
               {isFavorite ? (
-                <HeartOff size={18} aria-hidden="true" className="transition-transform duration-200 motion-reduce:transition-none" />
+                <HeartOff
+                  size={18}
+                  aria-hidden="true"
+                  className="transition-transform duration-[var(--duration-jaryq-base)] group-hover/fav:scale-110 motion-reduce:transition-none motion-reduce:group-hover/fav:scale-100"
+                />
               ) : (
-                <Heart size={18} aria-hidden="true" className="transition-transform duration-200 motion-reduce:transition-none" />
+                <Heart
+                  size={18}
+                  aria-hidden="true"
+                  className="transition-transform duration-[var(--duration-jaryq-base)] group-hover/fav:scale-110 motion-reduce:transition-none motion-reduce:group-hover/fav:scale-100"
+                />
               )}
               {isFavorite ? "Алып тастау" : "Таңдаулыға"}
             </button>

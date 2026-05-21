@@ -65,22 +65,28 @@ export function ChapterList({
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
-      className="fixed inset-0 z-60 flex flex-col bg-white"
+      className="fixed inset-0 z-60 flex flex-col bg-jaryq-bg-card"
     >
-      <div className="flex items-center justify-between px-4 py-4 border-b border-[#E8E8E8]">
-        <h2 id={titleId} className="text-lg font-bold text-[#0F0F0F]">
+      <div
+        className="flex items-center justify-between px-4 py-4 border-b border-jaryq-border-light"
+        style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
+      >
+        <h2
+          id={titleId}
+          className="font-display text-lg lg:text-xl font-bold text-jaryq-text-primary tracking-tight"
+        >
           Тараулар
         </h2>
         <button
           ref={closeBtnRef}
           onClick={onClose}
           aria-label="Тараулар тізімін жабу"
-          className="w-11 h-11 flex items-center justify-center rounded-full text-[#5C5C5C] hover:bg-[#F5F5F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+          className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary active:scale-95 transition-[background-color,color,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
         >
           <X size={20} aria-hidden="true" />
         </button>
       </div>
-      <ul className="flex-1 overflow-y-auto divide-y divide-[#E8E8E8]">
+      <ul className="flex-1 overflow-y-auto divide-y divide-jaryq-border-light">
         {chapters.map((chapter, index) => {
           const active = index === currentIndex;
           return (
@@ -90,18 +96,29 @@ export function ChapterList({
                 aria-current={active ? "true" : undefined}
                 aria-label={`${index + 1}-тарау, ${chapter.title}, ұзақтығы ${formatDuration(chapter.duration)}${active ? ", қазір ойналуда" : ""}`}
                 className={cn(
-                  "w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[#F5F5F5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#F97316]",
-                  active && "bg-[#FFF4ED]"
+                  "w-full flex items-center gap-3 px-4 py-3 text-left transition-colors duration-[var(--duration-jaryq-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary",
+                  active
+                    ? "bg-jaryq-primary-soft"
+                    : "hover:bg-jaryq-bg-main"
                 )}
               >
                 <div
                   aria-hidden="true"
                   className={cn(
-                    "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0",
+                    "w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 tabular-nums transition-colors duration-[var(--duration-jaryq-fast)]",
                     active
-                      ? "bg-[#F97316] text-white"
-                      : "bg-[#F5F5F5] text-[#5C5C5C]"
+                      ? "text-white"
+                      : "bg-jaryq-bg-main text-jaryq-text-secondary"
                   )}
+                  style={
+                    active
+                      ? {
+                          backgroundImage:
+                            "linear-gradient(90deg, var(--color-jaryq-primary) 0%, var(--color-jaryq-primary-dark) 100%)",
+                          boxShadow: "var(--shadow-jaryq-glow-sm)",
+                        }
+                      : undefined
+                  }
                 >
                   {active ? <PlayCircle size={18} /> : index + 1}
                 </div>
@@ -109,12 +126,14 @@ export function ChapterList({
                   <p
                     className={cn(
                       "font-medium text-sm truncate",
-                      active ? "text-[#F97316]" : "text-[#0F0F0F]"
+                      active
+                        ? "text-jaryq-primary font-semibold"
+                        : "text-jaryq-text-primary"
                     )}
                   >
                     {chapter.title}
                   </p>
-                  <p className="text-xs text-[#5C5C5C]">
+                  <p className="text-xs text-jaryq-text-secondary tabular-nums">
                     {formatDuration(chapter.duration)}
                   </p>
                 </div>

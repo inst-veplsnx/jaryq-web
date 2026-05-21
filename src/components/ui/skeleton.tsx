@@ -5,10 +5,37 @@ function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="skeleton"
       aria-hidden="true"
-      className={cn("animate-pulse rounded-md bg-muted", className)}
+      className={cn("jaryq-shimmer rounded-md", className)}
       {...props}
     />
   )
 }
 
-export { Skeleton }
+function SkeletonText({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <Skeleton
+      className={cn("h-3 w-full rounded-md", className)}
+      {...props}
+    />
+  )
+}
+
+function SkeletonCover({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <Skeleton
+      className={cn("aspect-[3/4] w-full rounded-xl", className)}
+      {...props}
+    />
+  )
+}
+
+function SkeletonCircle({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <Skeleton
+      className={cn("aspect-square w-12 rounded-full", className)}
+      {...props}
+    />
+  )
+}
+
+export { Skeleton, SkeletonText, SkeletonCover, SkeletonCircle }

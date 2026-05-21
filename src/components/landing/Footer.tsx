@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Heart } from "lucide-react";
 
 const links = {
   Платформа: [
@@ -31,7 +32,7 @@ export function Footer() {
             <Link
               href="/"
               aria-label="JARYQ бастапқы бетке"
-              className="flex items-center gap-2 mb-4 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316]"
+              className="flex items-center gap-2 mb-4 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
             >
               <Image
                 src="/logo.png"
@@ -60,7 +61,7 @@ export function Footer() {
                   <li key={label}>
                     <Link
                       href={href}
-                      className="text-[#A3A3A3] hover:text-white text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F97316] rounded"
+                      className="text-[#A3A3A3] hover:text-white hover:translate-x-0.5 text-sm inline-flex items-center transition-[color,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded motion-reduce:transition-none motion-reduce:hover:translate-x-0"
                     >
                       {label}
                     </Link>
@@ -75,9 +76,15 @@ export function Footer() {
           <p className="text-[#A3A3A3] text-sm">
             © {new Date().getFullYear()} JARYQ. Барлық құқықтар сақталған.
           </p>
-          <p className="text-[#A3A3A3] text-sm">
-            Жасалды <span aria-hidden="true">❤️</span>
-            <span className="sr-only">сүйіспеншілікпен</span> Қазақстан үшін
+          <p className="text-[#A3A3A3] text-sm inline-flex items-center gap-1.5">
+            Жасалды
+            <Heart
+              size={14}
+              aria-hidden="true"
+              className="text-jaryq-primary fill-jaryq-primary"
+            />
+            <span className="sr-only">сүйіспеншілікпен</span>
+            Қазақстан үшін
           </p>
         </div>
       </div>

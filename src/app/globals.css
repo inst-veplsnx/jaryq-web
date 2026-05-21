@@ -60,6 +60,31 @@
   --color-jaryq-border-warm: #F0E7DC;
   --color-jaryq-ink: #1E293B;
   --color-jaryq-ink-soft: #F1F5F9;
+
+  /* Elevation scale. Use semantically:
+     - xs: subtle resting state on flat backgrounds
+     - sm: default card resting
+     - md: card hover
+     - lg: modal, popover, full player
+     - glow: brand orange aura — covers, logos, primary CTAs */
+  --shadow-jaryq-xs: 0 1px 2px rgba(15, 15, 15, 0.04);
+  --shadow-jaryq-sm: 0 2px 8px -2px rgba(15, 15, 15, 0.06), 0 1px 2px rgba(15, 15, 15, 0.03);
+  --shadow-jaryq-md: 0 12px 28px -10px rgba(15, 15, 15, 0.12), 0 2px 6px -2px rgba(15, 15, 15, 0.06);
+  --shadow-jaryq-lg: 0 24px 48px -16px rgba(15, 15, 15, 0.18), 0 4px 12px -4px rgba(15, 15, 15, 0.08);
+  --shadow-jaryq-glow: 0 20px 40px -15px rgba(249, 115, 22, 0.38);
+  --shadow-jaryq-glow-sm: 0 10px 24px -10px rgba(249, 115, 22, 0.32);
+
+  /* Motion tokens.
+     Radius convention (no new tokens needed):
+       rounded-lg  inputs, menu rows, small badges
+       rounded-xl  cards, buttons
+       rounded-2xl large surfaces, hero, full player, modal
+       rounded-full avatars, pills, chevron buttons */
+  --ease-jaryq-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-jaryq-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-jaryq-fast: 150ms;
+  --duration-jaryq-base: 220ms;
+  --duration-jaryq-slow: 360ms;
 }
 
 :root {
@@ -158,6 +183,69 @@ html.jaryq-large-text {
 .jaryq-reveal-delay-1 { animation-delay: 80ms; }
 .jaryq-reveal-delay-2 { animation-delay: 160ms; }
 .jaryq-reveal-delay-3 { animation-delay: 240ms; }
+.jaryq-reveal-delay-4 { animation-delay: 320ms; }
+.jaryq-reveal-delay-5 { animation-delay: 400ms; }
+.jaryq-reveal-delay-6 { animation-delay: 480ms; }
+
+/* Auto-stagger reveal: any child with [data-reveal] inside a [data-reveal-group]
+   receives a delay derived from its DOM order. Avoids per-item delay classes. */
+[data-reveal-group] > [data-reveal]:nth-child(1) { animation-delay: 0ms; }
+[data-reveal-group] > [data-reveal]:nth-child(2) { animation-delay: 60ms; }
+[data-reveal-group] > [data-reveal]:nth-child(3) { animation-delay: 120ms; }
+[data-reveal-group] > [data-reveal]:nth-child(4) { animation-delay: 180ms; }
+[data-reveal-group] > [data-reveal]:nth-child(5) { animation-delay: 240ms; }
+[data-reveal-group] > [data-reveal]:nth-child(6) { animation-delay: 300ms; }
+[data-reveal-group] > [data-reveal]:nth-child(n+7) { animation-delay: 360ms; }
+
+/* Canonical card surface — single source of truth for card chrome. */
+.jaryq-card {
+  background-color: var(--color-jaryq-bg-card);
+  border: 1px solid var(--color-jaryq-border-light);
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: var(--shadow-jaryq-sm);
+  transition-property: box-shadow, transform, border-color, background-color;
+  transition-duration: var(--duration-jaryq-base);
+  transition-timing-function: var(--ease-jaryq-out);
+}
+.jaryq-card-hover:hover {
+  box-shadow: var(--shadow-jaryq-md);
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--color-jaryq-primary) 30%, transparent);
+}
+.jaryq-card-hover:active {
+  transform: translateY(0);
+  transition-duration: var(--duration-jaryq-fast);
+}
+
+/* Gradient utilities — replace inline gradient class soup. */
+.jaryq-gradient-warm {
+  background-image: linear-gradient(135deg, #FFF4ED 0%, #FFFBF5 60%, #FFFBF5 100%);
+}
+.jaryq-gradient-cta {
+  background-image: linear-gradient(90deg, var(--color-jaryq-primary) 0%, var(--color-jaryq-primary-dark) 100%);
+}
+.jaryq-gradient-cta-radial {
+  background-image: radial-gradient(circle at 30% 30%, #FB923C 0%, var(--color-jaryq-primary) 50%, var(--color-jaryq-primary-dark) 100%);
+}
+
+/* Shimmer skeleton — drives the existing jaryq-shimmer keyframes. */
+.jaryq-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-jaryq-border-light);
+}
+.jaryq-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+  animation: jaryq-shimmer 1.6s linear infinite;
+}
 
 /* Hero waveform — vertical bars pulsing in place to convey audio. */
 @keyframes jaryq-wave-pulse {

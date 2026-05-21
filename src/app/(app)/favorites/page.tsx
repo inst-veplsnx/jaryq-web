@@ -6,8 +6,12 @@ import { bookService } from "@/lib/services/bookService";
 import { Favorite } from "@/types";
 import { BookCard } from "@/components/books/BookCard";
 import { EmptyState } from "@/components/books/EmptyState";
-import { Skeleton } from "@/components/ui/skeleton";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { SkeletonCover, SkeletonText } from "@/components/ui/skeleton";
 import { useAuthStore } from "@/store/authStore";
+
+const BOOK_GRID =
+  "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5";
 
 export default function FavoritesPage() {
   const { user } = useAuthStore();
@@ -24,7 +28,7 @@ export default function FavoritesPage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-7xl mx-auto px-8 py-10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
             ? "Таңдаулы кітаптар жүктелуде…"
@@ -33,28 +37,25 @@ export default function FavoritesPage() {
               : `${favorites.length} таңдаулы кітап жүктелді`}
         </div>
 
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-black tracking-tight text-jaryq-text-primary">
-              Таңдаулы
-            </h1>
-            <p className="text-jaryq-text-secondary mt-1">Сіздің жинағыңыз</p>
-          </div>
-          {!loading && favorites.length > 0 && (
-            <p className="text-sm text-jaryq-text-muted shrink-0 tabular-nums">
-              {favorites.length} кітап
-            </p>
-          )}
-        </div>
+        <PageHeader
+          icon={Heart}
+          title="Таңдаулы"
+          subtitle="Сіздің жинағыңыз"
+          meta={
+            !loading && favorites.length > 0
+              ? `${favorites.length} кітап`
+              : undefined
+          }
+        />
 
         <div aria-busy={loading || undefined}>
           {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
-              {Array.from({ length: 6 }).map((_, i) => (
+            <div className={BOOK_GRID}>
+              {Array.from({ length: 12 }).map((_, i) => (
                 <div key={i} className="space-y-2">
-                  <Skeleton className="aspect-[3/4] rounded-xl" />
-                  <Skeleton className="h-4 w-3/4 rounded" />
-                  <Skeleton className="h-3 w-1/2 rounded" />
+                  <SkeletonCover />
+                  <SkeletonText className="h-4 w-3/4" />
+                  <SkeletonText className="h-3 w-1/2" />
                 </div>
               ))}
             </div>
@@ -62,10 +63,11 @@ export default function FavoritesPage() {
             <EmptyState
               title="Таңдаулы кітаптар жоқ"
               description="Кітап бетінде жүрек белгісін басып, таңдаулыларға қосыңыз."
-              icon={<Heart className="text-pink-500" size={36} />}
+              icon={<Heart size={36} />}
+              tone="default"
             />
           ) : (
-            <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+            <ul className={BOOK_GRID}>
               {favorites.map((fav) =>
                 fav.book ? (
                   <li key={fav.id}>

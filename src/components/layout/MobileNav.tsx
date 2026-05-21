@@ -21,9 +21,10 @@ export function MobileNav() {
     <nav
       aria-label="Мобильді мәзір"
       className={cn(
-        "lg:hidden fixed left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-jaryq-border-light pb-safe transition-all duration-200 motion-reduce:transition-none",
+        "lg:hidden fixed left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-t border-jaryq-border-light pb-safe transition-[bottom] duration-[var(--duration-jaryq-base)] ease-[var(--ease-jaryq-out)] motion-reduce:transition-none",
         hasPlayer ? "bottom-[68px]" : "bottom-0"
       )}
+      style={{ boxShadow: "0 -8px 24px -16px rgba(15,15,15,0.10)" }}
     >
       <ul className="flex items-center justify-around h-16">
         {tabs.map(({ href, icon: Icon, label }) => {

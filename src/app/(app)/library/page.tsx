@@ -6,6 +6,7 @@ import { bookService } from "@/lib/services/bookService";
 import { UserProgress } from "@/types";
 import { BookListItem } from "@/components/books/BookListItem";
 import { EmptyState } from "@/components/books/EmptyState";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthStore } from "@/store/authStore";
 import { formatTime } from "@/lib/utils";
@@ -25,7 +26,7 @@ export default function LibraryPage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-5xl mx-auto px-8 py-10">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
             ? "Кітап сөресі жүктелуде…"
@@ -34,19 +35,16 @@ export default function LibraryPage() {
               : `${progressList.length} кітап жүктелді`}
         </div>
 
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-black tracking-tight text-jaryq-text-primary">
-              Кітап сөресі
-            </h1>
-            <p className="text-jaryq-text-secondary mt-1">Тыңдап жатқандарыңыз</p>
-          </div>
-          {!loading && progressList.length > 0 && (
-            <p className="text-sm text-jaryq-text-muted shrink-0 tabular-nums">
-              {progressList.length} кітап
-            </p>
-          )}
-        </div>
+        <PageHeader
+          icon={BookMarked}
+          title="Кітап сөресі"
+          subtitle="Тыңдап жатқандарыңыз"
+          meta={
+            !loading && progressList.length > 0
+              ? `${progressList.length} кітап`
+              : undefined
+          }
+        />
 
         <div aria-busy={loading || undefined}>
           {loading ? (
@@ -59,7 +57,8 @@ export default function LibraryPage() {
             <EmptyState
               title="Кітап сөресі бос"
               description="Аудиокітапты тыңдай бастасаңыз, прогресс осында сақталады."
-              icon={<BookMarked className="text-green-500" size={36} />}
+              icon={<BookMarked size={36} />}
+              tone="default"
             />
           ) : (
             <ul className="grid grid-cols-1 lg:grid-cols-2 gap-3">

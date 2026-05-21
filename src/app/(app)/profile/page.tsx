@@ -4,6 +4,43 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Settings, BookMarked, Heart, LogOut } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
+import { cn } from "@/lib/utils";
+
+interface ProfileLink {
+  href: string;
+  icon: typeof Settings;
+  label: string;
+  desc: string;
+  iconClass: string;
+  bgClass: string;
+}
+
+const PROFILE_LINKS: ProfileLink[] = [
+  {
+    href: "/library",
+    icon: BookMarked,
+    label: "Кітап сөресі",
+    desc: "Тыңдап жатқандарыңыз",
+    iconClass: "text-jaryq-primary",
+    bgClass: "bg-jaryq-primary-soft",
+  },
+  {
+    href: "/favorites",
+    icon: Heart,
+    label: "Таңдаулы",
+    desc: "Сіздің жинағыңыз",
+    iconClass: "text-rose-600",
+    bgClass: "bg-rose-50",
+  },
+  {
+    href: "/profile/settings",
+    icon: Settings,
+    label: "Баптаулар",
+    desc: "Қолданба баптаулары",
+    iconClass: "text-jaryq-ink",
+    bgClass: "bg-jaryq-ink-soft",
+  },
+];
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -14,56 +51,30 @@ export default function ProfilePage() {
     router.push("/login");
   };
 
-  const links = [
-    {
-      href: "/library",
-      icon: BookMarked,
-      label: "Кітап сөресі",
-      desc: "Тыңдап жатқандарыңыз",
-      color: "text-green-500",
-      bg: "bg-green-50",
-      border: "border-green-500/20",
-    },
-    {
-      href: "/favorites",
-      icon: Heart,
-      label: "Таңдаулы",
-      desc: "Сіздің жинағыңыз",
-      color: "text-pink-500",
-      bg: "bg-pink-50",
-      border: "border-pink-500/20",
-    },
-    {
-      href: "/profile/settings",
-      icon: Settings,
-      label: "Баптаулар",
-      desc: "Қолданба баптаулары",
-      color: "text-violet-500",
-      bg: "bg-violet-50",
-      border: "border-violet-500/20",
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-3xl mx-auto px-8 py-10 space-y-8">
+      <div className="max-w-3xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10 space-y-8">
 
         {/* User card */}
-        <div className="bg-white rounded-2xl border border-jaryq-border-light p-8 shadow-sm">
+        <div
+          className="jaryq-card p-8 rounded-2xl"
+          style={{ boxShadow: "var(--shadow-jaryq-sm)" }}
+        >
           <div className="flex items-center gap-6">
             <div
               aria-hidden="true"
-              className="w-20 h-20 rounded-full bg-jaryq-primary flex items-center justify-center flex-shrink-0 shadow-[0_15px_30px_-10px_rgba(249,115,22,0.5)] ring-4 ring-jaryq-primary-soft"
+              className="w-20 h-20 rounded-full jaryq-gradient-cta-radial flex items-center justify-center flex-shrink-0 ring-4 ring-jaryq-primary-soft"
+              style={{ boxShadow: "var(--shadow-jaryq-glow)" }}
             >
-              <span className="text-white text-3xl font-black">
+              <span className="text-white text-3xl font-black drop-shadow-sm">
                 {(user?.full_name || user?.email || "?")[0].toUpperCase()}
               </span>
             </div>
-            <div>
-              <h1 className="text-2xl font-black tracking-tight text-jaryq-text-primary">
+            <div className="min-w-0">
+              <h1 className="font-display text-2xl lg:text-3xl font-black tracking-tight text-jaryq-text-primary leading-[1.1] truncate">
                 {user?.full_name || "Пайдаланушы"}
               </h1>
-              <p className="text-jaryq-text-secondary mt-1">{user?.email}</p>
+              <p className="text-jaryq-text-secondary mt-1 truncate">{user?.email}</p>
             </div>
           </div>
         </div>
@@ -71,17 +82,20 @@ export default function ProfilePage() {
         {/* Navigation cards */}
         <nav aria-label="Профиль мәзірі">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {links.map(({ href, icon: Icon, label, desc, color, bg, border }) => (
+            {PROFILE_LINKS.map(({ href, icon: Icon, label, desc, iconClass, bgClass }) => (
               <Link
                 key={href}
                 href={href}
-                className={`group block bg-white rounded-2xl p-6 border ${border} hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:translate-y-0`}
+                className="jaryq-card jaryq-card-hover group block rounded-2xl p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:hover:translate-y-0"
               >
                 <span
                   aria-hidden="true"
-                  className={`w-12 h-12 ${bg} rounded-xl flex items-center justify-center mb-4 transition-transform duration-200 group-hover:scale-110 motion-reduce:transition-none motion-reduce:group-hover:scale-100`}
+                  className={cn(
+                    "w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform duration-[var(--duration-jaryq-base)] group-hover:scale-110 group-hover:rotate-[-4deg] motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0",
+                    bgClass
+                  )}
                 >
-                  <Icon size={24} className={color} />
+                  <Icon size={24} className={iconClass} />
                 </span>
                 <p className="font-bold tracking-tight text-jaryq-text-primary">
                   {label}
@@ -95,7 +109,7 @@ export default function ProfilePage() {
         {/* Sign out */}
         <button
           onClick={handleSignOut}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-500 bg-white border border-jaryq-border-light hover:bg-red-50 hover:border-red-500/30 active:scale-[0.98] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 motion-reduce:transition-none"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-500 bg-white border border-jaryq-border-light hover:bg-red-50 hover:border-red-500/30 active:scale-[0.98] transition-[background-color,border-color,transform] duration-[var(--duration-jaryq-fast)] ease-[var(--ease-jaryq-out)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 motion-reduce:transition-none"
         >
           <LogOut size={16} aria-hidden="true" />
           Шығу

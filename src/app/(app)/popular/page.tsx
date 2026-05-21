@@ -6,7 +6,11 @@ import { bookService } from "@/lib/services/bookService";
 import { Book } from "@/types";
 import { BookCard } from "@/components/books/BookCard";
 import { EmptyState } from "@/components/books/EmptyState";
-import { Skeleton } from "@/components/ui/skeleton";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { SkeletonCover, SkeletonText } from "@/components/ui/skeleton";
+
+const BOOK_GRID =
+  "grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5";
 
 export default function PopularPage() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -21,7 +25,7 @@ export default function PopularPage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-7xl mx-auto px-8 py-10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
             ? "Танымал кітаптар жүктелуде…"
@@ -30,31 +34,32 @@ export default function PopularPage() {
               : `${books.length} танымал кітап жүктелді`}
         </div>
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-black tracking-tight text-jaryq-text-primary">
-            Танымал
-          </h1>
-          <p className="text-jaryq-text-secondary mt-1">Көп тыңдалған кітаптар</p>
-        </div>
+        <PageHeader
+          icon={Flame}
+          title="Танымал"
+          subtitle="Көп тыңдалған кітаптар"
+          meta={!loading && books.length > 0 ? `${books.length} кітап` : undefined}
+        />
 
         <div aria-busy={loading || undefined}>
           {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+            <div className={BOOK_GRID}>
               {Array.from({ length: 12 }).map((_, i) => (
                 <div key={i} className="space-y-2">
-                  <Skeleton className="aspect-[3/4] rounded-xl" />
-                  <Skeleton className="h-4 w-3/4 rounded" />
-                  <Skeleton className="h-3 w-1/2 rounded" />
+                  <SkeletonCover />
+                  <SkeletonText className="h-4 w-3/4" />
+                  <SkeletonText className="h-3 w-1/2" />
                 </div>
               ))}
             </div>
           ) : books.length === 0 ? (
             <EmptyState
               title="Танымал кітаптар жоқ"
-              icon={<Flame className="text-red-500" size={36} />}
+              icon={<Flame size={36} />}
+              tone="default"
             />
           ) : (
-            <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+            <ul className={BOOK_GRID}>
               {books.map((book) => (
                 <li key={book.id}>
                   <BookCard book={book} />
