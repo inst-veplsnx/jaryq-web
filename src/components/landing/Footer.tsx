@@ -36,7 +36,7 @@ export function Footer() {
             >
               <Image
                 src="/logo.png"
-                alt="JARYQ"
+                alt=""
                 width={36}
                 height={36}
                 className="rounded-xl"

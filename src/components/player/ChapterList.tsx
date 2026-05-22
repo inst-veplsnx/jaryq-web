@@ -93,7 +93,7 @@ export function ChapterList({
             <li key={chapter.id}>
               <button
                 onClick={() => onSelectChapter(index)}
-                aria-current={active ? "true" : undefined}
+                aria-pressed={active}
                 aria-label={`${index + 1}-тарау, ${chapter.title}, ұзақтығы ${formatDuration(chapter.duration)}${active ? ", қазір ойналуда" : ""}`}
                 className={cn(
                   "w-full flex items-center gap-3 px-4 py-3 text-left transition-colors duration-(--duration-jaryq-fast) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary",

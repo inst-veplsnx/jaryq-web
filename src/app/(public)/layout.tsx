@@ -24,7 +24,7 @@ export default function PublicLayout({
           >
             <Image
               src="/logo.png"
-              alt="JARYQ"
+              alt=""
               width={32}
               height={32}
               className="rounded-lg"

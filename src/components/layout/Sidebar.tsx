@@ -61,10 +61,11 @@ export function Sidebar() {
         >
           <Image
             src="/logo.png"
-            alt="JARYQ"
+            alt=""
             width={32}
             height={32}
             className="rounded-lg"
+            aria-hidden="true"
           />
           <span className="text-xl font-black text-jaryq-text-primary tracking-tight">
             JARYQ

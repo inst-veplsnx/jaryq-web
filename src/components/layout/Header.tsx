@@ -32,7 +32,7 @@ export function Header({ title, showSearch = true }: HeaderProps) {
       >
         <Image
           src="/logo.png"
-          alt="JARYQ"
+          alt=""
           width={28}
           height={28}
           className="rounded-md"

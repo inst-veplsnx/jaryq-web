@@ -52,9 +52,9 @@ export default function RegisterPage() {
         >
           <Check size={36} strokeWidth={3} className="text-green-600" aria-hidden="true" />
         </div>
-        <h2 className="font-display text-2xl lg:text-3xl font-black tracking-tight text-jaryq-text-primary mb-2">
+        <h1 className="font-display text-2xl lg:text-3xl font-black tracking-tight text-jaryq-text-primary mb-2">
           Тіркелдіңіз!
-        </h2>
+        </h1>
         <p className="text-jaryq-text-secondary">
           Бастапқы бетке бағытталып жатырсыз...
         </p>
