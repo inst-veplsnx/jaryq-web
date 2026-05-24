@@ -54,8 +54,12 @@ const values: Array<{
 export function About() {
   return (
     <section className="py-24 px-4 bg-jaryq-bg-cream" id="about">
-      <div className="max-w-7xl mx-auto jaryq-reveal">
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto">
+        <div
+          data-scroll-reveal="true"
+          data-reveal-style="lift"
+          className="text-center mb-16"
+        >
           <div
             className="inline-flex items-center gap-2 bg-white text-jaryq-primary text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm"
             style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
@@ -81,12 +85,13 @@ export function About() {
             return (
               <li
                 key={title}
-                data-reveal
-                className="jaryq-card jaryq-card-hover jaryq-reveal group rounded-2xl p-6 motion-reduce:hover:translate-y-0"
+                data-scroll-reveal="true"
+                data-reveal-style="lift"
+                className="jaryq-card jaryq-card-hover group rounded-2xl p-6 motion-reduce:hover:translate-y-0"
               >
                 <div
                   aria-hidden="true"
-                  className={`w-12 h-12 ${t.bg} rounded-xl flex items-center justify-center mb-4 ring-1 ${t.ring} transition-transform duration-(--duration-jaryq-base) group-hover:scale-110 group-hover:-rotate-4 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0`}
+                  className={`jaryq-reveal-icon w-12 h-12 ${t.bg} rounded-xl flex items-center justify-center mb-4 ring-1 ${t.ring} transition-transform duration-(--duration-jaryq-base) group-hover:scale-110 group-hover:-rotate-4 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0`}
                 >
                   <Icon size={24} className={t.icon} />
                 </div>

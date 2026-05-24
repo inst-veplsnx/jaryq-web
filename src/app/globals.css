@@ -190,12 +190,12 @@ html.jaryq-large-text {
 .jaryq-reveal {
   animation: jaryq-fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-.jaryq-reveal-delay-1 { animation-delay: 80ms; }
-.jaryq-reveal-delay-2 { animation-delay: 160ms; }
-.jaryq-reveal-delay-3 { animation-delay: 240ms; }
-.jaryq-reveal-delay-4 { animation-delay: 320ms; }
-.jaryq-reveal-delay-5 { animation-delay: 400ms; }
-.jaryq-reveal-delay-6 { animation-delay: 480ms; }
+.jaryq-reveal-delay-1 { animation-delay: 80ms; --jaryq-reveal-delay: 80ms; }
+.jaryq-reveal-delay-2 { animation-delay: 160ms; --jaryq-reveal-delay: 160ms; }
+.jaryq-reveal-delay-3 { animation-delay: 240ms; --jaryq-reveal-delay: 240ms; }
+.jaryq-reveal-delay-4 { animation-delay: 320ms; --jaryq-reveal-delay: 320ms; }
+.jaryq-reveal-delay-5 { animation-delay: 400ms; --jaryq-reveal-delay: 400ms; }
+.jaryq-reveal-delay-6 { animation-delay: 480ms; --jaryq-reveal-delay: 480ms; }
 
 /* Branded page-load motion. The wrapper is keyed by pathname so it runs on
    initial page load and route changes without adding a motion dependency. */
@@ -265,15 +265,100 @@ html.jaryq-large-text {
   }
 }
 
-/* Auto-stagger reveal: any child with [data-reveal] inside a [data-reveal-group]
+/* Landing scroll reveal. Content remains visible until the client observer
+   adds .jaryq-scroll-motion-ready, so no-JS users still see every section. */
+.jaryq-scroll-motion-ready [data-scroll-reveal] {
+  --jaryq-reveal-delay: 0ms;
+  opacity: 0;
+  transform: translate3d(0, 24px, 0) scale(0.985);
+  transition-property: opacity, transform;
+  transition-duration: 460ms;
+  transition-timing-function: var(--ease-jaryq-out);
+  transition-delay: var(--jaryq-reveal-delay);
+}
+
+.jaryq-scroll-motion-ready [data-scroll-reveal][data-reveal-style="slide-left"] {
+  transform: translate3d(32px, 0, 0) scale(0.985);
+}
+
+.jaryq-scroll-motion-ready [data-scroll-reveal][data-reveal-style="slide-right"] {
+  transform: translate3d(-32px, 0, 0) scale(0.985);
+}
+
+.jaryq-scroll-motion-ready [data-scroll-reveal][data-reveal-style="scale"] {
+  transform: translate3d(0, 12px, 0) scale(0.94);
+}
+
+.jaryq-scroll-motion-ready [data-scroll-reveal][data-reveal-style="line"] {
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.jaryq-scroll-motion-ready [data-scroll-reveal][data-reveal-visible="true"] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.jaryq-scroll-motion-ready [data-scroll-reveal][data-reveal-style="line"][data-reveal-visible="true"] {
+  opacity: 0.3;
+  transform: scaleX(1);
+}
+
+@keyframes jaryq-icon-pop {
+  0% {
+    transform: scale(0.84) rotate(-5deg);
+  }
+  70% {
+    transform: scale(1.08) rotate(2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.jaryq-scroll-motion-ready [data-scroll-reveal][data-reveal-visible="true"] .jaryq-reveal-icon {
+  animation: jaryq-icon-pop 360ms var(--ease-jaryq-spring) backwards;
+  animation-delay: calc(var(--jaryq-reveal-delay) + 90ms);
+}
+
+/* Auto-stagger reveal: any child with a reveal marker inside [data-reveal-group]
    receives a delay derived from its DOM order. Avoids per-item delay classes. */
-[data-reveal-group] > [data-reveal]:nth-child(1) { animation-delay: 0ms; }
-[data-reveal-group] > [data-reveal]:nth-child(2) { animation-delay: 60ms; }
-[data-reveal-group] > [data-reveal]:nth-child(3) { animation-delay: 120ms; }
-[data-reveal-group] > [data-reveal]:nth-child(4) { animation-delay: 180ms; }
-[data-reveal-group] > [data-reveal]:nth-child(5) { animation-delay: 240ms; }
-[data-reveal-group] > [data-reveal]:nth-child(6) { animation-delay: 300ms; }
-[data-reveal-group] > [data-reveal]:nth-child(n+7) { animation-delay: 360ms; }
+[data-reveal-group] > [data-reveal]:nth-child(1),
+[data-reveal-group] > [data-scroll-reveal]:nth-child(1) {
+  animation-delay: 0ms;
+  --jaryq-reveal-delay: 0ms;
+}
+[data-reveal-group] > [data-reveal]:nth-child(2),
+[data-reveal-group] > [data-scroll-reveal]:nth-child(2) {
+  animation-delay: 60ms;
+  --jaryq-reveal-delay: 60ms;
+}
+[data-reveal-group] > [data-reveal]:nth-child(3),
+[data-reveal-group] > [data-scroll-reveal]:nth-child(3) {
+  animation-delay: 120ms;
+  --jaryq-reveal-delay: 120ms;
+}
+[data-reveal-group] > [data-reveal]:nth-child(4),
+[data-reveal-group] > [data-scroll-reveal]:nth-child(4) {
+  animation-delay: 180ms;
+  --jaryq-reveal-delay: 180ms;
+}
+[data-reveal-group] > [data-reveal]:nth-child(5),
+[data-reveal-group] > [data-scroll-reveal]:nth-child(5) {
+  animation-delay: 240ms;
+  --jaryq-reveal-delay: 240ms;
+}
+[data-reveal-group] > [data-reveal]:nth-child(6),
+[data-reveal-group] > [data-scroll-reveal]:nth-child(6) {
+  animation-delay: 300ms;
+  --jaryq-reveal-delay: 300ms;
+}
+[data-reveal-group] > [data-reveal]:nth-child(n+7),
+[data-reveal-group] > [data-scroll-reveal]:nth-child(n+7) {
+  animation-delay: 360ms;
+  --jaryq-reveal-delay: 360ms;
+}
 
 /* Canonical card surface — single source of truth for card chrome. */
 .jaryq-card {
@@ -403,6 +488,36 @@ html.jaryq-large-text {
 .jaryq-wave-bar {
   transform-origin: center;
   animation: jaryq-wave-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes jaryq-float-soft {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+
+@keyframes jaryq-progress-listen {
+  0%, 100% { transform: scaleX(0.38); }
+  50% { transform: scaleX(0.74); }
+}
+
+.jaryq-float-soft {
+  animation: jaryq-float-soft 5.5s ease-in-out infinite;
+}
+.jaryq-float-delay-1 { animation-delay: 700ms; }
+.jaryq-float-delay-2 { animation-delay: 1400ms; }
+
+.jaryq-audio-progress-loop {
+  transform: scaleX(0.38);
+  transform-origin: left center;
+  animation: jaryq-progress-listen 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jaryq-float-soft,
+  .jaryq-audio-progress-loop,
+  .jaryq-wave-bar {
+    animation: none;
+  }
 }
 
 /* Reuse existing jaryq-ambient-drift keyframes via these utility classes. */

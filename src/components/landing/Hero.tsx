@@ -28,24 +28,40 @@ export function Hero() {
 
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
         {/* Text */}
-        <div className="jaryq-reveal">
-          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm text-jaryq-primary text-sm font-semibold px-4 py-2 rounded-full mb-6 border border-jaryq-border-warm shadow-sm">
+        <div data-reveal-group>
+          <div
+            data-scroll-reveal="true"
+            data-reveal-style="scale"
+            className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm text-jaryq-primary text-sm font-semibold px-4 py-2 rounded-full mb-6 border border-jaryq-border-warm shadow-sm"
+          >
             <Headphones size={14} aria-hidden="true" />
             Қазақстанның аудиокітап платформасы
           </div>
-          <h1 className="font-display text-5xl lg:text-6xl xl:text-7xl font-black text-jaryq-text-primary leading-[1.05] tracking-tight mb-6">
+          <h1
+            data-scroll-reveal="true"
+            data-reveal-style="slide-right"
+            className="font-display text-5xl lg:text-6xl xl:text-7xl font-black text-jaryq-text-primary leading-[1.05] tracking-tight mb-6"
+          >
             Кітапты
             <br />
             <span className="text-jaryq-primary italic">тыңдаудың</span>
             <br />
             уақыты келді
           </h1>
-          <p className="text-lg text-jaryq-text-secondary leading-relaxed mb-8 max-w-md">
+          <p
+            data-scroll-reveal="true"
+            data-reveal-style="slide-right"
+            className="text-lg text-jaryq-text-secondary leading-relaxed mb-8 max-w-md"
+          >
             JARYQ — қазақ тіліндегі аудиокітаптардың ең үлкен платформасы.
             Мыңдаған кітапты тыңдаңыз, прогрессіңізді сақтаңыз,
             таңдаулыларыңызды жинаңыз.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div
+            data-scroll-reveal="true"
+            data-reveal-style="lift"
+            className="flex flex-wrap gap-4"
+          >
             <Link
               href="/register"
               className="group/cta inline-flex items-center gap-2 jaryq-gradient-cta text-white font-bold px-8 py-4 rounded-2xl transition-[transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-out hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
@@ -70,19 +86,31 @@ export function Hero() {
           </div>
 
           {/* Trust micro-copy */}
-          <p className="mt-5 inline-flex items-center gap-2 text-sm text-slate-600">
+          <p
+            data-scroll-reveal="true"
+            data-reveal-style="lift"
+            className="mt-5 inline-flex items-center gap-2 text-sm text-slate-600"
+          >
             <Sparkles size={14} className="text-jaryq-primary" aria-hidden="true" />
             Тегін · Тіркеу 30 секундта · Несие картасы керек емес
           </p>
 
           {/* Stats */}
-          <dl className="flex gap-8 mt-12 pt-8 border-t border-jaryq-border-warm">
+          <dl
+            data-reveal-group
+            className="flex gap-8 mt-12 pt-8 border-t border-jaryq-border-warm"
+          >
             {[
               { value: "500+", label: "Аудиокітап" },
               { value: "50+", label: "Жанр" },
               { value: "10K+", label: "Тыңдаушы" },
             ].map(({ value, label }) => (
-              <div key={label} className="flex flex-col-reverse">
+              <div
+                key={label}
+                data-scroll-reveal="true"
+                data-reveal-style="scale"
+                className="flex flex-col-reverse"
+              >
                 <dt className="text-sm text-jaryq-text-secondary font-medium">{label}</dt>
                 <dd className="font-display text-3xl lg:text-4xl font-black text-jaryq-primary">
                   {value}
@@ -94,7 +122,9 @@ export function Hero() {
 
         {/* Visual — book-cover collage + waveform */}
         <div
-          className="relative flex justify-center items-center jaryq-reveal jaryq-reveal-delay-2"
+          data-scroll-reveal="true"
+          data-reveal-style="slide-left"
+          className="relative flex justify-center items-center"
           aria-hidden="true"
         >
           <div className="relative w-85 h-110">
@@ -132,7 +162,7 @@ export function Hero() {
 
             {/* Back cover — slate ink */}
             <div
-              className="absolute top-6 -left-2 w-48 h-64 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 -rotate-10 flex flex-col justify-end p-4 border border-white/10"
+              className="jaryq-float-soft absolute top-6 -left-2 w-48 h-64 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 -rotate-10 flex flex-col justify-end p-4 border border-white/10"
               style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
             >
               <div className="h-1 w-10 bg-jaryq-primary rounded-full mb-3" />
@@ -144,7 +174,7 @@ export function Hero() {
 
             {/* Middle cover — cream */}
             <div
-              className="absolute top-2 right-0 w-48 h-64 rounded-2xl bg-gradient-to-br from-jaryq-primary-soft to-jaryq-primary-med rotate-8 flex flex-col justify-end p-4 border border-jaryq-border-warm"
+              className="jaryq-float-soft jaryq-float-delay-1 absolute top-2 right-0 w-48 h-64 rounded-2xl bg-gradient-to-br from-jaryq-primary-soft to-jaryq-primary-med rotate-8 flex flex-col justify-end p-4 border border-jaryq-border-warm"
               style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
             >
               <div className="h-1 w-10 bg-jaryq-ink rounded-full mb-3" />
@@ -156,7 +186,7 @@ export function Hero() {
 
             {/* Front cover — brand orange with play */}
             <div
-              className="absolute top-16 left-1/2 -translate-x-1/2 w-52 h-72 rounded-2xl jaryq-gradient-cta-radial flex flex-col justify-between p-5 ring-1 ring-white/30"
+              className="jaryq-float-soft jaryq-float-delay-2 absolute top-16 left-1/2 -translate-x-1/2 w-52 h-72 rounded-2xl jaryq-gradient-cta-radial flex flex-col justify-between p-5 ring-1 ring-white/30"
               style={{ boxShadow: "var(--shadow-jaryq-lg), var(--shadow-jaryq-glow)" }}
             >
               <div className="flex items-center justify-between">
@@ -180,7 +210,7 @@ export function Hero() {
                 </div>
                 <div className="flex-1">
                   <div className="h-1 bg-white/30 rounded-full overflow-hidden">
-                    <div className="h-full w-1/3 bg-white rounded-full" />
+                    <div className="jaryq-audio-progress-loop h-full w-full bg-white rounded-full" />
                   </div>
                   <div className="flex justify-between mt-1.5 text-white/70 text-[10px] font-medium">
                     <span>12:34</span>
@@ -192,14 +222,14 @@ export function Hero() {
 
             {/* Floating badges */}
             <div
-              className="absolute -right-4 top-4 bg-white rounded-2xl px-3 py-2 border border-jaryq-border-warm rotate-6"
+              className="jaryq-float-soft jaryq-float-delay-1 absolute -right-4 top-4 bg-white rounded-2xl px-3 py-2 border border-jaryq-border-warm rotate-6"
               style={{ boxShadow: "var(--shadow-jaryq-md)" }}
             >
               <p className="text-xs font-bold text-jaryq-text-primary">3-тарау</p>
               <p className="text-[10px] text-jaryq-text-muted tabular-nums">47:23 қалды</p>
             </div>
             <div
-              className="absolute -left-6 bottom-12 bg-jaryq-ink text-white rounded-2xl px-3 py-2 -rotate-6"
+              className="jaryq-float-soft jaryq-float-delay-2 absolute -left-6 bottom-12 bg-jaryq-ink text-white rounded-2xl px-3 py-2 -rotate-6"
               style={{ boxShadow: "var(--shadow-jaryq-md)" }}
             >
               <p className="text-xs font-bold tabular-nums">1.5x жылдам</p>

@@ -4,8 +4,12 @@ import { TEAM } from "@/lib/team";
 export function Team() {
   return (
     <section className="py-24 px-4 bg-white" id="team">
-      <div className="max-w-7xl mx-auto jaryq-reveal">
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto">
+        <div
+          data-scroll-reveal="true"
+          data-reveal-style="lift"
+          className="text-center mb-16"
+        >
           <div className="inline-flex items-center gap-2 bg-jaryq-primary-soft text-jaryq-primary text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm">
             Команда
           </div>
@@ -25,14 +29,15 @@ export function Team() {
           {TEAM.map((member, index) => (
             <li
               key={index}
-              data-reveal
-              className="jaryq-card jaryq-card-hover jaryq-reveal group rounded-2xl p-6 text-center motion-reduce:hover:translate-y-0"
+              data-scroll-reveal="true"
+              data-reveal-style="lift"
+              className="jaryq-card jaryq-card-hover group rounded-2xl p-6 text-center motion-reduce:hover:translate-y-0"
               style={{ backgroundColor: "var(--color-jaryq-bg-cream)" }}
             >
               {/* Avatar */}
               <div
                 aria-hidden="true"
-                className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden jaryq-gradient-cta-radial flex items-center justify-center transition-transform duration-(--duration-jaryq-base) group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                className="jaryq-reveal-icon w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden jaryq-gradient-cta-radial flex items-center justify-center transition-transform duration-(--duration-jaryq-base) group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
                 style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
               >
                 {member.photoUrl ? (

@@ -30,8 +30,12 @@ const steps = [
 export function HowItWorks() {
   return (
     <section className="py-24 px-4 bg-white" id="how-it-works">
-      <div className="max-w-7xl mx-auto jaryq-reveal">
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto">
+        <div
+          data-scroll-reveal="true"
+          data-reveal-style="lift"
+          className="text-center mb-16"
+        >
           <div className="inline-flex items-center gap-2 bg-jaryq-primary-soft text-jaryq-primary text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm">
             Қалай жұмыс жасайды?
           </div>
@@ -48,20 +52,24 @@ export function HowItWorks() {
           className="grid md:grid-cols-3 gap-8 relative list-none"
         >
           {/* Connector line sits behind bubbles */}
-          <div
-            aria-hidden="true"
-            className="hidden md:block absolute top-12 left-[16.66%] right-[16.66%] h-0.5 bg-gradient-to-r from-jaryq-primary via-jaryq-primary-light to-jaryq-ink opacity-30 z-0"
-          />
+          <li aria-hidden="true" className="contents">
+            <span
+              data-scroll-reveal="true"
+              data-reveal-style="line"
+              className="jaryq-step-connector hidden md:block absolute top-12 left-[16.66%] right-[16.66%] h-0.5 bg-gradient-to-r from-jaryq-primary via-jaryq-primary-light to-jaryq-ink opacity-30 z-0"
+            />
+          </li>
 
           {steps.map(({ number, icon: Icon, title, description, color }) => (
             <li
               key={number}
-              data-reveal
-              className="jaryq-reveal relative text-center"
+              data-scroll-reveal="true"
+              data-reveal-style="scale"
+              className="relative text-center"
             >
               <div
                 aria-hidden="true"
-                className="w-24 h-24 rounded-3xl mx-auto mb-6 flex flex-col items-center justify-center relative z-10 ring-1 ring-white/40"
+                className="jaryq-reveal-icon w-24 h-24 rounded-3xl mx-auto mb-6 flex flex-col items-center justify-center relative z-10 ring-1 ring-white/40"
                 style={{
                   backgroundColor: color,
                   boxShadow:

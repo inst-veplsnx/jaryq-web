@@ -13,7 +13,11 @@ export function CTA() {
         aria-hidden="true"
         className="jaryq-blob-drift-alt absolute -bottom-24 -left-16 w-80 h-80 bg-amber-200/20 rounded-full pointer-events-none blur-3xl"
       />
-      <div className="relative max-w-4xl mx-auto text-center jaryq-reveal">
+      <div
+        data-scroll-reveal="true"
+        data-reveal-style="scale"
+        className="relative max-w-4xl mx-auto text-center"
+      >
         <h2 className="font-display text-4xl lg:text-6xl font-black text-white mb-6 leading-[1.05] tracking-tight">
           Бүгін бастаңыз.
           <br />

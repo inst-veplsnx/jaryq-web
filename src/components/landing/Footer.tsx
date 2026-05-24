@@ -28,9 +28,9 @@ export function Footer() {
   return (
     <footer className="bg-jaryq-text-primary text-white py-16 px-4">
       <div className="max-w-7xl mx-auto">
-        <div className="grid md:grid-cols-4 gap-12 mb-12">
+        <div data-reveal-group className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
-          <div>
+          <div data-scroll-reveal="true" data-reveal-style="lift">
             <Link
               href="/"
               aria-label="JARYQ бастапқы бетке"
@@ -54,7 +54,12 @@ export function Footer() {
 
           {/* Links */}
           {Object.entries(links).map(([section, items]) => (
-            <nav key={section} aria-label={section}>
+            <nav
+              key={section}
+              aria-label={section}
+              data-scroll-reveal="true"
+              data-reveal-style="lift"
+            >
               <h2 className="font-bold text-sm uppercase tracking-widest text-neutral-300 mb-4">
                 {section}
               </h2>
@@ -74,7 +79,11 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="pt-8 border-t border-[#3B3B3B]/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div
+          data-scroll-reveal="true"
+          data-reveal-style="lift"
+          className="pt-8 border-t border-[#3B3B3B]/50 flex flex-col sm:flex-row items-center justify-between gap-4"
+        >
           <p className="text-neutral-400 text-sm">
             © {CURRENT_YEAR} JARYQ. Барлық құқықтар сақталған.
           </p>
