@@ -1,3 +1,5 @@
+import { PageLoadTransition } from "@/components/layout/PageLoadTransition";
+
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className="relative min-h-screen jaryq-gradient-warm flex flex-col items-center justify-center px-4 py-12 overflow-hidden">
@@ -21,7 +23,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         }}
       />
       <div className="relative z-10 w-full flex items-center justify-center">
-        {children}
+        <PageLoadTransition>{children}</PageLoadTransition>
       </div>
     </main>
   );

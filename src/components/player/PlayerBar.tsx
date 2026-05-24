@@ -253,7 +253,7 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
         aria-label="Аудио ойнатқыш"
         aria-hidden={showFull ? "true" : undefined}
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-50 bg-transparent px-2 pb-safe transition-[left] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none sm:px-4",
+          "fixed bottom-0 left-[4.5rem] right-0 z-50 bg-transparent px-2 pb-safe transition-[left] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none sm:px-4",
           isNavigationCollapsed ? "lg:left-[4.5rem]" : "lg:left-60"
         )}
       >

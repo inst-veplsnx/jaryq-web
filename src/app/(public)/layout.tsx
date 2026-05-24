@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { PageLoadTransition } from "@/components/layout/PageLoadTransition";
 
 export default function PublicLayout({
   children,
@@ -53,7 +54,7 @@ export default function PublicLayout({
         </div>
       </nav>
       <main id="main-content" tabIndex={-1} className="focus:outline-none">
-        {children}
+        <PageLoadTransition>{children}</PageLoadTransition>
       </main>
     </div>
   );
