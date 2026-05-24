@@ -384,6 +384,15 @@ html.jaryq-large-text {
 .jaryq-gradient-warm {
   background-image: linear-gradient(135deg, #FFF4ED 0%, #FFFBF5 60%, #FFFBF5 100%);
 }
+.jaryq-gradient-auth {
+  background-color: var(--color-jaryq-bg-cream);
+  background-image:
+    linear-gradient(135deg, color-mix(in srgb, var(--color-jaryq-primary-med) 28%, transparent) 0%, color-mix(in srgb, var(--color-jaryq-primary-soft) 80%, transparent) 34%, transparent 62%),
+    linear-gradient(225deg, color-mix(in srgb, var(--color-jaryq-primary) 12%, transparent) 0%, color-mix(in srgb, var(--color-jaryq-primary-med) 16%, transparent) 36%, transparent 64%),
+    linear-gradient(45deg, color-mix(in srgb, var(--color-jaryq-primary-med) 18%, transparent) 0%, color-mix(in srgb, var(--color-jaryq-primary-soft) 78%, transparent) 34%, transparent 62%),
+    linear-gradient(315deg, color-mix(in srgb, var(--color-jaryq-primary) 10%, transparent) 0%, color-mix(in srgb, var(--color-jaryq-primary-med) 14%, transparent) 36%, transparent 64%),
+    linear-gradient(180deg, var(--color-jaryq-bg-cream) 0%, var(--color-jaryq-primary-soft) 100%);
+}
 .jaryq-gradient-cta {
   background-image: linear-gradient(90deg, var(--color-jaryq-primary) 0%, var(--color-jaryq-primary-dark) 100%);
 }

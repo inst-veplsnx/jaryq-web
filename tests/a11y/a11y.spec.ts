@@ -37,6 +37,30 @@ async function isBackgroundHiddenFromAT(page: Page) {
   });
 }
 
+async function expectAuthPanelCentered(page: Page, route: "/login" | "/register") {
+  await page.goto(route);
+  await page.waitForLoadState("networkidle");
+
+  const panel = page.getByTestId("auth-panel");
+  await expect(panel).toBeVisible();
+
+  const metrics = await panel.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return {
+      panelCenterX: rect.left + rect.width / 2,
+      panelHeight: rect.height,
+      viewportCenterX: window.innerWidth / 2,
+      viewportHeight: window.innerHeight,
+      scrollWidth: document.documentElement.scrollWidth,
+      viewportWidth: window.innerWidth,
+    };
+  });
+
+  expect(Math.abs(metrics.panelCenterX - metrics.viewportCenterX)).toBeLessThanOrEqual(2);
+  expect(metrics.panelHeight).toBeLessThanOrEqual(metrics.viewportHeight);
+  expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.viewportWidth + 1);
+}
+
 test.describe("WCAG axe route checks", () => {
   const routes = [
     "/",
@@ -102,6 +126,19 @@ test("login and register fields have labels and predictable tab order", async ({
   await expect(registerEmail).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(registerPassword).toBeFocused();
+});
+
+test("login and register panels stay centered and fit the viewport", async ({
+  page,
+}) => {
+  for (const viewport of [
+    { width: 1440, height: 900 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await expectAuthPanelCentered(page, "/login");
+    await expectAuthPanelCentered(page, "/register");
+  }
 });
 
 test("mobile nav is inert while hidden and tabbable when revealed", async ({

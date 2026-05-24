@@ -3,8 +3,15 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { Eye, EyeOff, Loader2, User, Check } from "lucide-react";
+import { Eye, EyeOff, Loader2, User, Check, Lock, Mail } from "lucide-react";
+import {
+  AUTH_FIELD_ICON_CLASS,
+  AUTH_INPUT_CLASS,
+  AUTH_MESSAGE_CLASS,
+  AUTH_PASSWORD_TOGGLE_CLASS,
+  AUTH_SUBMIT_CLASS,
+  AuthPanel,
+} from "@/components/auth/AuthPanel";
 import { useAuthStore } from "@/store/authStore";
 
 export default function RegisterPage() {
@@ -44,98 +51,86 @@ export default function RegisterPage() {
 
   if (success) {
     return (
-      <div className="w-full max-w-sm text-center" role="status" aria-live="polite">
+      <div
+        data-testid="auth-panel"
+        className="mx-auto w-full max-w-[34rem] rounded-2xl border border-white/75 bg-white/95 p-6 text-center backdrop-blur-sm sm:p-9"
+        role="status"
+        aria-live="polite"
+        style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
+      >
         <div
           aria-hidden="true"
-          className="relative w-20 h-20 rounded-full bg-green-50 ring-4 ring-green-100 flex items-center justify-center mx-auto mb-4"
+          className="relative mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-green-50 ring-4 ring-green-100 sm:size-24"
           style={{ boxShadow: "0 18px 40px -14px rgba(34,197,94,0.4)" }}
         >
-          <Check size={36} strokeWidth={3} className="text-green-600" aria-hidden="true" />
+          <Check
+            size={40}
+            strokeWidth={3}
+            className="text-green-600"
+            aria-hidden="true"
+          />
         </div>
-        <h1 className="font-display text-2xl lg:text-3xl font-black tracking-tight text-jaryq-text-primary mb-2">
+        <h1 className="mb-2 font-display text-3xl font-black text-jaryq-text-primary sm:text-4xl">
           Тіркелдіңіз!
         </h1>
-        <p className="text-jaryq-text-secondary">
+        <p className="text-sm leading-6 text-jaryq-text-secondary sm:text-base">
           Бастапқы бетке бағытталып жатырсыз...
         </p>
       </div>
     );
   }
 
-  const inputBase =
-    "w-full px-4 py-3 border border-jaryq-border-light rounded-xl text-jaryq-text-primary placeholder:text-jaryq-text-muted focus:outline-none focus:border-jaryq-primary focus:ring-2 focus:ring-jaryq-primary/40 transition-all duration-150 bg-jaryq-bg-main/60 hover:bg-jaryq-bg-main motion-reduce:transition-none";
-
   return (
-    <div className="w-full max-w-sm">
-      {/* Logo */}
-      <div className="flex flex-col items-center mb-8">
-        <div className="relative mb-4">
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 rounded-2xl blur-2xl bg-jaryq-primary/30"
-          />
-          <Image
-            src="/logo.png"
-            alt="JARYQ"
-            width={80}
-            height={80}
-            className="relative rounded-2xl"
-            priority
-            style={{ boxShadow: "var(--shadow-jaryq-glow)" }}
-          />
-        </div>
-        <h1 className="font-display text-2xl lg:text-3xl font-black tracking-tight text-jaryq-text-primary">
-          Тіркелу
-        </h1>
-        <p className="text-jaryq-text-secondary text-sm mt-1">
-          Тегін есептік жазба жасаңыз
-        </p>
-      </div>
-
-      {/* Card */}
-      <div
-        className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 border border-jaryq-border-light"
-        style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
-      >
-        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-          {/* Full name */}
-          <div>
-            <label
-              htmlFor={nameId}
-              className="block text-sm font-semibold text-jaryq-text-primary mb-1.5"
-            >
-              Аты-жөні
-            </label>
-            <div className="relative">
-              <User
-                size={16}
-                aria-hidden="true"
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-jaryq-text-muted"
-              />
-              <input
-                id={nameId}
-                type="text"
-                autoComplete="name"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Айгерім Бекова"
-                required
-                aria-required="true"
-                aria-invalid={error ? "true" : undefined}
-                aria-describedby={error ? errorId : undefined}
-                className={`${inputBase} pl-9`}
-              />
-            </div>
+    <AuthPanel
+      title="Тіркелу"
+      subtitle="Тегін есептік жазба жасаңыз"
+      footer={
+        <>
+          Есептік жазбаңыз бар ма?{" "}
+          <Link
+            href="/login"
+            className="rounded font-semibold text-jaryq-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+          >
+            Кіру
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6" noValidate>
+        <div>
+          <label
+            htmlFor={nameId}
+            className="mb-2 block text-sm font-semibold text-jaryq-text-primary sm:text-base"
+          >
+            Аты-жөні
+          </label>
+          <div className="relative">
+            <User aria-hidden="true" className={AUTH_FIELD_ICON_CLASS} />
+            <input
+              id={nameId}
+              type="text"
+              autoComplete="name"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Айгерім Бекова"
+              required
+              aria-required="true"
+              aria-invalid={error ? "true" : undefined}
+              aria-describedby={error ? errorId : undefined}
+              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-[3.25rem]`}
+            />
           </div>
+        </div>
 
-          {/* Email */}
-          <div>
-            <label
-              htmlFor={emailId}
-              className="block text-sm font-semibold text-jaryq-text-primary mb-1.5"
-            >
-              Email
-            </label>
+        <div>
+          <label
+            htmlFor={emailId}
+            className="mb-2 block text-sm font-semibold text-jaryq-text-primary sm:text-base"
+          >
+            Email
+          </label>
+          <div className="relative">
+            <Mail aria-hidden="true" className={AUTH_FIELD_ICON_CLASS} />
             <input
               id={emailId}
               type="email"
@@ -147,98 +142,86 @@ export default function RegisterPage() {
               aria-required="true"
               aria-invalid={error ? "true" : undefined}
               aria-describedby={error ? errorId : undefined}
-              className={inputBase}
+              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-[3.25rem]`}
             />
           </div>
+        </div>
 
-          {/* Password */}
-          <div>
-            <label
-              htmlFor={passwordId}
-              className="block text-sm font-semibold text-jaryq-text-primary mb-1.5"
+        <div>
+          <label
+            htmlFor={passwordId}
+            className="mb-2 block text-sm font-semibold text-jaryq-text-primary sm:text-base"
+          >
+            Пароль
+          </label>
+          <div className="relative">
+            <Lock aria-hidden="true" className={AUTH_FIELD_ICON_CLASS} />
+            <input
+              id={passwordId}
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Кемінде 6 таңба"
+              required
+              minLength={6}
+              aria-required="true"
+              aria-invalid={error ? "true" : undefined}
+              aria-describedby={`${passwordHintId}${error ? ` ${errorId}` : ""}`}
+              className={`${AUTH_INPUT_CLASS} pl-12 pr-14 sm:pl-[3.25rem] sm:pr-16`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Парольді жасыру" : "Парольді көрсету"}
+              aria-pressed={showPassword}
+              aria-controls={passwordId}
+              className={AUTH_PASSWORD_TOGGLE_CLASS}
             >
-              Пароль
-            </label>
-            <div className="relative">
-              <input
-                id={passwordId}
-                type={showPassword ? "text" : "password"}
-                autoComplete="new-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Кемінде 6 таңба"
-                required
-                minLength={6}
-                aria-required="true"
-                aria-invalid={error ? "true" : undefined}
-                aria-describedby={`${passwordHintId}${error ? ` ${errorId}` : ""}`}
-                className={`${inputBase} pr-12`}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Парольді жасыру" : "Парольді көрсету"}
-                aria-pressed={showPassword}
-                aria-controls={passwordId}
-                className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:text-jaryq-primary hover:bg-jaryq-primary-soft transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
-              >
-                {showPassword ? (
-                  <EyeOff size={18} aria-hidden="true" />
-                ) : (
-                  <Eye size={18} aria-hidden="true" />
-                )}
-              </button>
-            </div>
-            <p id={passwordHintId} className="text-xs text-jaryq-text-secondary mt-1">
-              Кемінде 6 таңба
-            </p>
+              {showPassword ? (
+                <EyeOff size={18} aria-hidden="true" />
+              ) : (
+                <Eye size={18} aria-hidden="true" />
+              )}
+            </button>
           </div>
+          <p id={passwordHintId} className="mt-2 text-xs text-jaryq-text-secondary sm:text-sm">
+            Кемінде 6 таңба
+          </p>
+        </div>
 
-          {/* Error */}
-          {error && (
-            <div
-              id={errorId}
-              role="alert"
-              aria-live="assertive"
-              className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-xl border border-red-200"
-            >
-              {error}
-            </div>
+        {error && (
+          <div
+            id={errorId}
+            role="alert"
+            aria-live="assertive"
+            className={`${AUTH_MESSAGE_CLASS} border-red-200 bg-red-50 text-red-700`}
+          >
+            {error}
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading || !email || !password || !fullName}
+          aria-busy={loading || undefined}
+          className={AUTH_SUBMIT_CLASS}
+          style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
+        >
+          {loading ? (
+            <>
+              <Loader2
+                size={20}
+                className="animate-spin motion-reduce:animate-none"
+                aria-hidden="true"
+              />
+              <span>Тіркелу...</span>
+            </>
+          ) : (
+            "Тіркелу"
           )}
-
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading || !email || !password || !fullName}
-            aria-busy={loading || undefined}
-            className="w-full jaryq-gradient-cta text-white font-bold py-3.5 rounded-xl hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-[transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-spring flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
-            style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
-          >
-            {loading ? (
-              <>
-                <Loader2
-                  size={18}
-                  className="animate-spin motion-reduce:animate-none"
-                  aria-hidden="true"
-                />
-                <span>Тіркелу...</span>
-              </>
-            ) : (
-              "Тіркелу"
-            )}
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-jaryq-text-secondary mt-6">
-          Есептік жазбаңыз бар ма?{" "}
-          <Link
-            href="/login"
-            className="text-jaryq-primary font-semibold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded"
-          >
-            Кіру
-          </Link>
-        </p>
-      </div>
-    </div>
+        </button>
+      </form>
+    </AuthPanel>
   );
 }

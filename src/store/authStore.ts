@@ -1,12 +1,39 @@
 "use client";
 
 import { create } from "zustand";
-import type { Session } from "@supabase/supabase-js";
+import type { Session, User as SupabaseAuthUser } from "@supabase/supabase-js";
 import { getSupabaseClient } from "@/lib/supabase/client";
-import { User } from "@/types";
+import type { User } from "@/types";
 
 let _authSubscription: { unsubscribe: () => void } | null = null;
 let _initPromise: Promise<void> | null = null;
+let _profileHydrationToken = 0;
+
+function readMetadataString(authUser: SupabaseAuthUser, key: string): string {
+  const value = authUser.user_metadata?.[key];
+  return typeof value === "string" ? value : "";
+}
+
+function buildFallbackUser(authUser: SupabaseAuthUser): User {
+  return {
+    id: authUser.id,
+    email: authUser.email ?? "",
+    full_name:
+      readMetadataString(authUser, "full_name") ||
+      readMetadataString(authUser, "name"),
+    created_at: authUser.created_at ?? new Date().toISOString(),
+  };
+}
+
+function mergeProfileWithFallback(profile: User, fallback: User): User {
+  return {
+    ...fallback,
+    ...profile,
+    email: profile.email || fallback.email,
+    full_name: profile.full_name || fallback.full_name,
+    created_at: profile.created_at || fallback.created_at,
+  };
+}
 
 async function fetchProfile(userId: string): Promise<User | null> {
   try {
@@ -15,12 +42,44 @@ async function fetchProfile(userId: string): Promise<User | null> {
       .from("profiles")
       .select("*")
       .eq("id", userId)
-      .single();
+      .maybeSingle();
     if (error) return null;
     return data;
   } catch {
     return null;
   }
+}
+
+async function getOrCreateProfile(session: Session): Promise<User | null> {
+  const fallback = buildFallbackUser(session.user);
+  const existingProfile = await fetchProfile(fallback.id);
+  if (existingProfile) {
+    return mergeProfileWithFallback(existingProfile, fallback);
+  }
+
+  try {
+    const supabase = getSupabaseClient();
+    const { data, error } = await supabase
+      .from("profiles")
+      .insert({
+        id: fallback.id,
+        email: fallback.email,
+        full_name: fallback.full_name ?? "",
+      })
+      .select("*")
+      .single();
+
+    if (!error && data) {
+      return mergeProfileWithFallback(data, fallback);
+    }
+  } catch {
+    // If RLS or a trigger race blocks insert, keep using the auth fallback.
+  }
+
+  const profileAfterInsertAttempt = await fetchProfile(fallback.id);
+  return profileAfterInsertAttempt
+    ? mergeProfileWithFallback(profileAfterInsertAttempt, fallback)
+    : null;
 }
 
 interface AuthState {
@@ -38,100 +97,159 @@ interface AuthState {
   signOut: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  session: null,
-  loading: true,
-  error: null,
+export const useAuthStore = create<AuthState>((set) => {
+  const hydrateProfile = async (session: Session, token: number) => {
+    const profile = await getOrCreateProfile(session);
+    if (!profile || token !== _profileHydrationToken) return;
 
-  initialize: async () => {
-    if (_initPromise) return _initPromise;
-    _authSubscription?.unsubscribe();
-    _authSubscription = null;
+    set((state) => {
+      if (state.session?.user.id !== session.user.id) return state;
+      return { user: profile };
+    });
+  };
 
-    _initPromise = (async () => {
+  const applySession = (session: Session) => {
+    const fallbackUser = buildFallbackUser(session.user);
+    const token = ++_profileHydrationToken;
+
+    set((state) => ({
+      session,
+      user:
+        state.user?.id === fallbackUser.id
+          ? {
+              ...fallbackUser,
+              ...state.user,
+              email: fallbackUser.email || state.user.email,
+            }
+          : fallbackUser,
+      loading: false,
+      error: null,
+    }));
+
+    setTimeout(() => {
+      void hydrateProfile(session, token);
+    }, 0);
+  };
+
+  const clearSession = () => {
+    _profileHydrationToken += 1;
+    set({ session: null, user: null, loading: false, error: null });
+  };
+
+  return {
+    user: null,
+    session: null,
+    loading: true,
+    error: null,
+
+    initialize: async () => {
+      if (_initPromise) return _initPromise;
+      _authSubscription?.unsubscribe();
+      _authSubscription = null;
+
+      _initPromise = (async () => {
+        try {
+          const supabase = getSupabaseClient();
+
+          const {
+            data: { subscription },
+          } = supabase.auth.onAuthStateChange((_event, session) => {
+            if (session?.user) {
+              applySession(session);
+            } else {
+              clearSession();
+            }
+          });
+
+          _authSubscription = subscription;
+
+          const {
+            data: { session },
+            error,
+          } = await supabase.auth.getSession();
+
+          if (error) throw error;
+
+          if (session?.user) {
+            applySession(session);
+          } else {
+            clearSession();
+          }
+        } catch (err: unknown) {
+          set({
+            session: null,
+            user: null,
+            loading: false,
+            error:
+              (err as Error)?.message ?? "Инициализация сәтсіз аяқталды",
+          });
+        }
+      })().finally(() => {
+        _initPromise = null;
+      });
+
+      return _initPromise;
+    },
+
+    signIn: async (email, password) => {
+      set({ loading: true, error: null });
       try {
         const supabase = getSupabaseClient();
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (session?.user) {
-          const profile = await fetchProfile(session.user.id);
-          set({ session, user: profile, loading: false });
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) {
+          set({ error: error.message, loading: false });
+          return { error: error.message };
+        }
+        if (data.session?.user) {
+          applySession(data.session);
         } else {
           set({ loading: false });
         }
-
-        const {
-          data: { subscription },
-        } = supabase.auth.onAuthStateChange(async (_event: string, session: import("@supabase/supabase-js").Session | null) => {
-          if (session?.user) {
-            const profile = await fetchProfile(session.user.id);
-            set({ session, user: profile, loading: false, error: null });
-          } else {
-            set({ session: null, user: null, loading: false });
-          }
-        });
-
-        _authSubscription = subscription;
+        return {};
       } catch (err: unknown) {
-        set({ loading: false, error: (err as Error)?.message ?? 'Инициализация сәтсіз аяқталды' });
+        const msg = (err as Error)?.message || "Қате орын алды";
+        set({ error: msg, loading: false });
+        return { error: msg };
       }
-    })().finally(() => { _initPromise = null; });
+    },
 
-    return _initPromise;
-  },
-
-  signIn: async (email, password) => {
-    set({ loading: true, error: null });
-    try {
-      const supabase = getSupabaseClient();
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        set({ error: error.message, loading: false });
-        return { error: error.message };
+    signUp: async (email, password, fullName) => {
+      set({ loading: true, error: null });
+      try {
+        const supabase = getSupabaseClient();
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { full_name: fullName } },
+        });
+        if (error) {
+          set({ error: error.message, loading: false });
+          return { error: error.message };
+        }
+        if (data.session?.user) {
+          applySession(data.session);
+        } else {
+          set({ loading: false });
+        }
+        return {};
+      } catch (err: unknown) {
+        const msg = (err as Error)?.message || "Қате орын алды";
+        set({ error: msg, loading: false });
+        return { error: msg };
       }
-      return {};
-    } catch (err: unknown) {
-      const msg = (err as Error)?.message || "Қате орын алды";
-      set({ error: msg, loading: false });
-      return { error: msg };
-    }
-  },
+    },
 
-  signUp: async (email, password, fullName) => {
-    set({ loading: true, error: null });
-    try {
-      const supabase = getSupabaseClient();
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { data: { full_name: fullName } },
-      });
-      if (error) {
-        set({ error: error.message, loading: false });
-        return { error: error.message };
+    signOut: async () => {
+      try {
+        const supabase = getSupabaseClient();
+        await supabase.auth.signOut();
+      } catch {
+        // ignore
       }
-      return {};
-    } catch (err: unknown) {
-      const msg = (err as Error)?.message || "Қате орын алды";
-      set({ error: msg, loading: false });
-      return { error: msg };
-    }
-  },
-
-  signOut: async () => {
-    _authSubscription?.unsubscribe();
-    _authSubscription = null;
-    try {
-      const supabase = getSupabaseClient();
-      await supabase.auth.signOut();
-    } catch {
-      // ignore
-    }
-    set({ user: null, session: null, error: null, loading: false });
-  },
-}));
+      clearSession();
+    },
+  };
+});
