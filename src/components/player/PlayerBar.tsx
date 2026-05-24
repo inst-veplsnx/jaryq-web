@@ -8,7 +8,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { howlerService } from "@/lib/audio/howlerService";
 import { bookService } from "@/lib/services/bookService";
-import { formatTime } from "@/lib/utils";
+import { cn, formatTime } from "@/lib/utils";
 import { CoverImage } from "@/components/books/CoverImage";
 import dynamic from "next/dynamic";
 
@@ -21,7 +21,11 @@ const AUTOSAVE_INTERVAL_MS = 30_000;
 const SPEED_STEPS = [0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
 const KEY_SEEK_DELTA = 5;
 
-export function PlayerBar() {
+interface PlayerBarProps {
+  isNavigationCollapsed?: boolean;
+}
+
+export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
   const {
     currentBook,
     currentChapter,
@@ -254,7 +258,10 @@ export function PlayerBar() {
       {/* Mini player bar */}
       <section
         aria-label="Аудио ойнатқыш"
-        className="fixed bottom-0 left-0 right-0 lg:left-60 z-50 bg-jaryq-bg-card/95 backdrop-blur-md border-t-2 border-jaryq-primary/20 pb-safe"
+        className={cn(
+          "fixed bottom-0 left-0 right-0 z-50 bg-jaryq-bg-card/95 backdrop-blur-md border-t-2 border-jaryq-primary/20 pb-safe transition-[left] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+          isNavigationCollapsed ? "lg:left-[4.5rem]" : "lg:left-60"
+        )}
         style={{ boxShadow: "0 -12px 28px -10px rgba(15,15,15,0.12), var(--shadow-jaryq-md)" }}
       >
         {/* Error banner */}

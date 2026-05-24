@@ -1,5 +1,6 @@
 "use client";
 
+import { forwardRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -37,7 +38,20 @@ const catalogNav = [
 const linkBase =
   "group relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none";
 
-export function Sidebar() {
+const collapsedLink = "h-11 justify-center gap-0 px-0";
+const navLabel =
+  "min-w-0 max-w-[10rem] overflow-hidden whitespace-nowrap transition-[max-width,opacity,transform] duration-200 ease-jaryq-out motion-reduce:transition-none";
+const collapsedLabel = "max-w-0 -translate-x-1 opacity-0";
+
+interface SidebarProps {
+  isCollapsed?: boolean;
+  onActivity?: () => void;
+}
+
+export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
+  { isCollapsed = false, onActivity },
+  ref
+) {
   const pathname = usePathname();
   const router = useRouter();
   const { signOut, user } = useAuthStore(
@@ -51,15 +65,33 @@ export function Sidebar() {
 
   return (
     <aside
+      ref={ref}
       aria-label="Бүйір мәзір"
-      className="hidden lg:flex flex-col w-60 h-screen fixed left-0 top-0 bg-white border-r border-jaryq-border-light z-30"
+      onFocusCapture={onActivity}
+      onPointerDown={onActivity}
+      onPointerEnter={onActivity}
+      onPointerMove={onActivity}
+      className={cn(
+        "hidden lg:flex flex-col h-screen fixed left-0 top-0 bg-white border-r border-jaryq-border-light z-30 overflow-hidden transition-[width,box-shadow] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+        isCollapsed
+          ? "w-[4.5rem] shadow-[10px_0_30px_-24px_rgba(15,15,15,0.28)]"
+          : "w-60"
+      )}
     >
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-jaryq-border-light">
+      <div
+        className={cn(
+          "py-5 border-b border-jaryq-border-light transition-[padding] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+          isCollapsed ? "px-4" : "px-6"
+        )}
+      >
         <Link
           href="/home"
           aria-label="JARYQ бастапқы бетке"
-          className="inline-flex items-center gap-2 rounded-md transition-transform duration-150 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none motion-reduce:hover:scale-100"
+          className={cn(
+            "inline-flex items-center gap-2 rounded-md transition-[transform,gap] duration-150 hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none motion-reduce:hover:scale-100",
+            isCollapsed && "w-full justify-center gap-0"
+          )}
         >
           <Image
             src="/logo.png"
@@ -70,7 +102,14 @@ export function Sidebar() {
             aria-hidden="true"
             priority
           />
-          <span className="text-xl font-black text-jaryq-text-primary tracking-tight">
+          <span
+            aria-hidden={isCollapsed}
+            className={cn(
+              "text-xl font-black text-jaryq-text-primary tracking-tight",
+              navLabel,
+              isCollapsed && collapsedLabel
+            )}
+          >
             JARYQ
           </span>
         </Link>
@@ -87,8 +126,11 @@ export function Sidebar() {
                   <Link
                     href={href}
                     aria-current={active ? "page" : undefined}
+                    aria-label={isCollapsed ? label : undefined}
+                    title={isCollapsed ? label : undefined}
                     className={cn(
                       linkBase,
+                      isCollapsed && collapsedLink,
                       active
                         ? "bg-jaryq-primary-soft text-jaryq-primary shadow-[inset_0_-1px_0_rgba(249,115,22,0.08)]"
                         : "text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary"
@@ -109,7 +151,12 @@ export function Sidebar() {
                         active && "scale-110"
                       )}
                     />
-                    {label}
+                    <span
+                      aria-hidden={isCollapsed}
+                      className={cn(navLabel, isCollapsed && collapsedLabel)}
+                    >
+                      {label}
+                    </span>
                   </Link>
                 </li>
               );
@@ -117,10 +164,18 @@ export function Sidebar() {
           </ul>
         </nav>
 
-        <div className="pt-4">
+        <div
+          className={cn(
+            "transition-[padding] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+            isCollapsed ? "pt-3" : "pt-4"
+          )}
+        >
           <h2
             id="sidebar-catalog-heading"
-            className="px-3 text-[10px] font-semibold text-jaryq-text-secondary uppercase tracking-widest mb-2"
+            className={cn(
+              "px-3 text-[10px] font-semibold text-jaryq-text-secondary uppercase tracking-widest transition-[height,margin,opacity] duration-200 ease-jaryq-out motion-reduce:transition-none",
+              isCollapsed ? "h-0 mb-0 overflow-hidden opacity-0" : "mb-2"
+            )}
           >
             Каталог
           </h2>
@@ -134,8 +189,11 @@ export function Sidebar() {
                     <Link
                       href={href}
                       aria-current={active ? "page" : undefined}
+                      aria-label={isCollapsed ? label : undefined}
+                      title={isCollapsed ? label : undefined}
                       className={cn(
                         linkBase,
+                        isCollapsed && collapsedLink,
                         active
                           ? "bg-jaryq-primary-soft text-jaryq-primary"
                           : "text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary"
@@ -155,7 +213,12 @@ export function Sidebar() {
                           active && "scale-110"
                         )}
                       />
-                      {label}
+                      <span
+                        aria-hidden={isCollapsed}
+                        className={cn(navLabel, isCollapsed && collapsedLabel)}
+                      >
+                        {label}
+                      </span>
                     </Link>
                   </li>
                 );
@@ -169,11 +232,32 @@ export function Sidebar() {
       {user && (
         <div className="border-t border-jaryq-border-light">
           {/* User info */}
-          <div className="px-4 pt-3 pb-2">
-            <p className="text-[10px] font-semibold text-jaryq-text-muted uppercase tracking-widest px-1 mb-2">
+          <div
+            className={cn(
+              "px-4 pt-3 pb-2 transition-[padding] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+              isCollapsed && "px-3"
+            )}
+          >
+            <p
+              aria-hidden={isCollapsed}
+              className={cn(
+                "text-[10px] font-semibold text-jaryq-text-muted uppercase tracking-widest px-1 transition-[height,margin,opacity] duration-200 ease-jaryq-out motion-reduce:transition-none",
+                isCollapsed ? "h-0 mb-0 overflow-hidden opacity-0" : "mb-2"
+              )}
+            >
               Аккаунт
             </p>
-            <div className="flex items-center gap-3">
+            <div
+              className={cn(
+                "flex items-center gap-3 transition-[gap] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+                isCollapsed && "justify-center gap-0"
+              )}
+              title={
+                isCollapsed
+                  ? user.full_name || user.email || "Пайдаланушы"
+                  : undefined
+              }
+            >
               <div
                 aria-hidden="true"
                 className="w-8 h-8 rounded-full bg-jaryq-primary flex items-center justify-center flex-shrink-0 ring-2 ring-jaryq-primary-soft"
@@ -182,7 +266,15 @@ export function Sidebar() {
                   {(user.full_name || user.email || "?")[0].toUpperCase()}
                 </span>
               </div>
-              <div className="flex-1 min-w-0">
+              <div
+                aria-hidden={isCollapsed}
+                className={cn(
+                  "flex-1 min-w-0 transition-[max-width,opacity,transform] duration-200 ease-jaryq-out motion-reduce:transition-none",
+                  isCollapsed
+                    ? "max-w-0 -translate-x-1 overflow-hidden opacity-0"
+                    : "max-w-[10rem] opacity-100"
+                )}
+              >
                 <p className="text-sm font-semibold tracking-tight text-jaryq-text-primary truncate">
                   {user.full_name || "Пайдаланушы"}
                 </p>
@@ -193,17 +285,32 @@ export function Sidebar() {
             </div>
           </div>
           {/* Logout — visually separated destructive action */}
-          <div className="px-4 pb-4 pt-1 border-t border-jaryq-border-light">
+          <div
+            className={cn(
+              "px-4 pb-4 pt-1 border-t border-jaryq-border-light transition-[padding] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+              isCollapsed && "px-3"
+            )}
+          >
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-red-500 bg-red-50/60 hover:bg-red-50 transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 motion-reduce:transition-none"
+              aria-label={isCollapsed ? "Шығу" : undefined}
+              title={isCollapsed ? "Шығу" : undefined}
+              className={cn(
+                "flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-red-500 bg-red-50/60 hover:bg-red-50 transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 motion-reduce:transition-none",
+                isCollapsed && "h-10 justify-center gap-0 px-0"
+              )}
             >
               <LogOut size={16} aria-hidden="true" />
-              Шығу
+              <span
+                aria-hidden={isCollapsed}
+                className={cn(navLabel, isCollapsed && collapsedLabel)}
+              >
+                Шығу
+              </span>
             </button>
           </div>
         </div>
       )}
     </aside>
   );
-}
+});
