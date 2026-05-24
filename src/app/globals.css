@@ -238,6 +238,76 @@ html.jaryq-large-text {
   background-image: radial-gradient(circle at 30% 30%, #FB923C 0%, var(--color-jaryq-primary) 50%, var(--color-jaryq-primary-dark) 100%);
 }
 
+/* Shared audio seek range used by the mini and full players. */
+.jaryq-player-range {
+  --jaryq-range-progress: 0%;
+  appearance: none;
+  height: 1.75rem;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.jaryq-player-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.jaryq-player-range:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--color-jaryq-primary) 28%, transparent),
+    0 0 0 6px rgba(255, 255, 255, 0.85);
+}
+.jaryq-player-range::-webkit-slider-runnable-track {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--color-jaryq-primary) 0%,
+    var(--color-jaryq-primary-dark) var(--jaryq-range-progress),
+    var(--color-jaryq-border-light) var(--jaryq-range-progress),
+    var(--color-jaryq-border-light) 100%
+  );
+}
+.jaryq-player-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  margin-top: -0.25rem;
+  border-radius: 9999px;
+  background: var(--color-jaryq-primary);
+  border: 2px solid #fff;
+  box-shadow: 0 4px 12px -4px rgba(15, 15, 15, 0.35);
+  transition: transform var(--duration-jaryq-fast) var(--ease-jaryq-out);
+}
+.jaryq-player-range:hover::-webkit-slider-thumb,
+.jaryq-player-range:active::-webkit-slider-thumb {
+  transform: scale(1.12);
+}
+.jaryq-player-range::-moz-range-track {
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--color-jaryq-primary) 0%,
+    var(--color-jaryq-primary-dark) var(--jaryq-range-progress),
+    var(--color-jaryq-border-light) var(--jaryq-range-progress),
+    var(--color-jaryq-border-light) 100%
+  );
+}
+.jaryq-player-range::-moz-range-thumb {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 9999px;
+  background: var(--color-jaryq-primary);
+  border: 2px solid #fff;
+  box-shadow: 0 4px 12px -4px rgba(15, 15, 15, 0.35);
+  transition: transform var(--duration-jaryq-fast) var(--ease-jaryq-out);
+}
+.jaryq-player-range:hover::-moz-range-thumb,
+.jaryq-player-range:active::-moz-range-thumb {
+  transform: scale(1.12);
+}
+
 /* Shimmer skeleton — drives the existing jaryq-shimmer keyframes. */
 .jaryq-shimmer {
   position: relative;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback, useState, useId } from "react";
 import { Play, Pause, SkipBack, SkipForward, ChevronUp, X } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 import { usePlayerStore } from "@/store/playerStore";
@@ -52,6 +52,7 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
   const { user } = useAuthStore();
   const { autoSave, speed, setSpeed } = useSettingsStore();
   const [showFull, setShowFull] = useState(false);
+  const fullPlayerDialogId = useId();
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Speed ref keeps the callback stable while always reading the latest value
@@ -193,26 +194,16 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
   const openFull = useCallback(() => setShowFull(true), []);
   const closeFull = useCallback(() => setShowFull(false), []);
 
-  // Scrub by clicking/dragging on the progress bar.
-  const seekToRatio = useCallback((ratio: number) => {
+  const handleMiniSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const dur = usePlayerStore.getState().duration;
     if (!dur) return;
-    const newPos = Math.max(0, Math.min(dur, ratio * dur));
+    const newPos = Math.max(0, Math.min(dur, parseFloat(e.target.value)));
     howlerService.seekTo(newPos);
     usePlayerStore.setState({ position: newPos });
   }, []);
 
-  const handleScrubPointer = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      if (rect.width <= 0) return;
-      seekToRatio((e.clientX - rect.left) / rect.width);
-    },
-    [seekToRatio]
-  );
-
   const handleScrubKey = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
       const dur = usePlayerStore.getState().duration;
       if (!dur) return;
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
@@ -240,12 +231,14 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
   const progress = duration > 0 ? (position / duration) * 100 : 0;
   const chapterNum = currentChapter?.chapter_number;
   const chapterTitle = currentChapter?.title;
+  const clampedPosition = duration > 0 ? Math.min(position, duration) : 0;
 
   return (
     <>
       {/* Full player sheet */}
       {showFull && (
         <FullPlayer
+          dialogId={fullPlayerDialogId}
           onClose={closeFull}
           onLoadChapter={loadChapter}
           togglePlay={togglePlay}
@@ -258,183 +251,201 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
       {/* Mini player bar */}
       <section
         aria-label="Аудио ойнатқыш"
+        aria-hidden={showFull ? "true" : undefined}
         className={cn(
-          "fixed bottom-0 left-0 right-0 z-50 bg-jaryq-bg-card/95 backdrop-blur-md border-t-2 border-jaryq-primary/20 pb-safe transition-[left] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+          "fixed bottom-0 left-0 right-0 z-50 bg-transparent px-2 pb-safe transition-[left] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none sm:px-4",
           isNavigationCollapsed ? "lg:left-[4.5rem]" : "lg:left-60"
         )}
-        style={{ boxShadow: "0 -12px 28px -10px rgba(15,15,15,0.12), var(--shadow-jaryq-md)" }}
       >
-        {/* Error banner */}
-        {playerError && (
-          <p className="text-xs text-red-400 text-center py-1 px-4 bg-red-950/30">
-            {playerError}
-          </p>
-        )}
-
-        {/* Scrubbable progress bar.
-           Outer wrapper provides a generous y-padded hit area; inner track
-           is visually thin but easy to tap. */}
         <div
-          role="slider"
-          tabIndex={duration > 0 ? 0 : -1}
-          aria-label="Тарау прогресі"
-          aria-valuemin={0}
-          aria-valuemax={Math.round(duration) || 0}
-          aria-valuenow={Math.round(position)}
-          aria-valuetext={`${formatTime(position)} / ${formatTime(duration)}`}
-          onPointerDown={handleScrubPointer}
-          onKeyDown={handleScrubKey}
-          className="group relative py-1.5 -my-1 cursor-pointer focus-visible:outline-none touch-none"
+          className="overflow-hidden rounded-t-2xl border border-jaryq-border-warm/80 bg-white/95 backdrop-blur-xl"
+          style={{
+            backgroundImage:
+              "linear-gradient(180deg, rgba(255,251,245,0.98) 0%, rgba(255,255,255,0.96) 62%, rgba(255,244,237,0.94) 100%)",
+            boxShadow:
+              "0 -18px 42px -24px rgba(15,15,15,0.28), var(--shadow-jaryq-md)",
+          }}
         >
-          <div className="relative h-1 group-hover:h-1.5 group-focus-visible:h-1.5 bg-jaryq-border-light transition-[height] duration-150 motion-reduce:transition-none overflow-hidden">
-            {isLoading ? (
-              <div className="absolute inset-0 bg-jaryq-primary/40 overflow-hidden">
+          {/* Error banner */}
+          {playerError && (
+            <p
+              role="alert"
+              aria-live="assertive"
+              className="bg-red-50 px-4 py-1.5 text-center text-xs font-medium text-red-700"
+            >
+              {playerError}
+            </p>
+          )}
+
+          <div className="relative px-3 pt-3 sm:px-4">
+            <input
+              id="mini-player-progress"
+              type="range"
+              min={0}
+              max={duration || 1}
+              step={0.5}
+              value={clampedPosition}
+              disabled={duration <= 0}
+              aria-label="Тарау прогресі"
+              aria-valuemin={0}
+              aria-valuemax={Math.round(duration) || 1}
+              aria-valuenow={Math.round(position)}
+              aria-valuetext={`${formatTime(position)} / ${formatTime(duration)}`}
+              onChange={handleMiniSeek}
+              onKeyDown={handleScrubKey}
+              className="jaryq-player-range w-full"
+              style={
+                {
+                  "--jaryq-range-progress": `${progress}%`,
+                } as React.CSSProperties
+              }
+            />
+            {isLoading && (
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-3 top-[1.125rem] h-2 overflow-hidden rounded-full bg-jaryq-primary-soft sm:inset-x-4"
+              >
                 <span
-                  aria-hidden="true"
-                  className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/70 to-transparent motion-reduce:hidden"
+                  className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/80 to-transparent motion-reduce:hidden"
                   style={{ animation: "jaryq-shimmer 1.4s linear infinite" }}
                 />
-              </div>
-            ) : (
-              <div
-                className="h-full jaryq-gradient-cta transition-[width] duration-250 linear motion-reduce:transition-none"
-                style={{ width: `${progress}%` }}
-              />
+              </span>
             )}
           </div>
-          {/* Hover thumb */}
-          {!isLoading && duration > 0 && (
-            <span
-              aria-hidden="true"
-              className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-jaryq-primary shadow-sm ring-2 ring-white opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity duration-150 motion-reduce:transition-none"
-              style={{ left: `${progress}%` }}
-            />
-          )}
-        </div>
 
-        {/* Live region for chapter / state changes */}
-        <div role="status" aria-live="polite" className="sr-only">
-          {currentChapter
-            ? `${currentChapter.chapter_number}-тарау: ${currentChapter.title}${isPlaying ? ", ойналуда" : ", тоқтатылды"}`
-            : ""}
-        </div>
-
-        <div className="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 h-16">
-          {/* Cover + info */}
-          <button
-            onClick={openFull}
-            aria-label={`Толық ойнатқышты ашу: ${currentBook.title}${currentChapter ? `, ${currentChapter.title}` : ""}`}
-            className="group flex items-center gap-3 flex-1 min-w-0 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded-md"
-          >
-            <span className="relative shrink-0 overflow-hidden rounded-md ring-1 ring-black/5 shadow-sm">
-              <CoverImage
-                src={currentBook.cover_url}
-                alt=""
-                width={40}
-                height={52}
-                className="block transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
-              />
-            </span>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold tracking-tight text-jaryq-text-primary text-sm truncate leading-tight">
-                {currentBook.title}
-              </p>
-              <p className="text-jaryq-text-muted text-[11px] font-medium truncate leading-tight">
-                {chapterTitle ? (
-                  <>
-                    {chapterNum ? (
-                      <span className="text-jaryq-primary/80 font-semibold">
-                        {chapterNum}-тарау
-                      </span>
-                    ) : null}
-                    {chapterNum ? <span className="mx-1 opacity-50">·</span> : null}
-                    {chapterTitle}
-                  </>
-                ) : (
-                  currentBook.author
-                )}
-              </p>
-            </div>
-          </button>
-
-          {/* Time + speed group (secondary metadata, subordinated) */}
-          <div className="hidden sm:flex items-center gap-2">
-            <span
-              className="text-[11px] text-jaryq-text-muted font-mono tabular-nums"
-              aria-hidden="true"
-            >
-              {formatTime(position)}
-            </span>
-            <button
-              onClick={cycleSpeed}
-              aria-label={`Ойнату жылдамдығы: ${speed} есе. Өзгерту үшін басыңыз.`}
-              className="text-[10px] font-bold text-jaryq-primary bg-jaryq-primary-soft px-1.5 py-0.5 rounded-full transition-transform duration-150 active:scale-95 hover:bg-jaryq-primary-med/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
-            >
-              <span aria-hidden="true">{speed}x</span>
-            </button>
+          {/* Live region for chapter / state changes */}
+          <div role="status" aria-live="polite" className="sr-only">
+            {currentChapter
+              ? `${currentChapter.chapter_number}-тарау: ${currentChapter.title}${isPlaying ? ", ойналуда" : ", тоқтатылды"}`
+              : ""}
           </div>
 
-          {/* Controls */}
-          <div className="flex items-center gap-1">
+          <div className="flex h-[4.25rem] items-center gap-2 px-3 sm:h-[4.5rem] sm:gap-3 sm:px-4">
+            {/* Cover + info */}
             <button
-              onClick={skipPrev}
-              aria-label="Алдыңғы тарау"
-              className="hidden sm:flex w-11 h-11 items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-transform duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+              onClick={openFull}
+              aria-label={`Толық ойнатқышты ашу: ${currentBook.title}${currentChapter ? `, ${currentChapter.title}` : ""}`}
+              aria-haspopup="dialog"
+              aria-expanded={showFull}
+              aria-controls={fullPlayerDialogId}
+              className="group flex min-w-0 flex-1 items-center gap-3 rounded-xl p-1 text-left transition-colors duration-(--duration-jaryq-fast) hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
             >
-              <SkipBack size={18} aria-hidden="true" />
-            </button>
-            <button
-              onClick={togglePlay}
-              aria-label={isPlaying ? "Тоқтату" : "Ойнату"}
-              aria-pressed={isPlaying}
-              className="w-11 h-11 flex items-center justify-center rounded-full jaryq-gradient-cta text-white hover:scale-[1.05] active:scale-95 transition-transform duration-(--duration-jaryq-base) ease-jaryq-spring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
-              style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
-            >
-              <span className="relative w-5 h-5 inline-flex items-center justify-center">
-                <Play
-                  size={20}
-                  aria-hidden="true"
-                  className={`absolute transition-all duration-200 motion-reduce:transition-none ${
-                    isPlaying ? "opacity-0 scale-50" : "opacity-100 scale-100"
-                  }`}
-                />
-                <Pause
-                  size={20}
-                  aria-hidden="true"
-                  className={`absolute transition-all duration-200 motion-reduce:transition-none ${
-                    isPlaying ? "opacity-100 scale-100" : "opacity-0 scale-50"
-                  }`}
+              <span
+                className="relative shrink-0 overflow-hidden rounded-xl ring-1 ring-black/5"
+                style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
+              >
+                <CoverImage
+                  src={currentBook.cover_url}
+                  alt=""
+                  width={46}
+                  height={60}
+                  className="block transition-transform duration-300 ease-jaryq-out group-hover:scale-[1.04] motion-reduce:transition-none"
                 />
               </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold leading-tight tracking-tight text-jaryq-text-primary">
+                  {currentBook.title}
+                </p>
+                <p className="truncate text-[11px] font-medium leading-tight text-jaryq-text-muted sm:text-xs">
+                  {chapterTitle ? (
+                    <>
+                      {chapterNum ? (
+                        <span className="font-semibold text-jaryq-primary/80">
+                          {chapterNum}-тарау
+                        </span>
+                      ) : null}
+                      {chapterNum ? <span className="mx-1 opacity-50">-</span> : null}
+                      {chapterTitle}
+                    </>
+                  ) : (
+                    currentBook.author
+                  )}
+                </p>
+              </div>
             </button>
+
+            {/* Time + speed group (secondary metadata, subordinated) */}
+            <div className="hidden items-center gap-2 rounded-full border border-jaryq-border-warm bg-white/70 px-2.5 py-1 sm:flex">
+              <span
+                className="font-mono text-[11px] tabular-nums text-jaryq-text-muted"
+                aria-hidden="true"
+              >
+                {formatTime(position)}
+              </span>
+              <button
+                onClick={cycleSpeed}
+                aria-label={`Ойнату жылдамдығы: ${speed} есе. Өзгерту үшін басыңыз.`}
+                className="rounded-full bg-jaryq-primary-soft px-2 py-1 text-[10px] font-bold text-jaryq-primary transition-transform duration-150 hover:bg-jaryq-primary-med/40 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+              >
+                <span aria-hidden="true">{speed}x</span>
+              </button>
+            </div>
+
+            {/* Controls */}
+            <div className="flex items-center gap-1 rounded-full bg-white/65 p-1 ring-1 ring-jaryq-border-warm/80">
+              <button
+                onClick={skipPrev}
+                aria-label="Алдыңғы тарау"
+                className="hidden h-10 w-10 items-center justify-center rounded-full text-jaryq-text-secondary transition-[background-color,transform] duration-150 hover:bg-jaryq-primary-soft active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none sm:flex"
+              >
+                <SkipBack size={18} aria-hidden="true" />
+              </button>
+              <button
+                onClick={togglePlay}
+                aria-label={isPlaying ? "Тоқтату" : "Ойнату"}
+                aria-pressed={isPlaying}
+                className="flex h-11 w-11 items-center justify-center rounded-full text-white jaryq-gradient-cta transition-transform duration-(--duration-jaryq-base) ease-jaryq-spring hover:scale-[1.05] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:hover:scale-100"
+                style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
+              >
+                <span className="relative inline-flex h-5 w-5 items-center justify-center">
+                  <Play
+                    size={20}
+                    aria-hidden="true"
+                    className={`absolute transition-all duration-200 motion-reduce:transition-none ${
+                      isPlaying ? "scale-50 opacity-0" : "scale-100 opacity-100"
+                    }`}
+                  />
+                  <Pause
+                    size={20}
+                    aria-hidden="true"
+                    className={`absolute transition-all duration-200 motion-reduce:transition-none ${
+                      isPlaying ? "scale-100 opacity-100" : "scale-50 opacity-0"
+                    }`}
+                  />
+                </span>
+              </button>
+              <button
+                onClick={skipNext}
+                disabled={chapterIndex >= chapters.length - 1}
+                aria-label="Келесі тарау"
+                className="hidden h-10 w-10 items-center justify-center rounded-full text-jaryq-text-secondary transition-[background-color,transform] duration-150 hover:bg-jaryq-primary-soft active:scale-95 disabled:opacity-30 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none sm:flex"
+              >
+                <SkipForward size={18} aria-hidden="true" />
+              </button>
+            </div>
+
+            {/* Expand — redundant on mobile since the cover/info button also opens
+              the full player; keep it for tablet/desktop. */}
             <button
-              onClick={skipNext}
-              disabled={chapterIndex >= chapters.length - 1}
-              aria-label="Келесі тарау"
-              className="hidden sm:flex w-11 h-11 items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main transition-transform duration-150 active:scale-95 disabled:opacity-30 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+              onClick={openFull}
+              aria-label="Толық ойнатқышты ашу"
+              aria-haspopup="dialog"
+              aria-expanded={showFull}
+              aria-controls={fullPlayerDialogId}
+              className="hidden h-11 w-11 items-center justify-center rounded-full text-jaryq-text-muted transition-[background-color,color,transform] duration-150 hover:bg-jaryq-primary-soft hover:text-jaryq-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none sm:flex"
             >
-              <SkipForward size={18} aria-hidden="true" />
+              <ChevronUp size={18} aria-hidden="true" />
+            </button>
+
+            {/* Close (subordinated — visually quieter than expand/play) */}
+            <button
+              onClick={close}
+              aria-label="Ойнатқышты жабу"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-jaryq-text-muted/70 transition-[background-color,color,transform] duration-150 hover:bg-red-50 hover:text-red-600 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+            >
+              <X size={14} aria-hidden="true" />
             </button>
           </div>
-
-          {/* Expand — redundant on mobile since the cover/info button also opens
-              the full player; keep it for tablet/desktop. */}
-          <button
-            onClick={openFull}
-            aria-label="Толық ойнатқышты ашу"
-            className="hidden sm:flex w-11 h-11 items-center justify-center text-jaryq-text-muted hover:text-jaryq-primary transition-transform duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded-full motion-reduce:transition-none"
-          >
-            <ChevronUp size={18} aria-hidden="true" />
-          </button>
-
-          {/* Close (subordinated — visually quieter than expand/play) */}
-          <button
-            onClick={close}
-            aria-label="Ойнатқышты жабу"
-            className="w-9 h-9 flex items-center justify-center text-jaryq-text-muted/60 hover:text-red-500 transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded-full motion-reduce:transition-none"
-          >
-            <X size={14} aria-hidden="true" />
-          </button>
         </div>
       </section>
     </>

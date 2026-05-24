@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useRef } from "react";
 import { Settings } from "lucide-react";
 import { useSettingsStore } from "@/store/settingsStore";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -75,6 +75,38 @@ export default function SettingsPage() {
     useSettingsStore();
   const speedLabelId = useId();
   const speedDescId = useId();
+  const speedOptionRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  const focusSpeedOption = (index: number) => {
+    const option = SPEED_OPTIONS[index];
+    setSpeed(option);
+    window.requestAnimationFrame(() => {
+      speedOptionRefs.current[index]?.focus();
+    });
+  };
+
+  const handleSpeedKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    let nextIndex: number | null = null;
+
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      nextIndex = (index + 1) % SPEED_OPTIONS.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      nextIndex =
+        (index - 1 + SPEED_OPTIONS.length) % SPEED_OPTIONS.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = SPEED_OPTIONS.length - 1;
+    }
+
+    if (nextIndex !== null) {
+      event.preventDefault();
+      focusSpeedOption(nextIndex);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
@@ -122,16 +154,21 @@ export default function SettingsPage() {
               aria-describedby={speedDescId}
               className="flex flex-wrap gap-2"
             >
-              {SPEED_OPTIONS.map((s) => {
+              {SPEED_OPTIONS.map((s, index) => {
                 const active = speed === s;
                 return (
                   <button
                     key={s}
+                    ref={(element) => {
+                      speedOptionRefs.current[index] = element;
+                    }}
                     type="button"
                     role="radio"
                     aria-checked={active}
                     aria-label={`${s} есе жылдамдық`}
+                    tabIndex={active ? 0 : -1}
                     onClick={() => setSpeed(s)}
+                    onKeyDown={(event) => handleSpeedKeyDown(event, index)}
                     className={cn(
                       "px-4 py-2 rounded-full text-sm font-bold transition-[background-color,color,box-shadow,transform] duration-(--duration-jaryq-fast) ease-jaryq-out active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
                       active

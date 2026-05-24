@@ -7,6 +7,7 @@ import { formatDuration } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 interface ChapterListProps {
+  dialogId: string;
   chapters: Chapter[];
   currentIndex: number;
   onSelectChapter: (index: number) => void;
@@ -14,6 +15,7 @@ interface ChapterListProps {
 }
 
 export function ChapterList({
+  dialogId,
   chapters,
   currentIndex,
   onSelectChapter,
@@ -67,87 +69,105 @@ export function ChapterList({
 
   return (
     <div
+      id={dialogId}
       ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
-      className="fixed inset-0 z-60 flex flex-col bg-jaryq-bg-card"
+      className="fixed inset-0 z-[60] flex items-end bg-jaryq-text-primary/10 backdrop-blur-sm lg:items-stretch lg:justify-end"
     >
       <div
-        className="flex items-center justify-between px-4 py-4 border-b border-jaryq-border-light"
-        style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
+        className="flex max-h-[86dvh] w-full flex-col overflow-hidden rounded-t-2xl border border-jaryq-border-warm bg-white/95 backdrop-blur-xl lg:h-full lg:max-h-none lg:w-[28rem] lg:rounded-l-2xl lg:rounded-tr-none"
+        style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
       >
-        <h2
-          id={titleId}
-          className="font-display text-lg lg:text-xl font-bold text-jaryq-text-primary tracking-tight"
+        <div
+          className="flex items-center justify-between border-b border-jaryq-border-warm bg-jaryq-bg-cream/80 px-4 py-4"
+          style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
         >
-          Тараулар
-        </h2>
-        <button
-          ref={closeBtnRef}
-          onClick={onClose}
-          aria-label="Тараулар тізімін жабу"
-          className="w-11 h-11 flex items-center justify-center rounded-full text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary active:scale-95 transition-[background-color,color,transform] duration-(--duration-jaryq-fast) ease-jaryq-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
-        >
-          <X size={20} aria-hidden="true" />
-        </button>
-      </div>
-      <ul className="flex-1 overflow-y-auto divide-y divide-jaryq-border-light">
-        {chapters.map((chapter, index) => {
-          const active = index === currentIndex;
-          return (
-            <li key={chapter.id}>
-              <button
-                onClick={() => onSelectChapter(index)}
-                aria-pressed={active}
-                aria-label={`${index + 1}-тарау, ${chapter.title}, ұзақтығы ${formatDuration(chapter.duration)}${active ? ", қазір ойналуда" : ""}`}
-                className={cn(
-                  "w-full flex items-center gap-3 px-4 py-3 text-left transition-colors duration-(--duration-jaryq-fast) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary",
-                  active
-                    ? "bg-jaryq-primary-soft"
-                    : "hover:bg-jaryq-bg-main"
-                )}
-              >
-                <div
-                  aria-hidden="true"
+          <div className="min-w-0">
+            <h2
+              id={titleId}
+              className="font-display text-lg font-bold tracking-tight text-jaryq-text-primary lg:text-xl"
+            >
+              Тараулар
+            </h2>
+            <p className="text-xs font-medium text-jaryq-text-secondary">
+              {chapters.length} тарау
+            </p>
+          </div>
+          <button
+            ref={closeBtnRef}
+            onClick={onClose}
+            aria-label="Тараулар тізімін жабу"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-jaryq-text-secondary transition-[background-color,color,transform] duration-(--duration-jaryq-fast) ease-jaryq-out hover:bg-white hover:text-jaryq-text-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+          >
+            <X size={20} aria-hidden="true" />
+          </button>
+        </div>
+        <ul className="flex-1 space-y-2 overflow-y-auto p-3">
+          {chapters.map((chapter, index) => {
+            const active = index === currentIndex;
+            return (
+              <li key={chapter.id}>
+                <button
+                  onClick={() => onSelectChapter(index)}
+                  aria-pressed={active}
+                  aria-label={`${index + 1}-тарау, ${chapter.title}, ұзақтығы ${formatDuration(chapter.duration)}${active ? ", қазір ойналуда" : ""}`}
                   className={cn(
-                    "w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 tabular-nums transition-colors duration-(--duration-jaryq-fast)",
+                    "flex min-h-16 w-full items-center gap-3 rounded-xl border px-3 py-3 text-left transition-[background-color,border-color,transform] duration-(--duration-jaryq-fast) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary motion-reduce:transition-none",
                     active
-                      ? "text-white"
-                      : "bg-jaryq-bg-main text-jaryq-text-secondary"
+                      ? "border-jaryq-primary/30 bg-jaryq-primary-soft"
+                      : "border-transparent bg-white hover:border-jaryq-border-warm hover:bg-jaryq-bg-cream"
                   )}
-                  style={
-                    active
-                      ? {
-                          backgroundImage:
-                            "linear-gradient(90deg, var(--color-jaryq-primary) 0%, var(--color-jaryq-primary-dark) 100%)",
-                          boxShadow: "var(--shadow-jaryq-glow-sm)",
-                        }
-                      : undefined
-                  }
                 >
-                  {active ? <PlayCircle size={18} /> : index + 1}
-                </div>
-                <div className="flex-1 min-w-0" aria-hidden="true">
-                  <p
+                  <div
+                    aria-hidden="true"
                     className={cn(
-                      "font-medium text-sm truncate",
+                      "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold tabular-nums transition-colors duration-(--duration-jaryq-fast)",
                       active
-                        ? "text-jaryq-primary font-semibold"
-                        : "text-jaryq-text-primary"
+                        ? "text-white"
+                        : "bg-jaryq-bg-main text-jaryq-text-secondary"
                     )}
+                    style={
+                      active
+                        ? {
+                            backgroundImage:
+                              "linear-gradient(90deg, var(--color-jaryq-primary) 0%, var(--color-jaryq-primary-dark) 100%)",
+                            boxShadow: "var(--shadow-jaryq-glow-sm)",
+                          }
+                        : undefined
+                    }
                   >
-                    {chapter.title}
-                  </p>
-                  <p className="text-xs text-jaryq-text-secondary tabular-nums">
-                    {formatDuration(chapter.duration)}
-                  </p>
-                </div>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+                    {active ? <PlayCircle size={18} /> : index + 1}
+                  </div>
+                  <div className="min-w-0 flex-1" aria-hidden="true">
+                    <p
+                      className={cn(
+                        "truncate text-sm font-medium",
+                        active
+                          ? "font-semibold text-jaryq-primary"
+                          : "text-jaryq-text-primary"
+                      )}
+                    >
+                      {chapter.title}
+                    </p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <p className="text-xs tabular-nums text-jaryq-text-secondary">
+                        {formatDuration(chapter.duration)}
+                      </p>
+                      {active && (
+                        <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-jaryq-primary">
+                          Қазір ойналуда
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }

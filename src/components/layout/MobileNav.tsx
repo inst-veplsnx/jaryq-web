@@ -33,6 +33,7 @@ export const MobileNav = forwardRef<HTMLElement, MobileNavProps>(
       <nav
         ref={ref}
         aria-label="Мобильді мәзір"
+        aria-hidden={isHidden ? "true" : undefined}
         onFocusCapture={onActivity}
         onPointerDown={onActivity}
         className="lg:hidden fixed left-0 right-0 bottom-0 z-40 pointer-events-none"
@@ -56,6 +57,7 @@ export const MobileNav = forwardRef<HTMLElement, MobileNavProps>(
                   <Link
                     href={href}
                     aria-current={active ? "page" : undefined}
+                    tabIndex={isHidden ? -1 : undefined}
                     className={cn(
                       "flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none",
                       active
