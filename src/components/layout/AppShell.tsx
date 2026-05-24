@@ -18,7 +18,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     isNavigationHidden,
     revealNavigation,
     revealNavigationOnMobileActivity,
-  } = useAutoHideNavigation({ navigationRefs });
+  } = useAutoHideNavigation({ initialHidden: true, navigationRefs });
 
   return (
     <div className="flex h-screen overflow-hidden">

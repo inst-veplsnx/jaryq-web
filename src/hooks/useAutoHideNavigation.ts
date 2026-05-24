@@ -16,18 +16,20 @@ const MOBILE_ACTIVITY_EVENTS = [
 
 interface UseAutoHideNavigationOptions {
   idleDelayMs?: number;
+  initialHidden?: boolean;
   mobileViewportQuery?: string;
   navigationRefs?: Array<RefObject<HTMLElement | null>>;
 }
 
 export function useAutoHideNavigation({
   idleDelayMs = DEFAULT_IDLE_DELAY_MS,
+  initialHidden = false,
   mobileViewportQuery = MOBILE_VIEWPORT_QUERY,
   navigationRefs = EMPTY_NAVIGATION_REFS,
 }: UseAutoHideNavigationOptions = {}) {
-  const [isNavigationHidden, setIsNavigationHidden] = useState(false);
+  const [isNavigationHidden, setIsNavigationHidden] = useState(initialHidden);
   const hideTimerRef = useRef<number | null>(null);
-  const hiddenRef = useRef(false);
+  const hiddenRef = useRef(initialHidden);
   const lastActivityRef = useRef(0);
 
   const clearHideTimer = useCallback(() => {
@@ -37,13 +39,17 @@ export function useAutoHideNavigation({
     }
   }, []);
 
-  const hasFocusedNavigation = useCallback(() => {
+  const hasActiveNavigation = useCallback(() => {
     const activeElement = document.activeElement;
-    if (!activeElement) return false;
 
     return navigationRefs.some((navigationRef) => {
       const element = navigationRef.current;
-      return element ? element.contains(activeElement) : false;
+      if (!element) return false;
+
+      return (
+        (activeElement ? element.contains(activeElement) : false) ||
+        element.matches(":hover")
+      );
     });
   }, [navigationRefs]);
 
@@ -51,7 +57,7 @@ export function useAutoHideNavigation({
     clearHideTimer();
 
     function hideWhenReady() {
-      if (hasFocusedNavigation()) {
+      if (hasActiveNavigation()) {
         hideTimerRef.current = window.setTimeout(hideWhenReady, idleDelayMs);
         return;
       }
@@ -61,7 +67,7 @@ export function useAutoHideNavigation({
     }
 
     hideTimerRef.current = window.setTimeout(hideWhenReady, idleDelayMs);
-  }, [clearHideTimer, hasFocusedNavigation, idleDelayMs]);
+  }, [clearHideTimer, hasActiveNavigation, idleDelayMs]);
 
   const isMobileViewport = useCallback(
     () => window.matchMedia(mobileViewportQuery).matches,

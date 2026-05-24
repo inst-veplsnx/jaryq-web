@@ -70,7 +70,6 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
       onFocusCapture={onActivity}
       onPointerDown={onActivity}
       onPointerEnter={onActivity}
-      onPointerMove={onActivity}
       className={cn(
         "hidden lg:flex flex-col h-screen fixed left-0 top-0 bg-white border-r border-jaryq-border-light z-30 overflow-hidden transition-[width,box-shadow] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
         isCollapsed
