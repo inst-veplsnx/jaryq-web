@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, memo, useMemo } from "react";
 import { Play, Pause, Heart, HeartOff, Loader2, ListMusic } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 import { Book, Chapter, UserProgress } from "@/types";
 import { useAuthStore } from "@/store/authStore";
 import { usePlayerStore } from "@/store/playerStore";
@@ -15,14 +16,113 @@ interface BookDetailProps {
   chapters: Chapter[];
 }
 
+interface ChapterRowProps {
+  chapter: Chapter;
+  index: number;
+  isCurrent: boolean;
+  isCurrentPlaying: boolean;
+  isResume: boolean;
+  resumePosition: number;
+  onPlay: (index: number, startPosition: number) => void;
+}
+
+const ChapterRow = memo(function ChapterRow({
+  chapter,
+  index,
+  isCurrent,
+  isCurrentPlaying,
+  isResume,
+  resumePosition,
+  onPlay,
+}: ChapterRowProps) {
+  const chapterLabel = useMemo(
+    () =>
+      [
+        `${index + 1}-тарау`,
+        chapter.title,
+        `ұзақтығы ${formatDuration(chapter.duration)}`,
+        isResume ? `${formatTime(resumePosition)} өткен` : null,
+        isCurrentPlaying ? "қазір ойналуда" : isCurrent ? "таңдалған" : null,
+      ]
+        .filter(Boolean)
+        .join(", "),
+    [chapter, index, isCurrent, isCurrentPlaying, isResume, resumePosition]
+  );
+
+  return (
+    <li>
+      <button
+        onClick={() => onPlay(index, isResume ? resumePosition : 0)}
+        aria-label={chapterLabel}
+        aria-current={isCurrent ? "true" : undefined}
+        aria-pressed={isCurrentPlaying}
+        className={cn(
+          "group w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-jaryq-bg-main active:bg-jaryq-primary-soft/60 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary motion-reduce:transition-none",
+          isCurrent && "bg-jaryq-primary-soft"
+        )}
+      >
+        <div
+          aria-hidden="true"
+          className={cn(
+            "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all duration-150 motion-reduce:transition-none",
+            isCurrent
+              ? "bg-jaryq-primary text-white shadow-sm"
+              : "bg-jaryq-bg-main text-jaryq-text-muted group-hover:bg-jaryq-primary-soft group-hover:text-jaryq-primary"
+          )}
+        >
+          {index + 1}
+        </div>
+        <div className="flex-1 min-w-0" aria-hidden="true">
+          <p
+            className={cn(
+              "text-sm font-medium truncate",
+              isCurrent ? "text-jaryq-primary" : "text-jaryq-text-primary"
+            )}
+          >
+            {chapter.title}
+          </p>
+          <p className="text-xs text-jaryq-text-muted">
+            {formatDuration(chapter.duration)}
+            {isResume && (
+              <span className="ml-2 text-jaryq-primary">
+                • {formatTime(resumePosition)} өткен
+              </span>
+            )}
+          </p>
+        </div>
+        {isCurrentPlaying ? (
+          <Pause size={16} aria-hidden="true" className="text-jaryq-primary" />
+        ) : (
+          <Play
+            size={16}
+            aria-hidden="true"
+            className={cn(isCurrent ? "text-jaryq-primary" : "text-jaryq-text-muted")}
+          />
+        )}
+      </button>
+    </li>
+  );
+});
+
 export function BookDetail({ book, chapters }: BookDetailProps) {
   const user = useAuthStore((s) => s.user);
-  const isPlayerLoading = usePlayerStore((s) => s.isLoading);
-  const isPlaying = usePlayerStore((s) => s.isPlaying);
-  const currentBookId = usePlayerStore((s) => s.currentBook?.id ?? null);
-  const currentChapterId = usePlayerStore((s) => s.currentChapter?.id ?? null);
-  const loadChapter = usePlayerStore((s) => s.loadChapter);
-  const togglePlay = usePlayerStore((s) => s.togglePlay);
+  const {
+    isPlayerLoading,
+    isPlaying,
+    currentBookId,
+    currentChapterId,
+    loadChapter,
+    togglePlay,
+  } = usePlayerStore(
+    useShallow((s) => ({
+      isPlayerLoading: s.isLoading,
+      isPlaying: s.isPlaying,
+      currentBookId: s.currentBook?.id ?? null,
+      currentChapterId: s.currentChapter?.id ?? null,
+      loadChapter: s.loadChapter,
+      togglePlay: s.togglePlay,
+    }))
+  );
   const [isFavorite, setIsFavorite] = useState(false);
   const [favLoading, setFavLoading] = useState(false);
   const [progress, setProgress] = useState<UserProgress | null>(null);
@@ -31,8 +131,13 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
 
   useEffect(() => {
     if (!user) return;
-    bookService.isFavorite(user.id, book.id).then(setIsFavorite);
-    bookService.getProgress(user.id, book.id).then(setProgress);
+    Promise.all([
+      bookService.isFavorite(user.id, book.id),
+      bookService.getProgress(user.id, book.id),
+    ]).then(([fav, prog]) => {
+      setIsFavorite(fav);
+      setProgress(prog);
+    });
   }, [user, book.id]);
 
   const toggleFavorite = async () => {
@@ -273,87 +378,18 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
             </h2>
           </div>
           <ul className="bg-jaryq-bg-card rounded-2xl border border-jaryq-border-light overflow-hidden divide-y divide-jaryq-border-light">
-            {chapters.map((chapter, index) => {
-              const isCurrent = isCurrentBook && currentChapterId === chapter.id;
-              const isCurrentPlaying = isCurrent && isPlaying;
-              const isResume = progress?.chapter_number === chapter.chapter_number;
-              const chapterLabel = [
-                `${index + 1}-тарау`,
-                chapter.title,
-                `ұзақтығы ${formatDuration(chapter.duration)}`,
-                isResume && progress
-                  ? `${formatTime(progress.position)} өткен`
-                  : null,
-                isCurrentPlaying
-                  ? "қазір ойналуда"
-                  : isCurrent
-                    ? "таңдалған"
-                    : null,
-              ]
-                .filter(Boolean)
-                .join(", ");
-              return (
-                <li key={chapter.id}>
-                  <button
-                    onClick={() =>
-                      playOrToggle(index, isResume ? progress!.position : 0)
-                    }
-                    aria-label={chapterLabel}
-                    aria-current={isCurrent ? "true" : undefined}
-                    aria-pressed={isCurrentPlaying}
-                    className={cn(
-                      "group w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-jaryq-bg-main active:bg-jaryq-primary-soft/60 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-jaryq-primary motion-reduce:transition-none",
-                      isCurrent && "bg-jaryq-primary-soft"
-                    )}
-                  >
-                    <div
-                      aria-hidden="true"
-                      className={cn(
-                        "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all duration-150 motion-reduce:transition-none",
-                        isCurrent
-                          ? "bg-jaryq-primary text-white shadow-sm"
-                          : "bg-jaryq-bg-main text-jaryq-text-muted group-hover:bg-jaryq-primary-soft group-hover:text-jaryq-primary"
-                      )}
-                    >
-                      {index + 1}
-                    </div>
-                    <div className="flex-1 min-w-0" aria-hidden="true">
-                      <p
-                        className={cn(
-                          "text-sm font-medium truncate",
-                          isCurrent ? "text-jaryq-primary" : "text-jaryq-text-primary"
-                        )}
-                      >
-                        {chapter.title}
-                      </p>
-                      <p className="text-xs text-jaryq-text-muted">
-                        {formatDuration(chapter.duration)}
-                        {isResume && progress && (
-                          <span className="ml-2 text-jaryq-primary">
-                            • {formatTime(progress.position)} өткен
-                          </span>
-                        )}
-                      </p>
-                    </div>
-                    {isCurrentPlaying ? (
-                      <Pause
-                        size={16}
-                        aria-hidden="true"
-                        className="text-jaryq-primary"
-                      />
-                    ) : (
-                      <Play
-                        size={16}
-                        aria-hidden="true"
-                        className={cn(
-                          isCurrent ? "text-jaryq-primary" : "text-jaryq-text-muted"
-                        )}
-                      />
-                    )}
-                  </button>
-                </li>
-              );
-            })}
+            {chapters.map((chapter, index) => (
+              <ChapterRow
+                key={chapter.id}
+                chapter={chapter}
+                index={index}
+                isCurrent={isCurrentBook && currentChapterId === chapter.id}
+                isCurrentPlaying={isCurrentBook && currentChapterId === chapter.id && isPlaying}
+                isResume={progress?.chapter_number === chapter.chapter_number}
+                resumePosition={progress?.position ?? 0}
+                onPlay={playOrToggle}
+              />
+            ))}
           </ul>
         </section>
       )}

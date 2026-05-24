@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Sparkles } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { usePlayerStore } from "@/store/playerStore";
@@ -20,6 +20,7 @@ export default function HomePage() {
   const [newBooks, setNewBooks] = useState<Book[]>([]);
   const [popularBooks, setPopularBooks] = useState<Book[]>([]);
   const [catalogLoading, setCatalogLoading] = useState(true);
+  const chaptersRef = useRef<Chapter[]>([]);
 
   useEffect(() => {
     if (!user) return;
@@ -28,6 +29,15 @@ export default function HomePage() {
       setProgressLoading(false);
     });
   }, [user]);
+
+  // Pre-fetch chapters as soon as we know the resume book so the resume button
+  // responds instantly without a network round-trip at click time.
+  useEffect(() => {
+    if (!recentProgress?.book) return;
+    bookService.getChapters(recentProgress.book.id).then((ch) => {
+      chaptersRef.current = ch;
+    });
+  }, [recentProgress]);
 
   useEffect(() => {
     Promise.all([bookService.getNewArrivals(10), bookService.getPopular(10)]).then(
@@ -42,7 +52,10 @@ export default function HomePage() {
   const launchResume = useCallback(async () => {
     if (!recentProgress?.book || isPlayerLoading) return;
     const book = recentProgress.book;
-    const chapters: Chapter[] = await bookService.getChapters(book.id);
+    const chapters: Chapter[] =
+      chaptersRef.current.length
+        ? chaptersRef.current
+        : await bookService.getChapters(book.id);
     if (!chapters.length) return;
     const resumeIndex = chapters.findIndex(
       (c) => c.chapter_number === recentProgress.chapter_number

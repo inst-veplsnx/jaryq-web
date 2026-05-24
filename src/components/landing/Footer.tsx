@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 const links = {
   Платформа: [
     { label: "Жаңа кітаптар", href: "/new-arrivals" },
@@ -74,7 +76,7 @@ export function Footer() {
 
         <div className="pt-8 border-t border-[#3B3B3B]/50 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-neutral-400 text-sm">
-            © {new Date().getFullYear()} JARYQ. Барлық құқықтар сақталған.
+            © {CURRENT_YEAR} JARYQ. Барлық құқықтар сақталған.
           </p>
           <p className="text-neutral-400 text-sm inline-flex items-center gap-1.5">
             Жасалды

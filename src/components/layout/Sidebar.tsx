@@ -15,6 +15,7 @@ import {
   Layers,
   LogOut,
 } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore";
 
@@ -39,8 +40,9 @@ const linkBase =
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const signOut = useAuthStore((s) => s.signOut);
-  const user = useAuthStore((s) => s.user);
+  const { signOut, user } = useAuthStore(
+    useShallow((s) => ({ signOut: s.signOut, user: s.user }))
+  );
 
   const handleSignOut = async () => {
     await signOut();
@@ -66,6 +68,7 @@ export function Sidebar() {
             height={32}
             className="rounded-lg"
             aria-hidden="true"
+            priority
           />
           <span className="text-xl font-black text-jaryq-text-primary tracking-tight">
             JARYQ

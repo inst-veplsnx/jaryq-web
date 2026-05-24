@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback, useState } from "react";
 import { Play, Pause, SkipBack, SkipForward, ChevronUp, X } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 import { usePlayerStore } from "@/store/playerStore";
 import { useAuthStore } from "@/store/authStore";
 import { useSettingsStore } from "@/store/settingsStore";
@@ -21,15 +22,29 @@ const SPEED_STEPS = [0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
 const KEY_SEEK_DELTA = 5;
 
 export function PlayerBar() {
-  const currentBook = usePlayerStore((s) => s.currentBook);
-  const currentChapter = usePlayerStore((s) => s.currentChapter);
-  const chapterIndex = usePlayerStore((s) => s.chapterIndex);
-  const isPlaying = usePlayerStore((s) => s.isPlaying);
-  const position = usePlayerStore((s) => s.position);
-  const duration = usePlayerStore((s) => s.duration);
-  const chapters = usePlayerStore((s) => s.chapters);
-  const isLoading = usePlayerStore((s) => s.isLoading);
-  const playerError = usePlayerStore((s) => s.error);
+  const {
+    currentBook,
+    currentChapter,
+    chapterIndex,
+    isPlaying,
+    position,
+    duration,
+    chapters,
+    isLoading,
+    playerError,
+  } = usePlayerStore(
+    useShallow((s) => ({
+      currentBook: s.currentBook,
+      currentChapter: s.currentChapter,
+      chapterIndex: s.chapterIndex,
+      isPlaying: s.isPlaying,
+      position: s.position,
+      duration: s.duration,
+      chapters: s.chapters,
+      isLoading: s.isLoading,
+      playerError: s.error,
+    }))
+  );
   const { user } = useAuthStore();
   const { autoSave, speed, setSpeed } = useSettingsStore();
   const [showFull, setShowFull] = useState(false);
