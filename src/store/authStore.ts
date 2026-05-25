@@ -95,6 +95,8 @@ interface AuthState {
     password: string,
     fullName: string
   ) => Promise<{ error?: string }>;
+  resetPassword: (email: string) => Promise<{ error?: string }>;
+  updatePassword: (password: string) => Promise<{ error?: string }>;
   signOut: () => Promise<void>;
 }
 
@@ -239,6 +241,46 @@ export const useAuthStore = create<AuthState>((set) => {
         } else {
           set({ loading: false });
         }
+        return {};
+      } catch (err: unknown) {
+        const msg = translateAuthError((err as Error)?.message || "Қате орын алды");
+        set({ error: msg, loading: false });
+        return { error: msg };
+      }
+    },
+
+    resetPassword: async (email) => {
+      set({ loading: true, error: null });
+      try {
+        const supabase = getSupabaseClient();
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/update-password`,
+        });
+        if (error) {
+          const translated = translateAuthError(error.message);
+          set({ error: translated, loading: false });
+          return { error: translated };
+        }
+        set({ loading: false });
+        return {};
+      } catch (err: unknown) {
+        const msg = translateAuthError((err as Error)?.message || "Қате орын алды");
+        set({ error: msg, loading: false });
+        return { error: msg };
+      }
+    },
+
+    updatePassword: async (password) => {
+      set({ loading: true, error: null });
+      try {
+        const supabase = getSupabaseClient();
+        const { error } = await supabase.auth.updateUser({ password });
+        if (error) {
+          const translated = translateAuthError(error.message);
+          set({ error: translated, loading: false });
+          return { error: translated };
+        }
+        set({ loading: false });
         return {};
       } catch (err: unknown) {
         const msg = translateAuthError((err as Error)?.message || "Қате орын алды");

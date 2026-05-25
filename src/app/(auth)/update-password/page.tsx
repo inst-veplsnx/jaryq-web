@@ -3,7 +3,7 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Check } from "lucide-react";
 import {
   AUTH_FIELD_ICON_CLASS,
   AUTH_INPUT_CLASS,
@@ -14,105 +14,105 @@ import {
 } from "@/components/auth/AuthPanel";
 import { useAuthStore } from "@/store/authStore";
 
-export default function LoginPage() {
+export default function UpdatePasswordPage() {
   const router = useRouter();
-  const { signIn } = useAuthStore();
-  const [email, setEmail] = useState("");
+  const { updatePassword } = useAuthStore();
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const emailId = useId();
+  const [success, setSuccess] = useState(false);
   const passwordId = useId();
   const errorId = useId();
+  const passwordHintId = useId();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) return;
+    if (!password) return;
+    if (password.length < 6) {
+      setError("Пароль кемінде 6 таңба болуы тиіс");
+      return;
+    }
     setLoading(true);
     setError("");
-    const result = await signIn(email, password);
+    const result = await updatePassword(password);
     if (result.error) {
       setError(result.error);
       setLoading(false);
     } else {
-      router.push("/home");
+      setSuccess(true);
+      setTimeout(() => router.push("/home"), 1500);
     }
   };
 
+  if (success) {
+    return (
+      <div
+        data-testid="auth-panel"
+        className="mx-auto w-full max-w-[34rem] rounded-2xl border border-white/75 bg-white/95 p-6 text-center backdrop-blur-sm sm:p-9"
+        role="status"
+        aria-live="polite"
+        style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
+      >
+        <div
+          aria-hidden="true"
+          className="relative mx-auto mb-5 flex size-20 items-center justify-center rounded-full bg-green-50 ring-4 ring-green-100 sm:size-24"
+          style={{ boxShadow: "0 18px 40px -14px rgba(34,197,94,0.4)" }}
+        >
+          <Check
+            size={40}
+            strokeWidth={3}
+            className="text-green-600"
+            aria-hidden="true"
+          />
+        </div>
+        <h1 className="mb-2 font-display text-3xl font-black text-jaryq-text-primary sm:text-4xl">
+          Жаңартылды!
+        </h1>
+        <p className="text-sm leading-6 text-jaryq-text-secondary sm:text-base">
+          Жаңа пароль сәтті сақталды. Бастапқы бетке бағытталып жатырсыз...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <AuthPanel
-      title="JARYQ-ке кіру"
-      subtitle="Аудиокітаптар платформасы"
+      title="Жаңа парольді енгізу"
+      subtitle="Есептік жазбаңыз үшін жаңа пароль орнатыңыз"
       footer={
-        <div className="flex flex-col gap-3">
-          <div>
-            Есептік жазбаңыз жоқ па?{" "}
-            <Link
-              href="/register"
-              className="rounded font-semibold text-jaryq-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
-            >
-              Тіркелу
-            </Link>
-          </div>
-          <div>
-            Парольді ұмыттыңыз ба?{" "}
-            <Link
-              href="/forgot-password"
-              className="rounded font-semibold text-jaryq-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
-            >
-              Қалпына келтіру
-            </Link>
-          </div>
-        </div>
+        <>
+          <Link
+            href="/login"
+            className="rounded font-semibold text-jaryq-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+          >
+            Кіру бетіне оралу
+          </Link>
+        </>
       }
     >
       <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6" noValidate>
         <div>
           <label
-            htmlFor={emailId}
-            className="mb-2 block text-sm font-semibold text-jaryq-text-primary sm:text-base"
-          >
-            Email
-          </label>
-          <div className="relative">
-            <Mail aria-hidden="true" className={AUTH_FIELD_ICON_CLASS} />
-            <input
-              id={emailId}
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="email@example.com"
-              required
-              aria-required="true"
-              aria-invalid={error ? "true" : undefined}
-              aria-describedby={error ? errorId : undefined}
-              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-[3.25rem]`}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label
             htmlFor={passwordId}
             className="mb-2 block text-sm font-semibold text-jaryq-text-primary sm:text-base"
           >
-            Пароль
+            Жаңа пароль
           </label>
           <div className="relative">
             <Lock aria-hidden="true" className={AUTH_FIELD_ICON_CLASS} />
             <input
               id={passwordId}
               type={showPassword ? "text" : "password"}
-              autoComplete="current-password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="Кемінде 6 таңба"
               required
+              minLength={6}
               aria-required="true"
               aria-invalid={error ? "true" : undefined}
-              aria-describedby={error ? errorId : undefined}
+              aria-describedby={`${passwordHintId}${error ? ` ${errorId}` : ""}`}
               className={`${AUTH_INPUT_CLASS} pl-12 pr-14 sm:pl-[3.25rem] sm:pr-16`}
             />
             <button
@@ -130,6 +130,9 @@ export default function LoginPage() {
               )}
             </button>
           </div>
+          <p id={passwordHintId} className="mt-2 text-xs text-jaryq-text-secondary sm:text-sm">
+            Кемінде 6 таңба
+          </p>
         </div>
 
         {error && (
@@ -145,7 +148,7 @@ export default function LoginPage() {
 
         <button
           type="submit"
-          disabled={loading || !email || !password}
+          disabled={loading || !password}
           aria-busy={loading || undefined}
           className={AUTH_SUBMIT_CLASS}
           style={{ boxShadow: "var(--shadow-jaryq-glow-sm)" }}
@@ -157,10 +160,10 @@ export default function LoginPage() {
                 className="animate-spin motion-reduce:animate-none"
                 aria-hidden="true"
               />
-              <span>Кіру...</span>
+              <span>Жаңартылуда...</span>
             </>
           ) : (
-            "Кіру"
+            "Парольді жаңарту"
           )}
         </button>
       </form>

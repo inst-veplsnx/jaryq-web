@@ -58,9 +58,11 @@ export function translateAuthError(message: string | null | undefined): string {
   if (
     msg.includes("rate limit") ||
     msg.includes("too many requests") ||
-    msg.includes("rate_limit_exceeded")
+    msg.includes("rate_limit_exceeded") ||
+    msg.includes("security purposes") ||
+    msg.includes("request this once every")
   ) {
-    return "Сұраныс саны тым көп. Кейінірек қайталап көріңіз.";
+    return "Сұраныс саны тым көп. Біраз уақыттан соң қайталап көріңіз.";
   }
 
   // 7. Network errors
@@ -90,6 +92,15 @@ export function translateAuthError(message: string | null | undefined): string {
   // 10. Anonymous sign-ins disabled
   if (msg.includes("anonymous sign-ins are disabled")) {
     return "Анонимді кіру өшірілген";
+  }
+
+  // 11. Auth session missing or token expired
+  if (
+    msg.includes("auth session missing") ||
+    msg.includes("token expired") ||
+    msg.includes("invalid refresh token")
+  ) {
+    return "Сессия мерзімі аяқталды немесе жарамсыз. Қайта кіріңіз.";
   }
 
   // Fallback to the original message if it doesn't match any English signature
