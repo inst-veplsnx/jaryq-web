@@ -1,9 +1,10 @@
 "use client";
 
 import { create } from "zustand";
-import type { Session, User as SupabaseAuthUser } from "@supabase/supabase-js";
+import type { Session, User as SupabaseAuthUser, AuthChangeEvent } from "@supabase/supabase-js";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import type { User } from "@/types";
+import { translateAuthError } from "@/lib/authTranslations";
 
 let _authSubscription: { unsubscribe: () => void } | null = null;
 let _initPromise: Promise<void> | null = null;
@@ -153,7 +154,7 @@ export const useAuthStore = create<AuthState>((set) => {
 
           const {
             data: { subscription },
-          } = supabase.auth.onAuthStateChange((_event, session) => {
+          } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
             if (session?.user) {
               applySession(session);
             } else {
@@ -176,12 +177,14 @@ export const useAuthStore = create<AuthState>((set) => {
             clearSession();
           }
         } catch (err: unknown) {
+          const translatedError = translateAuthError(
+            (err as Error)?.message ?? "Инициализация сәтсіз аяқталды"
+          );
           set({
             session: null,
             user: null,
             loading: false,
-            error:
-              (err as Error)?.message ?? "Инициализация сәтсіз аяқталды",
+            error: translatedError,
           });
         }
       })().finally(() => {
@@ -200,8 +203,9 @@ export const useAuthStore = create<AuthState>((set) => {
           password,
         });
         if (error) {
-          set({ error: error.message, loading: false });
-          return { error: error.message };
+          const translated = translateAuthError(error.message);
+          set({ error: translated, loading: false });
+          return { error: translated };
         }
         if (data.session?.user) {
           applySession(data.session);
@@ -210,7 +214,7 @@ export const useAuthStore = create<AuthState>((set) => {
         }
         return {};
       } catch (err: unknown) {
-        const msg = (err as Error)?.message || "Қате орын алды";
+        const msg = translateAuthError((err as Error)?.message || "Қате орын алды");
         set({ error: msg, loading: false });
         return { error: msg };
       }
@@ -226,8 +230,9 @@ export const useAuthStore = create<AuthState>((set) => {
           options: { data: { full_name: fullName } },
         });
         if (error) {
-          set({ error: error.message, loading: false });
-          return { error: error.message };
+          const translated = translateAuthError(error.message);
+          set({ error: translated, loading: false });
+          return { error: translated };
         }
         if (data.session?.user) {
           applySession(data.session);
@@ -236,7 +241,7 @@ export const useAuthStore = create<AuthState>((set) => {
         }
         return {};
       } catch (err: unknown) {
-        const msg = (err as Error)?.message || "Қате орын алды";
+        const msg = translateAuthError((err as Error)?.message || "Қате орын алды");
         set({ error: msg, loading: false });
         return { error: msg };
       }
