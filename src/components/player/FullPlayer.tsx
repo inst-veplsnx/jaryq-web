@@ -20,6 +20,7 @@ import { CoverImage } from "@/components/books/CoverImage";
 import { ChapterList } from "./ChapterList";
 
 interface FullPlayerProps {
+  isOpen: boolean;
   dialogId: string;
   onClose: () => void;
   onLoadChapter: (index: number, startPosition?: number) => void;
@@ -30,6 +31,7 @@ interface FullPlayerProps {
 }
 
 export const FullPlayer = memo(function FullPlayer({
+  isOpen,
   dialogId,
   onClose,
   onLoadChapter,
@@ -58,6 +60,7 @@ export const FullPlayer = memo(function FullPlayer({
   const progress = duration > 0 ? position / duration : 0;
 
   useEffect(() => {
+    if (!isOpen) return;
     const selectors = [
       "main#main-content",
       'aside[aria-label="Бүйір мәзір"]',
@@ -85,19 +88,21 @@ export const FullPlayer = memo(function FullPlayer({
         }
       });
     };
-  }, []);
+  }, [isOpen]);
 
   // Focus management: save previous focus, focus close button on open, restore on close
   useEffect(() => {
-    previousFocusRef.current = document.activeElement as HTMLElement;
-    closeBtnRef.current?.focus();
-    return () => {
+    if (isOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement;
+      closeBtnRef.current?.focus();
+    } else {
       previousFocusRef.current?.focus?.();
-    };
-  }, []);
+    }
+  }, [isOpen]);
 
   // Escape to close + simple focus trap inside the dialog
   useEffect(() => {
+    if (!isOpen) return;
     const handleKey = (e: KeyboardEvent) => {
       if (showChapters) return;
       if (e.key === "Escape") {
@@ -123,7 +128,7 @@ export const FullPlayer = memo(function FullPlayer({
     };
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [onClose, showChapters]);
+  }, [onClose, showChapters, isOpen]);
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPos = parseFloat(e.target.value);
@@ -148,9 +153,13 @@ export const FullPlayer = memo(function FullPlayer({
       id={dialogId}
       ref={dialogRef}
       role="dialog"
-      aria-modal="true"
+      aria-modal={isOpen ? "true" : "false"}
+      aria-hidden={!isOpen}
       aria-labelledby={titleId}
-      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-jaryq-bg-main"
+      className={cn(
+        "fixed inset-0 z-50 flex flex-col overflow-hidden bg-jaryq-bg-main transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
+        isOpen ? "translate-y-0" : "translate-y-full"
+      )}
     >
       {/* Header — top padding uses max() so devices with a notch get more
           than 1rem; everyone else gets exactly 1rem. */}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState, useId } from "react";
-import { Play, Pause, SkipBack, SkipForward, ChevronUp, X } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, ChevronUp, ChevronDown, X } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 import { usePlayerStore } from "@/store/playerStore";
 import { useAuthStore } from "@/store/authStore";
@@ -236,17 +236,16 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
   return (
     <>
       {/* Full player sheet */}
-      {showFull && (
-        <FullPlayer
-          dialogId={fullPlayerDialogId}
-          onClose={closeFull}
-          onLoadChapter={loadChapter}
-          togglePlay={togglePlay}
-          skipPrev={skipPrev}
-          skipNext={skipNext}
-          cycleSpeed={cycleSpeed}
-        />
-      )}
+      <FullPlayer
+        isOpen={showFull}
+        dialogId={fullPlayerDialogId}
+        onClose={closeFull}
+        onLoadChapter={loadChapter}
+        togglePlay={togglePlay}
+        skipPrev={skipPrev}
+        skipNext={skipNext}
+        cycleSpeed={cycleSpeed}
+      />
 
       {/* Mini player bar */}
       <section
@@ -321,8 +320,8 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
           <div className="flex h-[4.25rem] items-center gap-2 px-3 sm:h-[4.5rem] sm:gap-3 sm:px-4">
             {/* Cover + info */}
             <button
-              onClick={openFull}
-              aria-label={`Толық ойнатқышты ашу: ${currentBook.title}${currentChapter ? `, ${currentChapter.title}` : ""}`}
+              onClick={() => setShowFull(!showFull)}
+              aria-label={`${showFull ? 'Толық ойнатқышты жабу' : 'Толық ойнатқышты ашу'}: ${currentBook.title}${currentChapter ? `, ${currentChapter.title}` : ""}`}
               aria-haspopup="dialog"
               aria-expanded={showFull}
               aria-controls={fullPlayerDialogId}
@@ -425,14 +424,18 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
             {/* Expand — redundant on mobile since the cover/info button also opens
               the full player; keep it for tablet/desktop. */}
             <button
-              onClick={openFull}
-              aria-label="Толық ойнатқышты ашу"
+              onClick={() => setShowFull(!showFull)}
+              aria-label={showFull ? "Толық ойнатқышты жабу" : "Толық ойнатқышты ашу"}
               aria-haspopup="dialog"
               aria-expanded={showFull}
               aria-controls={fullPlayerDialogId}
               className="hidden h-11 w-11 items-center justify-center rounded-full text-jaryq-text-muted transition-[background-color,color,transform] duration-150 hover:bg-jaryq-primary-soft hover:text-jaryq-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none sm:flex"
             >
-              <ChevronUp size={18} aria-hidden="true" />
+              {showFull ? (
+                <ChevronDown size={18} aria-hidden="true" />
+              ) : (
+                <ChevronUp size={18} aria-hidden="true" />
+              )}
             </button>
 
             {/* Close (subordinated — visually quieter than expand/play) */}
