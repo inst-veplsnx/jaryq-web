@@ -258,10 +258,8 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
         )}
       >
         <div
-          className="overflow-hidden rounded-t-2xl border border-jaryq-border-warm/80 bg-white/95 backdrop-blur-xl"
+          className="overflow-hidden rounded-t-2xl border border-jaryq-border-warm/80 bg-jaryq-bg-main"
           style={{
-            backgroundImage:
-              "linear-gradient(180deg, rgba(255,251,245,0.98) 0%, rgba(255,255,255,0.96) 62%, rgba(255,244,237,0.94) 100%)",
             boxShadow:
               "0 -18px 42px -24px rgba(15,15,15,0.28), var(--shadow-jaryq-md)",
           }}

@@ -150,11 +150,7 @@ export const FullPlayer = memo(function FullPlayer({
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
-      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-jaryq-bg-cream"
-      style={{
-        backgroundImage:
-          "linear-gradient(145deg, #FFF4ED 0%, #FFFBF5 42%, #FFFFFF 66%, #FFF4ED 100%)",
-      }}
+      className="fixed inset-0 z-50 flex flex-col overflow-hidden bg-jaryq-bg-main"
     >
       {/* Header — top padding uses max() so devices with a notch get more
           than 1rem; everyone else gets exactly 1rem. */}
