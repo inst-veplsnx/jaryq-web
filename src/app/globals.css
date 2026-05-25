@@ -128,6 +128,7 @@
   }
   html {
     @apply font-sans;
+    font-size: 112.5%;
   }
 }
 
@@ -160,7 +161,7 @@
 /* Accessibility: respect the "Large text" setting. We scale the root font
    size so that all rem-based sizing (including Tailwind defaults) grows. */
 html.jaryq-large-text {
-  font-size: 112.5%;
+  font-size: 125%;
 }
 
 /* Accessibility: respect user's reduced-motion preference. */
