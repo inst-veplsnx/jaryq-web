@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   title: "JARYQ — Аудиокітаптар платформасы",
   description:
     "JARYQ — Қазақстандағы ең үлкен аудиокітаптар платформасы. Мыңдаған кітаптарды тыңдаңыз.",
-  icons: { icon: "/favicon.png", apple: "/logo.png" },
+  icons: { icon: "/logo.png", apple: "/logo.png" },
   openGraph: {
     title: "JARYQ — Аудиокітаптар платформасы",
     description: "Қазақ тіліндегі аудиокітаптар платформасы",
