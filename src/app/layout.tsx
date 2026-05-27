@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/layout/AuthProvider";
-import { Toaster } from "@/components/ui/sonner";
+import { ToasterClient } from "@/components/ui/ToasterClient";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
-  subsets: ["latin", "cyrillic"],
-  weight: ["700", "800", "900"],
+  subsets: ["latin"],
+  weight: ["900"],
   display: "swap",
 });
 
@@ -57,7 +57,7 @@ export default function RootLayout({
       <body className="min-h-full bg-jaryq-bg-main">
         <AuthProvider>
           {children}
-          <Toaster />
+          <ToasterClient />
         </AuthProvider>
       </body>
     </html>

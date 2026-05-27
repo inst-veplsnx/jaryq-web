@@ -14,6 +14,8 @@ import { cn } from "@/lib/utils";
 interface BookDetailProps {
   book: Book;
   chapters: Chapter[];
+  initialFavorite?: boolean;
+  initialProgress?: UserProgress | null;
 }
 
 interface ChapterRowProps {
@@ -104,7 +106,12 @@ const ChapterRow = memo(function ChapterRow({
   );
 });
 
-export function BookDetail({ book, chapters }: BookDetailProps) {
+export function BookDetail({
+  book,
+  chapters,
+  initialFavorite,
+  initialProgress,
+}: BookDetailProps) {
   const user = useAuthStore((s) => s.user);
   const {
     isPlayerLoading,
@@ -123,13 +130,15 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
       togglePlay: s.togglePlay,
     }))
   );
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(initialFavorite ?? false);
   const [favLoading, setFavLoading] = useState(false);
-  const [progress, setProgress] = useState<UserProgress | null>(null);
+  const [progress, setProgress] = useState<UserProgress | null>(initialProgress ?? null);
 
   const isCurrentBook = currentBookId === book.id;
 
   useEffect(() => {
+    // Server already provided initial values — skip client-side fetch
+    if (initialFavorite !== undefined && initialProgress !== undefined) return;
     if (!user) return;
     Promise.all([
       bookService.isFavorite(user.id, book.id),
@@ -138,7 +147,7 @@ export function BookDetail({ book, chapters }: BookDetailProps) {
       setIsFavorite(fav);
       setProgress(prog);
     });
-  }, [user, book.id]);
+  }, [user, book.id, initialFavorite, initialProgress]);
 
   const toggleFavorite = async () => {
     if (!user || favLoading) return;

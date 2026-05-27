@@ -2,6 +2,9 @@ import { getSupabaseClient } from "@/lib/supabase/client";
 import { logger } from "@/lib/logger";
 import { Book, Chapter, Favorite, Genre, UserProgress } from "@/types";
 
+const GENRE_CACHE_TTL = 3_600_000; // 1 hour
+let _genresCache: { data: Genre[]; ts: number } | null = null;
+
 export const bookService = {
   async getNewArrivals(limit = 20): Promise<Book[]> {
     try {
@@ -125,6 +128,9 @@ export const bookService = {
   },
 
   async getGenres(): Promise<Genre[]> {
+    if (_genresCache && Date.now() - _genresCache.ts < GENRE_CACHE_TTL) {
+      return _genresCache.data;
+    }
     try {
       const supabase = getSupabaseClient();
       const { data, error } = await supabase
@@ -132,7 +138,9 @@ export const bookService = {
         .select("*")
         .order("name");
       if (error) throw error;
-      return data || [];
+      const genres = data || [];
+      _genresCache = { data: genres, ts: Date.now() };
+      return genres;
     } catch (error: unknown) {
       logger.error("Error fetching genres:", (error as Error).message);
       return [];
@@ -219,14 +227,15 @@ export const bookService = {
     }
   },
 
-  async getAllProgress(userId: string): Promise<UserProgress[]> {
+  async getAllProgress(userId: string, limit = 200): Promise<UserProgress[]> {
     try {
       const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from("user_progress")
         .select("*, book:books(*, genre:genres(*))")
         .eq("user_id", userId)
-        .order("updated_at", { ascending: false });
+        .order("updated_at", { ascending: false })
+        .limit(limit);
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {
@@ -235,14 +244,15 @@ export const bookService = {
     }
   },
 
-  async getFavorites(userId: string): Promise<Favorite[]> {
+  async getFavorites(userId: string, limit = 200): Promise<Favorite[]> {
     try {
       const supabase = getSupabaseClient();
       const { data, error } = await supabase
         .from("favorites")
         .select("*, book:books(*, genre:genres(*))")
         .eq("user_id", userId)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(limit);
       if (error) throw error;
       return data || [];
     } catch (error: unknown) {

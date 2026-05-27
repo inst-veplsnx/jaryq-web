@@ -53,7 +53,7 @@ export default function RegisterPage() {
     return (
       <div
         data-testid="auth-panel"
-        className="mx-auto w-full max-w-[34rem] rounded-2xl border border-white/75 bg-white/95 p-6 text-center backdrop-blur-sm sm:p-9"
+        className="mx-auto w-full max-w-136 rounded-2xl border border-white/75 bg-white/95 p-6 text-center backdrop-blur-sm sm:p-9"
         role="status"
         aria-live="polite"
         style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
@@ -86,7 +86,7 @@ export default function RegisterPage() {
       subtitle="Тегін есептік жазба жасаңыз"
       footer={
         <>
-          Есептік жазбаңыз бар ма?{" "}
+          Аккаунтыңыз бар ма?{" "}
           <Link
             href="/login"
             className="rounded font-semibold text-jaryq-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
@@ -102,7 +102,7 @@ export default function RegisterPage() {
             htmlFor={nameId}
             className="mb-2 block text-sm font-semibold text-jaryq-text-primary sm:text-base"
           >
-            Аты-жөні
+            Аты-жөніңіз
           </label>
           <div className="relative">
             <User aria-hidden="true" className={AUTH_FIELD_ICON_CLASS} />
@@ -117,7 +117,7 @@ export default function RegisterPage() {
               aria-required="true"
               aria-invalid={error ? "true" : undefined}
               aria-describedby={error ? errorId : undefined}
-              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-[3.25rem]`}
+              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-13`}
             />
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function RegisterPage() {
               aria-required="true"
               aria-invalid={error ? "true" : undefined}
               aria-describedby={error ? errorId : undefined}
-              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-[3.25rem]`}
+              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-13`}
             />
           </div>
         </div>
@@ -168,7 +168,7 @@ export default function RegisterPage() {
               aria-required="true"
               aria-invalid={error ? "true" : undefined}
               aria-describedby={`${passwordHintId}${error ? ` ${errorId}` : ""}`}
-              className={`${AUTH_INPUT_CLASS} pl-12 pr-14 sm:pl-[3.25rem] sm:pr-16`}
+              className={`${AUTH_INPUT_CLASS} pl-12 pr-14 sm:pl-13 sm:pr-16`}
             />
             <button
               type="button"

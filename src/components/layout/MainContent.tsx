@@ -24,8 +24,8 @@ export function MainContent({
       onScrollCapture={onActivity}
       onFocusCapture={onActivity}
       className={cn(
-        "ml-[4.5rem] flex-1 overflow-y-auto lg:pb-24 focus:outline-none transition-[margin,padding] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
-        isNavigationCollapsed ? "lg:ml-[4.5rem]" : "lg:ml-60",
+        "ml-18 flex-1 overflow-y-auto lg:pb-24 focus:outline-none transition-[margin,padding] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+        isNavigationCollapsed ? "lg:ml-18" : "lg:ml-60",
         hasPlayer ? "pb-35" : "pb-20"
       )}
     >

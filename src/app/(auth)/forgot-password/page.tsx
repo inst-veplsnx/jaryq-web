@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
     return (
       <div
         data-testid="auth-panel"
-        className="mx-auto w-full max-w-[34rem] rounded-2xl border border-white/75 bg-white/95 p-6 text-center backdrop-blur-sm sm:p-9"
+        className="mx-auto w-full max-w-136 rounded-2xl border border-white/75 bg-white/95 p-6 text-center backdrop-blur-sm sm:p-9"
         role="status"
         aria-live="polite"
         style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
@@ -108,7 +108,7 @@ export default function ForgotPasswordPage() {
               aria-required="true"
               aria-invalid={error ? "true" : undefined}
               aria-describedby={error ? errorId : undefined}
-              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-[3.25rem]`}
+              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-13`}
             />
           </div>
         </div>

@@ -56,7 +56,7 @@ export function HowItWorks() {
             <span
               data-scroll-reveal="true"
               data-reveal-style="line"
-              className="jaryq-step-connector hidden md:block absolute top-12 left-[16.66%] right-[16.66%] h-0.5 bg-gradient-to-r from-jaryq-primary via-jaryq-primary-light to-jaryq-ink opacity-30 z-0"
+              className="jaryq-step-connector hidden md:block absolute top-12 left-[16.66%] right-[16.66%] h-0.5 bg-linear-to-r from-jaryq-primary via-jaryq-primary-light to-jaryq-ink opacity-30 z-0"
             />
           </li>
 

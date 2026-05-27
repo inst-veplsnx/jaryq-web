@@ -24,6 +24,9 @@ const csp = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: ["lucide-react", "@base-ui/react"],
+  },
   turbopack: {
     root: path.resolve(__dirname),
   },

@@ -12,6 +12,7 @@ import {
   Gauge,
   Loader2,
 } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 import { usePlayerStore } from "@/store/playerStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { howlerService } from "@/lib/audio/howlerService";
@@ -40,14 +41,27 @@ export const FullPlayer = memo(function FullPlayer({
   skipNext,
   cycleSpeed,
 }: FullPlayerProps) {
-  const currentBook = usePlayerStore((s) => s.currentBook);
-  const currentChapter = usePlayerStore((s) => s.currentChapter);
-  const chapterIndex = usePlayerStore((s) => s.chapterIndex);
-  const isPlaying = usePlayerStore((s) => s.isPlaying);
-  const position = usePlayerStore((s) => s.position);
-  const duration = usePlayerStore((s) => s.duration);
-  const chapters = usePlayerStore((s) => s.chapters);
-  const isLoading = usePlayerStore((s) => s.isLoading);
+  const {
+    currentBook,
+    currentChapter,
+    chapterIndex,
+    isPlaying,
+    position,
+    duration,
+    chapters,
+    isLoading,
+  } = usePlayerStore(
+    useShallow((s) => ({
+      currentBook: s.currentBook,
+      currentChapter: s.currentChapter,
+      chapterIndex: s.chapterIndex,
+      isPlaying: s.isPlaying,
+      position: s.position,
+      duration: s.duration,
+      chapters: s.chapters,
+      isLoading: s.isLoading,
+    }))
+  );
   const speed = useSettingsStore((s) => s.speed);
   const [showChapters, setShowChapters] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);

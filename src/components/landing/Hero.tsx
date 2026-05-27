@@ -92,7 +92,7 @@ export function Hero() {
             className="mt-5 inline-flex items-center gap-2 text-sm text-slate-600"
           >
             <Sparkles size={14} className="text-jaryq-primary" aria-hidden="true" />
-            Тегін · Тіркеу 30 секундта · Несие картасы керек емес
+            Тегін · Тіркеу 30 секундта · Шексіз
           </p>
 
           {/* Stats */}
@@ -162,7 +162,7 @@ export function Hero() {
 
             {/* Back cover — slate ink */}
             <div
-              className="jaryq-float-soft absolute top-6 -left-2 w-48 h-64 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 -rotate-10 flex flex-col justify-end p-4 border border-white/10"
+              className="jaryq-float-soft absolute top-6 -left-2 w-48 h-64 rounded-2xl bg-linear-to-br from-slate-800 to-slate-900 -rotate-10 flex flex-col justify-end p-4 border border-white/10"
               style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
             >
               <div className="h-1 w-10 bg-jaryq-primary rounded-full mb-3" />
@@ -174,7 +174,7 @@ export function Hero() {
 
             {/* Middle cover — cream */}
             <div
-              className="jaryq-float-soft jaryq-float-delay-1 absolute top-2 right-0 w-48 h-64 rounded-2xl bg-gradient-to-br from-jaryq-primary-soft to-jaryq-primary-med rotate-8 flex flex-col justify-end p-4 border border-jaryq-border-warm"
+              className="jaryq-float-soft jaryq-float-delay-1 absolute top-2 right-0 w-48 h-64 rounded-2xl bg-linear-to-br from-jaryq-primary-soft to-jaryq-primary-med rotate-8 flex flex-col justify-end p-4 border border-jaryq-border-warm"
               style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
             >
               <div className="h-1 w-10 bg-jaryq-ink rounded-full mb-3" />
@@ -206,7 +206,7 @@ export function Hero() {
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Play size={18} className="text-jaryq-primary fill-[#F97316] ml-0.5" />
+                  <Play size={18} className="text-jaryq-primary fill-jaryq-primary ml-0.5" />
                 </div>
                 <div className="flex-1">
                   <div className="h-1 bg-white/30 rounded-full overflow-hidden">

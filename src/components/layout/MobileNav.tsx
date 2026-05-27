@@ -94,7 +94,7 @@ export const MobileNav = forwardRef<HTMLElement, MobileNavProps>(
         ref={ref}
         aria-label="Мобильді мәзір"
         onFocusCapture={onActivity}
-        className="fixed bottom-0 left-0 top-0 z-40 flex w-[4.5rem] flex-col border-r border-jaryq-border-light bg-white/95 backdrop-blur-xl lg:hidden"
+        className="fixed bottom-0 left-0 top-0 z-40 flex w-18 flex-col border-r border-jaryq-border-light bg-white/95 backdrop-blur-xl lg:hidden"
         style={{ boxShadow: "10px 0 30px -24px rgba(15,15,15,0.28)" }}
       >
         <Link

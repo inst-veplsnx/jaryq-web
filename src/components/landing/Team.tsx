@@ -14,7 +14,7 @@ export function Team() {
             Команда
           </div>
           <h2 className="font-display text-4xl lg:text-5xl font-black text-jaryq-text-primary mb-4 tracking-tight">
-            Жоба координаторлары
+            Жобаның негізін қалаушылары
           </h2>
           <p className="text-lg text-jaryq-text-secondary max-w-xl mx-auto">
             JARYQ артындағы адамдар — қазақ тіліне және аудиокітаптарға деген

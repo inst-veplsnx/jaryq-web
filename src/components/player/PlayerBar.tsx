@@ -49,7 +49,7 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
       playerError: s.error,
     }))
   );
-  const { user } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
   const { autoSave, speed, setSpeed } = useSettingsStore();
   const [showFull, setShowFull] = useState(false);
   const fullPlayerDialogId = useId();
@@ -137,18 +137,24 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
     return () => clearInterval(id);
   }, [isPlaying]);
 
-  // Auto-save progress — reads position from store (single source of truth)
+  // Auto-save progress — reads position from store (single source of truth).
+  // Deps use primitive IDs to avoid re-arming when object references change
+  // while the actual book/chapter/user hasn't changed.
   useEffect(() => {
-    if (!autoSave || !user || !currentBook || !currentChapter) return;
+    const userId = user?.id;
+    const bookId = currentBook?.id;
+    const chapterId = currentChapter?.id;
+    if (!autoSave || !userId || !bookId || !chapterId) return;
 
     const save = () => {
-      const pos = usePlayerStore.getState().position;
+      const state = usePlayerStore.getState();
+      if (!state.currentBook || !state.currentChapter) return;
       bookService.saveProgress(
-        user.id,
-        currentBook.id,
-        currentChapter.id,
-        currentChapter.chapter_number,
-        Math.floor(pos)
+        userId,
+        state.currentBook.id,
+        state.currentChapter.id,
+        state.currentChapter.chapter_number,
+        Math.floor(state.position)
       );
     };
 
@@ -156,7 +162,7 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
     return () => {
       if (saveTimerRef.current) clearInterval(saveTimerRef.current);
     };
-  }, [autoSave, user, currentBook, currentChapter]);
+  }, [autoSave, user?.id, currentBook?.id, currentChapter?.id]);
 
   const togglePlay = useCallback(() => {
     usePlayerStore.getState().togglePlay();

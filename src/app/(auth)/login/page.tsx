@@ -47,7 +47,7 @@ export default function LoginPage() {
       footer={
         <div className="flex flex-col gap-3">
           <div>
-            Есептік жазбаңыз жоқ па?{" "}
+            Аккаунтыңыз жоқ па?{" "}
             <Link
               href="/register"
               className="rounded font-semibold text-jaryq-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
@@ -88,7 +88,7 @@ export default function LoginPage() {
               aria-required="true"
               aria-invalid={error ? "true" : undefined}
               aria-describedby={error ? errorId : undefined}
-              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-[3.25rem]`}
+              className={`${AUTH_INPUT_CLASS} pl-12 sm:pl-13`}
             />
           </div>
         </div>
@@ -113,7 +113,7 @@ export default function LoginPage() {
               aria-required="true"
               aria-invalid={error ? "true" : undefined}
               aria-describedby={error ? errorId : undefined}
-              className={`${AUTH_INPUT_CLASS} pl-12 pr-14 sm:pl-[3.25rem] sm:pr-16`}
+              className={`${AUTH_INPUT_CLASS} pl-12 pr-14 sm:pl-13 sm:pr-16`}
             />
             <button
               type="button"

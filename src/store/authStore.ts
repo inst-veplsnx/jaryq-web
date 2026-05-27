@@ -156,8 +156,18 @@ export const useAuthStore = create<AuthState>((set) => {
 
           const {
             data: { subscription },
-          } = supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
+          } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
             if (session?.user) {
+              // Token refresh for the same user — update the session object so
+              // subsequent API calls use the new JWT, but skip the profile
+              // re-fetch since the user's profile row hasn't changed.
+              if (
+                event === "TOKEN_REFRESHED" &&
+                useAuthStore.getState().user?.id === session.user.id
+              ) {
+                set({ session });
+                return;
+              }
               applySession(session);
             } else {
               clearSession();

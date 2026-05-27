@@ -30,7 +30,7 @@ export function AuthPanel({
   footer,
 }: AuthPanelProps) {
   return (
-    <section data-testid="auth-panel" className="mx-auto w-full max-w-[34rem]">
+    <section data-testid="auth-panel" className="mx-auto w-full max-w-136">
       <div className="mb-6 flex flex-col items-center text-center sm:mb-8">
         <div className="relative mb-4 sm:mb-5">
           <span
