@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Settings, BookMarked, Heart, LogOut } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
@@ -43,12 +42,10 @@ const PROFILE_LINKS: ProfileLink[] = [
 ];
 
 export default function ProfilePage() {
-  const router = useRouter();
   const { user, signOut } = useAuthStore();
 
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/login");
+  const handleSignOut = () => {
+    void signOut();
   };
 
   return (

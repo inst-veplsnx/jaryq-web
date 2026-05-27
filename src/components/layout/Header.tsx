@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Search, LogOut } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 import { useAuthStore } from "@/store/authStore";
@@ -13,14 +12,12 @@ interface HeaderProps {
 }
 
 export function Header({ title, showSearch = true }: HeaderProps) {
-  const router = useRouter();
   const { user, signOut } = useAuthStore(
     useShallow((s) => ({ user: s.user, signOut: s.signOut }))
   );
 
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/login");
+  const handleSignOut = () => {
+    void signOut();
   };
 
   return (

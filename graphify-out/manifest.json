@@ -140,9 +140,9 @@
     "semantic_hash": "9040e41faf09bb52eb64e66247b55183"
   },
   "/home/veplsnx/jaryq/src/app/(app)/profile/page.tsx": {
-    "mtime": 1779635413.953732,
-    "ast_hash": "9021b4f8627112d26b516fb83d82f179",
-    "semantic_hash": "9021b4f8627112d26b516fb83d82f179"
+    "mtime": 1779886562.184496,
+    "ast_hash": "71238d3b0cc9d07b237811ad4fca6bac",
+    "semantic_hash": ""
   },
   "/home/veplsnx/jaryq/src/app/(app)/profile/settings/page.tsx": {
     "mtime": 1779635755.7202442,
@@ -190,9 +190,9 @@
     "semantic_hash": "2b22eec14928094e3cff1f2f333f139c"
   },
   "/home/veplsnx/jaryq/src/components/layout/Header.tsx": {
-    "mtime": 1779458724.5921445,
-    "ast_hash": "602254dc09bb1c7c428716581ec6d7c9",
-    "semantic_hash": "602254dc09bb1c7c428716581ec6d7c9"
+    "mtime": 1779886541.9061832,
+    "ast_hash": "e4f713f1ec0d9d2aaecbf85df6fc9bc9",
+    "semantic_hash": ""
   },
   "/home/veplsnx/jaryq/src/components/layout/AppShell.tsx": {
     "mtime": 1779629214.2889223,
@@ -210,9 +210,9 @@
     "semantic_hash": "5781b497b7554fd2316979d5bd6756a3"
   },
   "/home/veplsnx/jaryq/src/components/layout/Sidebar.tsx": {
-    "mtime": 1779635413.9552667,
-    "ast_hash": "bc9ce9021cd6fdd0841a92b1710ed02e",
-    "semantic_hash": "bc9ce9021cd6fdd0841a92b1710ed02e"
+    "mtime": 1779886552.764627,
+    "ast_hash": "cc9535650eb21a17493c282e518bc0d4",
+    "semantic_hash": ""
   },
   "/home/veplsnx/jaryq/src/components/layout/MobileNav.tsx": {
     "mtime": 1779638528.5360622,
@@ -385,9 +385,9 @@
     "semantic_hash": "6c2d048b2dd79eb30a6f284e348dea13"
   },
   "/home/veplsnx/jaryq/src/store/authStore.ts": {
-    "mtime": 1779687815.749978,
-    "ast_hash": "b82c8108d17ffff1b4e278e6fae9f5b8",
-    "semantic_hash": "b82c8108d17ffff1b4e278e6fae9f5b8"
+    "mtime": 1779886534.9621837,
+    "ast_hash": "838efb93bc0880d68d69268b6172e359",
+    "semantic_hash": ""
   },
   "/home/veplsnx/jaryq/src/hooks/useAutoHideNavigation.ts": {
     "mtime": 1779629214.1839223,
@@ -405,9 +405,9 @@
     "semantic_hash": "f196824657d8858bc7fa44eecbba38b1"
   },
   "/home/veplsnx/jaryq/README.md": {
-    "mtime": 1779339048.8008723,
-    "ast_hash": "434aec506421697cf866b02997f8ff4b",
-    "semantic_hash": "434aec506421697cf866b02997f8ff4b"
+    "mtime": 1779880122.6302738,
+    "ast_hash": "3df8126f9a9440e4478abd089723a9e2",
+    "semantic_hash": ""
   },
   "/home/veplsnx/jaryq/public/favicon.png": {
     "mtime": 1779184653.6543248,
@@ -423,5 +423,20 @@
     "mtime": 1779632614.7984505,
     "ast_hash": "a444150a6a3e8a0a2243ef7dbc8f4606",
     "semantic_hash": "a444150a6a3e8a0a2243ef7dbc8f4606"
+  },
+  "/home/veplsnx/jaryq/skills-lock.json": {
+    "mtime": 1779880906.1656604,
+    "ast_hash": "23a8dd76be9532d172dd7a442b0315d7",
+    "semantic_hash": ""
+  },
+  "/home/veplsnx/jaryq/.agents/skills/context7/scripts/context7.sh": {
+    "mtime": 1779880906.1566947,
+    "ast_hash": "615014924878be350ff940457b52c379",
+    "semantic_hash": ""
+  },
+  "/home/veplsnx/jaryq/.agents/skills/context7/SKILL.md": {
+    "mtime": 1779880906.156637,
+    "ast_hash": "84d2dc53d10b177e1eac5bdb1d3572ec",
+    "semantic_hash": ""
   }
 }

@@ -297,6 +297,9 @@ export const useAuthStore = create<AuthState>((set) => {
         // ignore
       }
       clearSession();
+      if (typeof window !== "undefined") {
+        window.location.assign("/login");
+      }
     },
   };
 });

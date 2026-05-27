@@ -1,12 +1,18 @@
-# Graph Report - .  (2026-05-27)
+# Graph Report - jaryq  (2026-05-27)
 
 ## Corpus Check
-- Corpus is ~26,401 words - fits in a single context window. You may not need a graph.
+- 85 files · ~28,163 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 431 nodes · 907 edges · 27 communities (16 shown, 11 thin omitted)
-- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 42 edges (avg confidence: 0.92)
-- Token cost: 9,800 input · 2,100 output
+- 484 nodes · 958 edges · 31 communities (20 shown, 11 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 42 edges (avg confidence: 0.92)
+- Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `36134a8a`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Audio Engine & Book Display|Audio Engine & Book Display]]
@@ -33,6 +39,10 @@
 - [[_COMMUNITY_Supabase Schema|Supabase Schema]]
 - [[_COMMUNITY_Playwright Root Config|Playwright Root Config]]
 - [[_COMMUNITY_AutoHide Navigation Hook|AutoHide Navigation Hook]]
+- [[_COMMUNITY_Community 27|Community 27]]
+- [[_COMMUNITY_Community 28|Community 28]]
+- [[_COMMUNITY_Community 29|Community 29]]
+- [[_COMMUNITY_Community 30|Community 30]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 35 edges
@@ -85,19 +95,19 @@
 - **A11Y Fixture System (deterministic offline test data + Playwright spec)** — lib_a11yfixtures_fixtures, lib_a11yfixtures_isa11yfixture, lib_a11yfixtures_searcha11y, tests_a11y_spec [INFERRED 0.95]
 - **JARYQ Brand Identity (logo + favicon, orange audiobook theme)** — public_logo, public_favicon [INFERRED 0.95]
 
-## Communities (27 total, 11 thin omitted)
+## Communities (31 total, 11 thin omitted)
 
 ### Community 0 - "Audio Engine & Book Display"
 Cohesion: 0.08
-Nodes (44): howlerService, BookCardProps, BookDetail(), BookDetailProps, ChapterRow, ChapterRowProps, BookListItemProps, ContinueListeningCard() (+36 more)
+Nodes (43): howlerService, BookDetail(), BookDetailProps, ChapterRow, ChapterRowProps, BookListItemProps, ContinueListeningCard(), CoverImage (+35 more)
 
 ### Community 1 - "Book UI Components"
-Cohesion: 0.15
-Nodes (31): BookCard, BookListItem, EmptyState(), EmptyStateProps, Tone, toneStyles, Auth-Gated Page Pattern, Book Listing Page Pattern (+23 more)
+Cohesion: 0.13
+Nodes (38): BookCard, BookCardProps, BookListItem, ContinueListeningCardProps, EmptyState(), EmptyStateProps, Tone, toneStyles (+30 more)
 
 ### Community 2 - "App Shell & Navigation"
-Cohesion: 0.07
-Nodes (33): AppLayout(), AppShell Component, AuthLayout(), Auto-save Progress Pattern, Mini Player + Full Player Sheet Pattern, EMPTY_NAVIGATION_REFS, MOBILE_ACTIVITY_EVENTS, useAutoHideNavigation() (+25 more)
+Cohesion: 0.10
+Nodes (22): AppLayout(), AppShell Component, AuthLayout(), EMPTY_NAVIGATION_REFS, MOBILE_ACTIVITY_EVENTS, useAutoHideNavigation(), UseAutoHideNavigationOptions, AppShell() (+14 more)
 
 ### Community 3 - "Landing Page & Marketing"
 Cohesion: 0.08
@@ -108,8 +118,8 @@ Cohesion: 0.05
 Nodes (36): dependencies, @base-ui/react, class-variance-authority, clsx, howler, lucide-react, next, next-themes (+28 more)
 
 ### Community 5 - "Auth UI & User Flow"
-Cohesion: 0.12
-Nodes (26): AUTH_INPUT_CLASS constant, AuthPanel(), AuthPanelProps, ForgotPasswordPage(), resetPassword Action (authStore), Header(), HeaderProps, translateAuthError() (+18 more)
+Cohesion: 0.10
+Nodes (31): AUTH_INPUT_CLASS constant, AuthPanel(), AuthPanelProps, ForgotPasswordPage(), resetPassword Action (authStore), Header(), HeaderProps, translateAuthError() (+23 more)
 
 ### Community 6 - "Book Detail Page"
 Cohesion: 0.11
@@ -139,8 +149,24 @@ Nodes (19): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModu
 Cohesion: 0.18
 Nodes (6): a11yFixtureBooks, a11yFixtureChapters, a11yFixtureFavorites, a11yFixtureGenres, a11yFixtureProgress, a11yFixtureUser
 
+### Community 27 - "Community 27"
+Cohesion: 0.07
+Nodes (26): Audio Player, code:block1 (src/), code:bash (npm install), code:env (NEXT_PUBLIC_SUPABASE_URL=https://<your-project>.supabase.co), code:bash (# Copy contents of supabase_schema.sql and paste into Supaba), code:bash (npm run dev), code:bash (# Run accessibility test suite), Configure environment (+18 more)
+
+### Community 28 - "Community 28"
+Cohesion: 0.15
+Nodes (12): code:bash (scripts/context7.sh search "library-name"), code:bash (scripts/context7.sh docs "<library-id>" "<topic>" "<mode>"), code:bash (# React hooks API), code:bash (export CONTEXT7_API_KEY="your-api-key"), Context7 Documentation Lookup Skill, Core Workflow, Environment Configuration, Examples (+4 more)
+
+### Community 29 - "Community 29"
+Cohesion: 0.25
+Nodes (7): computedHash, skillPath, source, sourceType, skills, context7, version
+
+### Community 30 - "Community 30"
+Cohesion: 0.60
+Nodes (3): context7.sh script, fetch_docs(), search_library()
+
 ## Knowledge Gaps
-- **178 isolated node(s):** `eslintConfig`, `config`, `target`, `lib`, `allowJs` (+173 more)
+- **209 isolated node(s):** `eslintConfig`, `config`, `target`, `lib`, `allowJs` (+204 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -148,16 +174,16 @@ Nodes (6): a11yFixtureBooks, a11yFixtureChapters, a11yFixtureFavorites, a11yFixt
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `useAuthStore` connect `Auth UI & User Flow` to `Audio Engine & Book Display`, `Book UI Components`, `App Shell & Navigation`, `Book Detail Page`, `Books Pages & SSR`, `Root Layout & Fonts`?**
-  _High betweenness centrality (0.095) - this node is a cross-community bridge._
-- **Why does `HomePage()` connect `Books Pages & SSR` to `Audio Engine & Book Display`, `Auth UI & User Flow`, `Book Detail Page`?**
-  _High betweenness centrality (0.060) - this node is a cross-community bridge._
+  _High betweenness centrality (0.075) - this node is a cross-community bridge._
+- **Why does `HomePage()` connect `Books Pages & SSR` to `Audio Engine & Book Display`, `Book UI Components`, `Auth UI & User Flow`, `Book Detail Page`?**
+  _High betweenness centrality (0.048) - this node is a cross-community bridge._
 - **Why does `cn()` connect `Audio Engine & Book Display` to `Book UI Components`, `Root Layout & Fonts`, `App Shell & Navigation`, `Auth UI & User Flow`?**
-  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+  _High betweenness centrality (0.046) - this node is a cross-community bridge._
 - **Are the 2 inferred relationships involving `PlayerBar()` (e.g. with `BookDetail()` and `ContinueListeningCard()`) actually correct?**
   _`PlayerBar()` has 2 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `eslintConfig`, `config`, `target` to the rest of the system?**
-  _178 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _209 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Audio Engine & Book Display` be split into smaller, more focused modules?**
-  _Cohesion score 0.08243727598566308 - nodes in this community are weakly interconnected._
-- **Should `App Shell & Navigation` be split into smaller, more focused modules?**
-  _Cohesion score 0.0743321718931475 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08135593220338982 - nodes in this community are weakly interconnected._
+- **Should `Book UI Components` be split into smaller, more focused modules?**
+  _Cohesion score 0.13157894736842105 - nodes in this community are weakly interconnected._

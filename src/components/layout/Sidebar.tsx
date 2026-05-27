@@ -3,7 +3,7 @@
 import { forwardRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   Home,
   Search,
@@ -53,14 +53,12 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
   ref
 ) {
   const pathname = usePathname();
-  const router = useRouter();
   const { signOut, user } = useAuthStore(
     useShallow((s) => ({ signOut: s.signOut, user: s.user }))
   );
 
-  const handleSignOut = async () => {
-    await signOut();
-    router.push("/login");
+  const handleSignOut = () => {
+    void signOut();
   };
 
   return (
