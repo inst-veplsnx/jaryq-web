@@ -45,3 +45,6 @@ next-env.d.ts
 
 # graphify
 graphify-out/
+
+# claude
+CLAUDE.md
