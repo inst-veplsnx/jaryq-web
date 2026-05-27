@@ -4,6 +4,7 @@ import { Book, Chapter, Favorite, Genre, UserProgress } from "@/types";
 
 const GENRE_CACHE_TTL = 3_600_000; // 1 hour
 let _genresCache: { data: Genre[]; ts: number } | null = null;
+let _genresInFlight: Promise<Genre[]> | null = null;
 
 export const bookService = {
   async getNewArrivals(limit = 20): Promise<Book[]> {
@@ -131,20 +132,35 @@ export const bookService = {
     if (_genresCache && Date.now() - _genresCache.ts < GENRE_CACHE_TTL) {
       return _genresCache.data;
     }
-    try {
-      const supabase = getSupabaseClient();
-      const { data, error } = await supabase
-        .from("genres")
-        .select("*")
-        .order("name");
-      if (error) throw error;
-      const genres = data || [];
-      _genresCache = { data: genres, ts: Date.now() };
-      return genres;
-    } catch (error: unknown) {
-      logger.error("Error fetching genres:", (error as Error).message);
-      return [];
-    }
+    if (_genresInFlight) return _genresInFlight;
+
+    _genresInFlight = (async () => {
+      try {
+        const supabase = getSupabaseClient();
+        const { data, error } = await supabase
+          .from("genres")
+          .select("*")
+          .order("name");
+        if (error) throw error;
+        const genres = data ?? [];
+        // Don't cache an empty result — likely a transient RLS/network issue.
+        if (genres.length > 0) {
+          _genresCache = { data: genres, ts: Date.now() };
+        }
+        return genres;
+      } catch (error: unknown) {
+        logger.error("Error fetching genres:", (error as Error).message);
+        return _genresCache?.data ?? [];
+      } finally {
+        _genresInFlight = null;
+      }
+    })();
+    return _genresInFlight;
+  },
+
+  invalidateGenresCache(): void {
+    _genresCache = null;
+    _genresInFlight = null;
   },
 
   async getGenreById(genreId: string): Promise<Genre | null> {

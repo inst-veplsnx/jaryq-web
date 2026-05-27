@@ -53,7 +53,6 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
   const { autoSave, speed, setSpeed } = useSettingsStore();
   const [showFull, setShowFull] = useState(false);
   const fullPlayerDialogId = useId();
-  const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Speed ref keeps the callback stable while always reading the latest value
   const speedRef = useRef(speed);
@@ -140,13 +139,15 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
   // Auto-save progress — reads position from store (single source of truth).
   // Deps use primitive IDs to avoid re-arming when object references change
   // while the actual book/chapter/user hasn't changed.
+  // Flushes on cleanup (book/chapter/user change, player close) and on
+  // pagehide (tab close, mobile backgrounding) to avoid losing trailing progress.
   useEffect(() => {
     const userId = user?.id;
     const bookId = currentBook?.id;
     const chapterId = currentChapter?.id;
     if (!autoSave || !userId || !bookId || !chapterId) return;
 
-    const save = () => {
+    const flush = () => {
       const state = usePlayerStore.getState();
       if (!state.currentBook || !state.currentChapter) return;
       bookService.saveProgress(
@@ -158,9 +159,12 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
       );
     };
 
-    saveTimerRef.current = setInterval(save, AUTOSAVE_INTERVAL_MS);
+    const id = setInterval(flush, AUTOSAVE_INTERVAL_MS);
+    window.addEventListener("pagehide", flush);
     return () => {
-      if (saveTimerRef.current) clearInterval(saveTimerRef.current);
+      clearInterval(id);
+      window.removeEventListener("pagehide", flush);
+      flush();
     };
   }, [autoSave, user?.id, currentBook?.id, currentChapter?.id]);
 

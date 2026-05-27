@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, memo, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback, memo, useMemo } from "react";
 import { Play, Pause, Heart, HeartOff, Loader2, ListMusic } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 import { Book, Chapter, UserProgress } from "@/types";
@@ -136,18 +136,43 @@ export function BookDetail({
 
   const isCurrentBook = currentBookId === book.id;
 
+  // Sync when server re-renders the page with fresh props (router.refresh).
   useEffect(() => {
-    // Server already provided initial values — skip client-side fetch
-    if (initialFavorite !== undefined && initialProgress !== undefined) return;
-    if (!user) return;
+    if (initialFavorite !== undefined) setIsFavorite(initialFavorite);
+  }, [initialFavorite]);
+  useEffect(() => {
+    if (initialProgress !== undefined) setProgress(initialProgress);
+  }, [initialProgress]);
+
+  // Skip the first client fetch when the server already seeded values for
+  // this mount, but always refetch when `user` changes after mount so
+  // client-side sign-in / sign-out is reflected immediately.
+  const didHydrateRef = useRef(
+    initialFavorite !== undefined && initialProgress !== undefined
+  );
+  useEffect(() => {
+    if (didHydrateRef.current) {
+      didHydrateRef.current = false;
+      return;
+    }
+    if (!user) {
+      setIsFavorite(false);
+      setProgress(null);
+      return;
+    }
+    let cancelled = false;
     Promise.all([
       bookService.isFavorite(user.id, book.id),
       bookService.getProgress(user.id, book.id),
     ]).then(([fav, prog]) => {
+      if (cancelled) return;
       setIsFavorite(fav);
       setProgress(prog);
     });
-  }, [user, book.id, initialFavorite, initialProgress]);
+    return () => {
+      cancelled = true;
+    };
+  }, [user, book.id]);
 
   const toggleFavorite = async () => {
     if (!user || favLoading) return;

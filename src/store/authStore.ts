@@ -157,21 +157,25 @@ export const useAuthStore = create<AuthState>((set) => {
           const {
             data: { subscription },
           } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
-            if (session?.user) {
-              // Token refresh for the same user — update the session object so
-              // subsequent API calls use the new JWT, but skip the profile
-              // re-fetch since the user's profile row hasn't changed.
-              if (
-                event === "TOKEN_REFRESHED" &&
-                useAuthStore.getState().user?.id === session.user.id
-              ) {
-                set({ session });
-                return;
-              }
-              applySession(session);
-            } else {
+            if (!session?.user) {
               clearSession();
+              return;
             }
+            const current = useAuthStore.getState();
+            const sameUser = current.user?.id === session.user.id;
+            // Skip the profile re-fetch when the session refreshes for the
+            // same user and no profile-visible fields changed. EMAIL_CHANGE
+            // is intentionally excluded — it must trigger a re-fetch.
+            if (
+              sameUser &&
+              (event === "TOKEN_REFRESHED" ||
+                (event === "USER_UPDATED" &&
+                  current.user?.email === session.user.email))
+            ) {
+              set({ session });
+              return;
+            }
+            applySession(session);
           });
 
           _authSubscription = subscription;
