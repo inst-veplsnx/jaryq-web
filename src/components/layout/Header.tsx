@@ -31,7 +31,7 @@ export function Header({ title, showSearch = true }: HeaderProps) {
         className="inline-flex items-center gap-2 rounded-md transition-transform duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
       >
         <Image
-          src="/logo.png"
+          src="/logo.webp"
           alt=""
           width={28}
           height={28}

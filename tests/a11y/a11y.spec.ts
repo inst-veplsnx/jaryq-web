@@ -26,7 +26,7 @@ async function startFixturePlayer(page: Page) {
 
 async function isBackgroundHiddenFromAT(page: Page) {
   return page.locator("main#main-content").evaluate((main) => {
-    let node: HTMLElement | null = main;
+    let node: HTMLElement | null = main as HTMLElement;
     while (node) {
       if (node.inert || node.getAttribute("aria-hidden") === "true") {
         return true;

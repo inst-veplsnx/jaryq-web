@@ -24,7 +24,7 @@ export default function PublicLayout({
             className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded-md transition-transform duration-(--duration-jaryq-fast) hover:scale-[1.02]"
           >
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt=""
               width={32}
               height={32}

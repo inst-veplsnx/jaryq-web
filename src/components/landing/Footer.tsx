@@ -37,7 +37,7 @@ export function Footer() {
               className="flex items-center gap-2 mb-4 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
             >
               <Image
-                src="/logo.png"
+                src="/logo.webp"
                 alt=""
                 width={36}
                 height={36}

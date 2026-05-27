@@ -42,7 +42,7 @@ export function AuthPanel({
             style={{ boxShadow: "var(--shadow-jaryq-md)" }}
           >
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt="JARYQ"
               width={84}
               height={84}

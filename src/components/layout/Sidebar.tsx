@@ -91,7 +91,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
           )}
         >
           <Image
-            src="/logo.png"
+            src="/logo.webp"
             alt=""
             width={32}
             height={32}

@@ -103,7 +103,7 @@ export const MobileNav = forwardRef<HTMLElement, MobileNavProps>(
           className="mx-auto mb-3 mt-4 flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-150 hover:scale-[1.03] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
         >
           <Image
-            src="/logo.png"
+            src="/logo.webp"
             alt=""
             width={32}
             height={32}

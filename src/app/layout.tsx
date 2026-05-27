@@ -27,14 +27,15 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import { requireEnvValue } from "@/lib/env";
+const siteUrl = requireEnvValue("NEXT_PUBLIC_SITE_URL", process.env.NEXT_PUBLIC_SITE_URL);
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "JARYQ — Аудиокітаптар платформасы",
   description:
     "JARYQ — Қазақстандағы ең үлкен аудиокітаптар платформасы. Мыңдаған кітаптарды тыңдаңыз.",
-  icons: { icon: "/logo.png", apple: "/logo.png" },
+  icons: { icon: "/logo.webp", apple: "/logo.webp" },
   openGraph: {
     title: "JARYQ — Аудиокітаптар платформасы",
     description: "Қазақ тіліндегі аудиокітаптар платформасы",
