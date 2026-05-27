@@ -37,7 +37,7 @@ export default function AllBooksPage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
+      <div className="max-w-[88rem] mx-auto px-4 sm:px-6 lg:px-8 pt-8 lg:pt-10 pb-10">
         <div role="status" aria-live="polite" className="sr-only">
           {loading
             ? "Кітаптар жүктелуде…"
