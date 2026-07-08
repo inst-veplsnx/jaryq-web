@@ -2,6 +2,14 @@ import { User } from "lucide-react";
 import { TEAM } from "@/lib/team";
 
 export function Team() {
+  // Hide placeholder cards ("Аты-жөні" = "Full name"). Until real members are
+  // filled in, the whole section stays out of the page rather than shipping a
+  // wall of obvious placeholders.
+  const members = TEAM.filter(
+    (member) => member.name && member.name !== "Аты-жөні"
+  );
+  if (members.length === 0) return null;
+
   return (
     <section className="py-24 px-4 bg-white" id="team">
       <div className="max-w-7xl mx-auto">
@@ -10,7 +18,7 @@ export function Team() {
           data-reveal-style="lift"
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-jaryq-primary-soft text-jaryq-primary text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm">
+          <div className="inline-flex items-center gap-2 bg-jaryq-primary-soft text-jaryq-primary-strong text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm">
             Команда
           </div>
           <h2 className="font-display text-4xl lg:text-5xl font-black text-jaryq-text-primary mb-4 tracking-tight">
@@ -26,7 +34,7 @@ export function Team() {
           data-reveal-group
           className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
-          {TEAM.map((member, index) => (
+          {members.map((member, index) => (
             <li
               key={index}
               data-scroll-reveal="true"
@@ -55,7 +63,7 @@ export function Team() {
               <h3 className="font-display text-lg font-bold text-jaryq-text-primary mb-1">
                 {member.name}
               </h3>
-              <p className="text-sm font-semibold text-jaryq-primary mb-3">
+              <p className="text-sm font-semibold text-jaryq-primary-strong mb-3">
                 {member.role}
               </p>
               {member.bio && (

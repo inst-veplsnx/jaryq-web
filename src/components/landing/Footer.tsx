@@ -82,7 +82,7 @@ export function Footer() {
         <div
           data-scroll-reveal="true"
           data-reveal-style="lift"
-          className="pt-8 border-t border-[#3B3B3B]/50 flex flex-col sm:flex-row items-center justify-between gap-4"
+          className="pt-8 border-t border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4"
         >
           <p className="text-neutral-400 text-sm">
             © {CURRENT_YEAR} JARYQ. Барлық құқықтар сақталған.

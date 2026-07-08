@@ -53,7 +53,7 @@ export function ContinueListeningCard({
           href={`/books/${progress.book.id}`}
           className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded"
         >
-          <p className="font-bold tracking-tight text-jaryq-text-primary text-base truncate hover:text-jaryq-primary transition-colors duration-150 motion-reduce:transition-none">
+          <p className="font-bold tracking-tight text-jaryq-text-primary text-base truncate hover:text-jaryq-primary-strong transition-colors duration-150 motion-reduce:transition-none">
             {progress.book.title}
           </p>
         </Link>

@@ -20,7 +20,7 @@ const PROFILE_LINKS: ProfileLink[] = [
     icon: BookMarked,
     label: "Кітап сөресі",
     desc: "Тыңдап жатқандарыңыз",
-    iconClass: "text-jaryq-primary",
+    iconClass: "text-jaryq-primary-strong",
     bgClass: "bg-jaryq-primary-soft",
   },
   {

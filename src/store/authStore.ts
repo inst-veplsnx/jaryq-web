@@ -194,7 +194,7 @@ export const useAuthStore = create<AuthState>((set) => {
           }
         } catch (err: unknown) {
           const translatedError = translateAuthError(
-            (err as Error)?.message ?? "Инициализация сәтсіз аяқталды"
+            (err as Error)?.message ?? "Бастапқы жүктеу сәтсіз аяқталды"
           );
           set({
             session: null,

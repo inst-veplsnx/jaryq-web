@@ -57,7 +57,7 @@ export const BookCard = memo(function BookCard({ book, progress }: BookCardProps
               <Badge
                 variant="default"
                 size="sm"
-                className="bg-rose-600 hover:bg-rose-600 border-0"
+                className="bg-jaryq-ink hover:bg-jaryq-ink border-0"
               >
                 Танымал
               </Badge>
@@ -66,7 +66,7 @@ export const BookCard = memo(function BookCard({ book, progress }: BookCardProps
         </div>
         <div className="p-3" aria-hidden="true">
           {book.genre && (
-            <p className="text-xs font-semibold text-jaryq-primary uppercase tracking-wide mb-1 truncate">
+            <p className="text-xs font-semibold text-jaryq-primary-strong uppercase tracking-wide mb-1 truncate">
               {book.genre.name}
             </p>
           )}

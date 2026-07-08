@@ -39,7 +39,7 @@ export default function PublicLayout({
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/login"
-              className="text-sm font-semibold text-jaryq-text-secondary hover:text-jaryq-primary transition-colors duration-(--duration-jaryq-fast) px-4 py-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+              className="text-sm font-semibold text-jaryq-text-secondary hover:text-jaryq-primary-strong transition-colors duration-(--duration-jaryq-fast) px-4 py-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
             >
               Кіру
             </Link>
@@ -53,7 +53,11 @@ export default function PublicLayout({
           </div>
         </div>
       </nav>
-      <main id="main-content" tabIndex={-1} className="focus:outline-none">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="overflow-x-clip focus:outline-none"
+      >
         <PageLoadTransition>{children}</PageLoadTransition>
       </main>
     </div>

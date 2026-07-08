@@ -8,7 +8,7 @@ export const AUTH_FIELD_ICON_CLASS =
   "pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-jaryq-text-muted";
 
 export const AUTH_PASSWORD_TOGGLE_CLASS =
-  "absolute right-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full text-jaryq-text-secondary transition-[background-color,color,transform] duration-(--duration-jaryq-fast) hover:bg-jaryq-primary-soft hover:text-jaryq-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary sm:size-12 motion-reduce:transition-none";
+  "absolute right-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full text-jaryq-text-secondary transition-[background-color,color,transform] duration-(--duration-jaryq-fast) hover:bg-jaryq-primary-soft hover:text-jaryq-primary-strong active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary sm:size-12 motion-reduce:transition-none";
 
 export const AUTH_SUBMIT_CLASS =
   "flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-2xl px-5 py-3 text-base font-bold text-white jaryq-gradient-cta transition-[transform,box-shadow,opacity] duration-(--duration-jaryq-base) ease-jaryq-spring hover:scale-[1.01] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 sm:min-h-14 sm:py-3.5 sm:text-[1.0625rem] motion-reduce:transition-none motion-reduce:hover:scale-100";

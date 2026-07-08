@@ -11,7 +11,7 @@ type Tone = "orange" | "ink";
 
 const TONES: Record<Tone, { icon: string; bg: string; ring: string }> = {
   orange: {
-    icon: "text-jaryq-primary",
+    icon: "text-jaryq-primary-strong",
     bg: "bg-jaryq-primary-soft",
     ring: "ring-jaryq-primary/20",
   },
@@ -79,7 +79,7 @@ export function Features() {
           className="text-center mb-16"
         >
           <div
-            className="inline-flex items-center gap-2 bg-white text-jaryq-primary text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm"
+            className="inline-flex items-center gap-2 bg-white text-jaryq-primary-strong text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm"
             style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
           >
             Мүмкіндіктер

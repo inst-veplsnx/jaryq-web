@@ -55,14 +55,23 @@ export async function proxy(request: NextRequest) {
   const isAuthPath = AUTH_PATHS.some((p) => pathname === p);
 
   if (isProtected && !user) {
+    // Preserve where the user was headed so login can send them back there
+    // instead of always dumping them on /home.
     const url = request.nextUrl.clone();
+    const redirectTarget = pathname + request.nextUrl.search;
+    url.search = "";
     url.pathname = "/login";
+    url.searchParams.set("redirect", redirectTarget);
     return NextResponse.redirect(url);
   }
 
   if (isAuthPath && user) {
     const url = request.nextUrl.clone();
-    url.pathname = "/home";
+    const redirect = url.searchParams.get("redirect");
+    const safe =
+      redirect && redirect.startsWith("/") && !redirect.startsWith("//");
+    url.search = "";
+    url.pathname = safe ? redirect : "/home";
     return NextResponse.redirect(url);
   }
 

@@ -79,7 +79,7 @@ export default function HomePage() {
             <span>{greetingName}</span>
             <Sparkles
               aria-hidden="true"
-              className="text-jaryq-primary"
+              className="text-jaryq-primary-strong"
               size={28}
             />
           </h1>

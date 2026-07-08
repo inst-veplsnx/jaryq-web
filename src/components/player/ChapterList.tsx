@@ -145,7 +145,7 @@ export function ChapterList({
                       className={cn(
                         "truncate text-sm font-medium",
                         active
-                          ? "font-semibold text-jaryq-primary"
+                          ? "font-semibold text-jaryq-primary-strong"
                           : "text-jaryq-text-primary"
                       )}
                     >
@@ -156,7 +156,7 @@ export function ChapterList({
                         {formatDuration(chapter.duration)}
                       </p>
                       {active && (
-                        <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-jaryq-primary">
+                        <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-jaryq-primary-strong">
                           Қазір ойналуда
                         </span>
                       )}

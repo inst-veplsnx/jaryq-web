@@ -9,7 +9,7 @@ export interface GenreAccent {
    restrained so the orange brand still leads. */
 export const GENRE_ACCENTS: readonly GenreAccent[] = [
   {
-    text: "text-jaryq-primary",
+    text: "text-jaryq-primary-strong",
     bg: "bg-jaryq-primary-soft",
     border: "border-jaryq-primary/20",
     glow: "from-jaryq-primary/15 to-transparent",

@@ -32,7 +32,7 @@ export function Hero() {
           <div
             data-scroll-reveal="true"
             data-reveal-style="scale"
-            className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm text-jaryq-primary text-sm font-semibold px-4 py-2 rounded-full mb-6 border border-jaryq-border-warm shadow-sm"
+            className="inline-flex max-w-full items-center gap-2 bg-white/80 backdrop-blur-sm text-jaryq-primary-strong text-xs sm:text-sm font-semibold px-4 py-2 rounded-full mb-6 border border-jaryq-border-warm shadow-sm"
           >
             <Headphones size={14} aria-hidden="true" />
             Қазақстанның аудиокітап платформасы
@@ -40,11 +40,11 @@ export function Hero() {
           <h1
             data-scroll-reveal="true"
             data-reveal-style="slide-right"
-            className="font-display text-5xl lg:text-6xl xl:text-7xl font-black text-jaryq-text-primary leading-[1.05] tracking-tight mb-6"
+            className="font-display text-[2.5rem] sm:text-5xl lg:text-6xl xl:text-7xl font-black text-jaryq-text-primary leading-[1.05] tracking-tight mb-6"
           >
             Кітапты
             <br />
-            <span className="text-jaryq-primary italic">тыңдаудың</span>
+            <span className="text-jaryq-primary-strong italic">тыңдаудың</span>
             <br />
             уақыты келді
           </h1>
@@ -78,7 +78,7 @@ export function Hero() {
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 bg-white text-jaryq-text-primary font-bold px-8 py-4 rounded-2xl border-2 border-jaryq-border-warm transition-[border-color,color,transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-out hover:border-jaryq-primary hover:text-jaryq-primary hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 bg-white text-jaryq-text-primary font-bold px-8 py-4 rounded-2xl border-2 border-jaryq-border-warm transition-[border-color,color,transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-out hover:border-jaryq-primary hover:text-jaryq-primary-strong hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
               style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
             >
               Кіру
@@ -91,33 +91,35 @@ export function Hero() {
             data-reveal-style="lift"
             className="mt-5 inline-flex items-center gap-2 text-sm text-slate-600"
           >
-            <Sparkles size={14} className="text-jaryq-primary" aria-hidden="true" />
+            <Sparkles size={14} className="text-jaryq-primary-strong" aria-hidden="true" />
             Тегін · Тіркеу 30 секундта · Шексіз
           </p>
 
-          {/* Stats */}
-          <dl
+          {/* Honest value props — real, verifiable claims (no fabricated
+              catalog/listener counts while the library is still small). */}
+          <ul
             data-reveal-group
-            className="flex gap-8 mt-12 pt-8 border-t border-jaryq-border-warm"
+            className="flex flex-wrap gap-x-8 gap-y-3 mt-12 pt-8 border-t border-jaryq-border-warm list-none"
           >
             {[
-              { value: "500+", label: "Аудиокітап" },
-              { value: "50+", label: "Жанр" },
-              { value: "10K+", label: "Тыңдаушы" },
-            ].map(({ value, label }) => (
-              <div
+              "Қазақ тілінде",
+              "Прогресс сақталады",
+              "Кез келген құрылғыда",
+            ].map((label) => (
+              <li
                 key={label}
                 data-scroll-reveal="true"
                 data-reveal-style="scale"
-                className="flex flex-col-reverse"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-jaryq-text-secondary"
               >
-                <dt className="text-sm text-jaryq-text-secondary font-medium">{label}</dt>
-                <dd className="font-display text-3xl lg:text-4xl font-black text-jaryq-primary">
-                  {value}
-                </dd>
-              </div>
+                <span
+                  aria-hidden="true"
+                  className="h-1.5 w-1.5 rounded-full bg-jaryq-primary"
+                />
+                {label}
+              </li>
             ))}
-          </dl>
+          </ul>
         </div>
 
         {/* Visual — book-cover collage + waveform */}
@@ -146,7 +148,7 @@ export function Hero() {
                       width={6}
                       height={36 * h}
                       rx={3}
-                      fill="#F97316"
+                      fill="var(--color-jaryq-primary)"
                       className="jaryq-wave-bar"
                       style={{
                         transform: `rotate(${angle}deg)`,
@@ -206,7 +208,7 @@ export function Hero() {
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Play size={18} className="text-jaryq-primary fill-jaryq-primary ml-0.5" />
+                  <Play size={18} className="text-jaryq-primary-strong fill-jaryq-primary ml-0.5" />
                 </div>
                 <div className="flex-1">
                   <div className="h-1 bg-white/30 rounded-full overflow-hidden">

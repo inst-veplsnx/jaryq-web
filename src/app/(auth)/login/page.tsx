@@ -36,7 +36,17 @@ export default function LoginPage() {
       setError(result.error);
       setLoading(false);
     } else {
-      router.push("/home");
+      // Honor ?redirect= set by the proxy when it bounced an unauthenticated
+      // user here. Only same-origin absolute paths, never a protocol-relative
+      // "//host" that could redirect off-site.
+      const redirect = new URLSearchParams(window.location.search).get(
+        "redirect"
+      );
+      const dest =
+        redirect && redirect.startsWith("/") && !redirect.startsWith("//")
+          ? redirect
+          : "/home";
+      router.replace(dest);
     }
   };
 
@@ -50,7 +60,7 @@ export default function LoginPage() {
             Аккаунтыңыз жоқ па?{" "}
             <Link
               href="/register"
-              className="rounded font-semibold text-jaryq-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+              className="rounded font-semibold text-jaryq-primary-strong hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
             >
               Тіркелу
             </Link>
@@ -59,7 +69,7 @@ export default function LoginPage() {
             Парольді ұмыттыңыз ба?{" "}
             <Link
               href="/forgot-password"
-              className="rounded font-semibold text-jaryq-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+              className="rounded font-semibold text-jaryq-primary-strong hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
             >
               Қалпына келтіру
             </Link>
