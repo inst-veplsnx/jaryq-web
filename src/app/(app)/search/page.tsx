@@ -61,6 +61,9 @@ export default function SearchPage() {
 
   return (
     <div className="min-h-screen bg-jaryq-bg-main">
+      {/* Page has no visible title (the search field is the primary UI); sr-only h1 gives AT users a page heading */}
+      <h1 className="sr-only">Іздеу</h1>
+
       {/* Search bar — sticky */}
       <div
         className="bg-white/85 backdrop-blur-md border-b border-jaryq-border-light px-4 sm:px-6 lg:px-8 py-4 sticky top-0 z-10"

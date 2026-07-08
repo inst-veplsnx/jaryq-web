@@ -60,9 +60,10 @@ export function EmptyState({
           {icon || <BookOpen size={36} />}
         </span>
       </div>
-      <h3 className="text-lg font-bold tracking-tight text-jaryq-text-primary mb-2">
+      {/* h2: EmptyState is always the page's top-level empty content under the page h1 — h2 keeps the outline contiguous (no h1→h3 skip) */}
+      <h2 className="text-lg font-bold tracking-tight text-jaryq-text-primary mb-2">
         {title}
-      </h3>
+      </h2>
       {description && (
         <p className="text-jaryq-text-secondary text-sm max-w-xs leading-relaxed">
           {description}
