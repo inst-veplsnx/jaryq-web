@@ -1,31 +1,22 @@
 import { Heart, Globe, Users, BookOpen } from "lucide-react";
 
-type Tone = "orange" | "ink";
-
-const TONES: Record<Tone, { icon: string; bg: string; ring: string }> = {
-  orange: {
-    icon: "text-jaryq-primary-strong",
-    bg: "bg-jaryq-primary-soft",
-    ring: "ring-jaryq-primary/20",
-  },
-  ink: {
-    icon: "text-jaryq-ink",
-    bg: "bg-jaryq-ink-soft",
-    ring: "ring-jaryq-ink/10",
-  },
+// Warm-editorial tone: orange or ink accent on the value's icon.
+const TONE_ICON: Record<"orange" | "ink", string> = {
+  orange: "text-jaryq-primary",
+  ink: "text-jaryq-ink",
 };
 
 const values: Array<{
   icon: typeof BookOpen;
   title: string;
   description: string;
-  tone: Tone;
+  tone: "orange" | "ink";
 }> = [
   {
     icon: BookOpen,
     title: "Мазмұн сапасы",
     description:
-      "Кәсіби дикторлармен жазылған жоғары сапалы аудиокітаптар. Тек ең жақсы шығармалар.",
+      "Кәсіби дикторлармен жазылған аудиокітаптар. Тек ең жақсы шығармалар.",
     tone: "orange",
   },
   {
@@ -54,56 +45,51 @@ const values: Array<{
 export function About() {
   return (
     <section className="py-24 px-4 bg-jaryq-bg-cream" id="about">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto grid gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-20 lg:items-start">
+        {/* Mission — left, editorial, sticks while the values scroll past */}
         <div
           data-scroll-reveal="true"
-          data-reveal-style="lift"
-          className="text-center mb-16"
+          data-reveal-style="slide-right"
+          className="lg:sticky lg:top-28"
         >
-          <div
-            className="inline-flex items-center gap-2 bg-white text-jaryq-primary-strong text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm"
-            style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
-          >
-            Жоба туралы
-          </div>
-          <h2 className="font-display text-4xl lg:text-5xl font-black text-jaryq-text-primary mb-4 tracking-tight">
+          <h2 className="font-display text-4xl lg:text-5xl font-black text-jaryq-text-primary tracking-tight">
             JARYQ дегеніміз не?
           </h2>
-          <p className="text-lg text-jaryq-text-secondary max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 text-lg text-jaryq-text-secondary leading-relaxed max-w-md">
             JARYQ — қазақ тіліндегі аудиокітаптарды насихаттауға бағытталған
             әлеуметтік жоба. Біздің мақсатымыз — кітапты барлығына қолжетімді
             ету: жолда, жұмыста, демалыста.
           </p>
         </div>
 
+        {/* Values — right, hairline-divided list (not a card grid) */}
         <ul
           data-reveal-group
-          className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="border-t border-jaryq-border-warm divide-y divide-jaryq-border-warm"
         >
-          {values.map(({ icon: Icon, title, description, tone }) => {
-            const t = TONES[tone];
-            return (
-              <li
-                key={title}
-                data-scroll-reveal="true"
-                data-reveal-style="lift"
-                className="jaryq-card jaryq-card-hover group rounded-2xl p-6 motion-reduce:hover:translate-y-0"
-              >
-                <div
-                  aria-hidden="true"
-                  className={`jaryq-reveal-icon w-12 h-12 ${t.bg} rounded-xl flex items-center justify-center mb-4 ring-1 ${t.ring} transition-transform duration-(--duration-jaryq-base) group-hover:scale-110 group-hover:-rotate-4 motion-reduce:transition-none motion-reduce:group-hover:scale-100 motion-reduce:group-hover:rotate-0`}
-                >
-                  <Icon size={24} className={t.icon} />
-                </div>
-                <h3 className="text-lg font-bold text-jaryq-text-primary mb-2">
+          {values.map(({ icon: Icon, title, description, tone }) => (
+            <li
+              key={title}
+              data-scroll-reveal="true"
+              data-reveal-style="lift"
+              className="flex gap-5 py-6 first:pt-8"
+            >
+              <Icon
+                size={26}
+                strokeWidth={1.75}
+                aria-hidden="true"
+                className={`jaryq-reveal-icon mt-0.5 shrink-0 ${TONE_ICON[tone]}`}
+              />
+              <div>
+                <h3 className="text-lg font-bold text-jaryq-text-primary">
                   {title}
                 </h3>
-                <p className="text-jaryq-text-secondary text-sm leading-relaxed">
+                <p className="mt-1 text-jaryq-text-secondary leading-relaxed">
                   {description}
                 </p>
-              </li>
-            );
-          })}
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
     </section>

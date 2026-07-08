@@ -110,7 +110,7 @@ export default function SearchPage() {
           >
             <Loader2
               size={28}
-              className="text-jaryq-primary-strong animate-spin motion-reduce:animate-none"
+              className="text-jaryq-primary animate-spin motion-reduce:animate-none"
             />
           </div>
         )}

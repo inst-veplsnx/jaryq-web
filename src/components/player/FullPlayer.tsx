@@ -189,7 +189,7 @@ export const FullPlayer = memo(function FullPlayer({
           ref={closeBtnRef}
           onClick={onClose}
           aria-label="Ойнатқышты жабу"
-          className="flex h-11 w-11 items-center justify-center rounded-full text-jaryq-text-secondary transition-[background-color,color,transform] duration-150 hover:bg-jaryq-primary-soft hover:text-jaryq-primary-strong active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-jaryq-text-secondary transition-[background-color,color,transform] duration-150 hover:bg-jaryq-primary-soft hover:text-jaryq-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
         >
           <ChevronDown size={24} aria-hidden="true" />
         </button>
@@ -205,7 +205,7 @@ export const FullPlayer = memo(function FullPlayer({
           aria-haspopup="dialog"
           aria-expanded={showChapters}
           aria-controls={chapterListId}
-          className="flex h-11 w-11 items-center justify-center rounded-full text-jaryq-text-secondary transition-[background-color,color,transform] duration-150 hover:bg-jaryq-primary-soft hover:text-jaryq-primary-strong active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+          className="flex h-11 w-11 items-center justify-center rounded-full text-jaryq-text-secondary transition-[background-color,color,transform] duration-150 hover:bg-jaryq-primary-soft hover:text-jaryq-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
         >
           <List size={20} aria-hidden="true" />
         </button>
@@ -243,7 +243,7 @@ export const FullPlayer = memo(function FullPlayer({
                   >
                     <Loader2
                       size={36}
-                      className="animate-spin text-jaryq-primary-strong motion-reduce:animate-none"
+                      className="animate-spin text-jaryq-primary motion-reduce:animate-none"
                     />
                   </div>
                 )}
@@ -272,7 +272,7 @@ export const FullPlayer = memo(function FullPlayer({
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase text-jaryq-primary-strong">
+                <p className="text-xs font-semibold uppercase text-jaryq-primary">
                   {chapterLabel}
                 </p>
                 <h3 className="mt-1 truncate text-lg font-bold tracking-tight text-jaryq-text-primary sm:text-xl">
@@ -287,7 +287,7 @@ export const FullPlayer = memo(function FullPlayer({
                   aria-haspopup="dialog"
                   aria-expanded={showChapters}
                   aria-controls={chapterListId}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-jaryq-primary-soft text-jaryq-primary-strong transition-[background-color,transform] duration-150 hover:bg-jaryq-primary-med/30 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-jaryq-primary-soft text-jaryq-primary transition-[background-color,transform] duration-150 hover:bg-jaryq-primary-med/30 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
                 >
                   <List size={18} aria-hidden="true" />
                 </button>
@@ -393,7 +393,7 @@ export const FullPlayer = memo(function FullPlayer({
             <button
               onClick={cycleSpeed}
               aria-label={`Ойнату жылдамдығы: ${speed} есе. Өзгерту үшін басыңыз.`}
-              className="mt-6 flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-jaryq-primary/20 bg-jaryq-primary-soft px-4 py-2.5 text-sm font-bold text-jaryq-primary-strong transition-[background-color,transform] duration-150 hover:bg-jaryq-primary-med/30 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+              className="mt-6 flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-jaryq-primary/20 bg-jaryq-primary-soft px-4 py-2.5 text-sm font-bold text-jaryq-primary transition-[background-color,transform] duration-150 hover:bg-jaryq-primary-med/30 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
             >
               <Gauge size={15} aria-hidden="true" />
               <span aria-hidden="true" className="tabular-nums">

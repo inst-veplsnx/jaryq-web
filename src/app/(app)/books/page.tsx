@@ -85,7 +85,7 @@ export default function AllBooksPage() {
                   <button
                     onClick={loadMore}
                     disabled={loadingMore}
-                    className="px-8 py-3 rounded-xl bg-jaryq-bg-card border border-jaryq-border-light text-jaryq-text-primary font-semibold hover:border-jaryq-primary hover:text-jaryq-primary-strong hover:bg-jaryq-primary-soft active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-(--duration-jaryq-fast) ease-jaryq-out disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+                    className="px-8 py-3 rounded-xl bg-jaryq-bg-card border border-jaryq-border-light text-jaryq-text-primary font-semibold hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-(--duration-jaryq-fast) ease-jaryq-out disabled:opacity-50 disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
                     style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
                   >
                     {loadingMore ? "Жүктелуде…" : "Көбірек жүктеу"}

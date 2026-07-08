@@ -358,7 +358,7 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
                   {chapterTitle ? (
                     <>
                       {chapterNum ? (
-                        <span className="font-semibold text-jaryq-primary-strong/80">
+                        <span className="font-semibold text-jaryq-primary/80">
                           {chapterNum}-тарау
                         </span>
                       ) : null}
@@ -383,7 +383,7 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
               <button
                 onClick={cycleSpeed}
                 aria-label={`Ойнату жылдамдығы: ${speed} есе. Өзгерту үшін басыңыз.`}
-                className="rounded-full bg-jaryq-primary-soft px-2 py-1 text-[10px] font-bold text-jaryq-primary-strong transition-transform duration-150 hover:bg-jaryq-primary-med/40 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
+                className="rounded-full bg-jaryq-primary-soft px-2 py-1 text-[10px] font-bold text-jaryq-primary transition-transform duration-150 hover:bg-jaryq-primary-med/40 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none"
               >
                 <span aria-hidden="true">{speed}x</span>
               </button>
@@ -440,7 +440,7 @@ export function PlayerBar({ isNavigationCollapsed = false }: PlayerBarProps) {
               aria-haspopup="dialog"
               aria-expanded={showFull}
               aria-controls={fullPlayerDialogId}
-              className="hidden h-11 w-11 items-center justify-center rounded-full text-jaryq-text-muted transition-[background-color,color,transform] duration-150 hover:bg-jaryq-primary-soft hover:text-jaryq-primary-strong active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none sm:flex"
+              className="hidden h-11 w-11 items-center justify-center rounded-full text-jaryq-text-muted transition-[background-color,color,transform] duration-150 hover:bg-jaryq-primary-soft hover:text-jaryq-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none sm:flex"
             >
               {showFull ? (
                 <ChevronDown size={18} aria-hidden="true" />

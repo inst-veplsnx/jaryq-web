@@ -173,7 +173,7 @@ export default function SettingsPage() {
                       "px-4 py-2 rounded-full text-sm font-bold transition-[background-color,color,box-shadow,transform] duration-(--duration-jaryq-fast) ease-jaryq-out active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none",
                       active
                         ? "jaryq-gradient-cta text-white"
-                        : "bg-jaryq-bg-main text-jaryq-text-secondary hover:bg-jaryq-primary-soft hover:text-jaryq-primary-strong"
+                        : "bg-jaryq-bg-main text-jaryq-text-secondary hover:bg-jaryq-primary-soft hover:text-jaryq-primary"
                     )}
                     style={
                       active

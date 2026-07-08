@@ -47,7 +47,7 @@ export function SectionTitle({
       {heading}
       <Link
         href={href}
-        className="group inline-flex items-center gap-1 text-sm font-semibold text-jaryq-primary-strong hover:text-jaryq-primary-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded motion-reduce:transition-none"
+        className="group inline-flex items-center gap-1 text-sm font-semibold text-jaryq-primary hover:text-jaryq-primary-dark transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary rounded motion-reduce:transition-none"
       >
         {hrefLabel}
         <ArrowRight

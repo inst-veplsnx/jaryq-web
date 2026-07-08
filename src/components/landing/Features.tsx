@@ -11,7 +11,7 @@ type Tone = "orange" | "ink";
 
 const TONES: Record<Tone, { icon: string; bg: string; ring: string }> = {
   orange: {
-    icon: "text-jaryq-primary-strong",
+    icon: "text-jaryq-primary",
     bg: "bg-jaryq-primary-soft",
     ring: "ring-jaryq-primary/20",
   },
@@ -78,12 +78,6 @@ export function Features() {
           data-reveal-style="lift"
           className="text-center mb-16"
         >
-          <div
-            className="inline-flex items-center gap-2 bg-white text-jaryq-primary-strong text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm"
-            style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
-          >
-            Мүмкіндіктер
-          </div>
           <h2 className="font-display text-4xl lg:text-5xl font-black text-jaryq-text-primary mb-4 tracking-tight">
             Бәрі бір жерде
           </h2>

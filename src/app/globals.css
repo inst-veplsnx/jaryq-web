@@ -44,11 +44,6 @@
   /* JARYQ custom colors */
   --color-jaryq-primary: #F97316;
   --color-jaryq-primary-dark: #EA580C;
-  /* Accessible orange for text/fills that carry copy. #F97316 only hits
-     2.8:1 on white and 2.8:1 under white text — fails WCAG AA everywhere.
-     #C2410C clears 4.5:1 as text-on-light and under white text. Use
-     primary-strong for orange TEXT on light and white TEXT on orange. */
-  --color-jaryq-primary-strong: #C2410C;
   --color-jaryq-primary-light: #FB923C;
   --color-jaryq-primary-soft: #FFF4ED;
   --color-jaryq-primary-med: #FDBA74;
@@ -410,12 +405,8 @@ html.jaryq-large-text {
     linear-gradient(315deg, color-mix(in srgb, var(--color-jaryq-primary) 10%, transparent) 0%, color-mix(in srgb, var(--color-jaryq-primary-med) 14%, transparent) 36%, transparent 64%),
     linear-gradient(180deg, var(--color-jaryq-bg-cream) 0%, var(--color-jaryq-primary-soft) 100%);
 }
-/* Filled buttons carry white text, so the fill must clear 4.5:1 against white.
-   Bright #F97316 only reaches 2.8:1; this deeper orange ramp clears AA while
-   staying unmistakably brand-orange. Bright #F97316 is reserved for decorative
-   surfaces (blobs, cover art, borders, icon accents) that carry no copy. */
 .jaryq-gradient-cta {
-  background-image: linear-gradient(90deg, var(--color-jaryq-primary-strong) 0%, #9A3412 100%);
+  background-image: linear-gradient(90deg, var(--color-jaryq-primary) 0%, var(--color-jaryq-primary-dark) 100%);
 }
 .jaryq-gradient-cta-radial {
   background-image: radial-gradient(circle at 30% 30%, #FB923C 0%, var(--color-jaryq-primary) 50%, var(--color-jaryq-primary-dark) 100%);

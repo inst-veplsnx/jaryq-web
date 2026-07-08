@@ -44,7 +44,7 @@ export const BookListItem = memo(function BookListItem({ book, progress, subtitl
           />
         </span>
         <div className="flex-1 min-w-0" aria-hidden="true">
-          <p className="text-xs font-semibold text-jaryq-primary-strong uppercase tracking-wide truncate">
+          <p className="text-xs font-semibold text-jaryq-primary uppercase tracking-wide truncate">
             {book.author}
           </p>
           <h3 className="font-bold tracking-tight text-jaryq-text-primary text-sm leading-snug line-clamp-2 mt-0.5">
@@ -91,7 +91,7 @@ export const BookListItem = memo(function BookListItem({ book, progress, subtitl
         <ChevronRight
           size={16}
           aria-hidden="true"
-          className="text-jaryq-text-muted group-hover:text-jaryq-primary-strong group-hover:translate-x-0.5 flex-shrink-0 transition-all duration-150 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
+          className="text-jaryq-text-muted group-hover:text-jaryq-primary group-hover:translate-x-0.5 flex-shrink-0 transition-all duration-150 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0"
         />
       </div>
     </Link>

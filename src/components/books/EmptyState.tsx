@@ -19,7 +19,7 @@ const toneStyles: Record<
     bg: "from-jaryq-primary-soft to-jaryq-primary-med/30",
     ring: "ring-jaryq-primary/10",
     glow: "bg-jaryq-primary/10",
-    iconColor: "text-jaryq-primary-strong",
+    iconColor: "text-jaryq-primary",
   },
   muted: {
     bg: "from-jaryq-ink-soft to-jaryq-ink/10",

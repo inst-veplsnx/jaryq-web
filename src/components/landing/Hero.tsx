@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Headphones, Play, Sparkles, ArrowRight } from "lucide-react";
+import { Headphones, Play, ArrowRight } from "lucide-react";
 
 const WAVE_BARS = [0.55, 0.85, 0.45, 1, 0.7, 0.95, 0.5, 0.8, 0.6];
 
@@ -32,7 +32,7 @@ export function Hero() {
           <div
             data-scroll-reveal="true"
             data-reveal-style="scale"
-            className="inline-flex max-w-full items-center gap-2 bg-white/80 backdrop-blur-sm text-jaryq-primary-strong text-xs sm:text-sm font-semibold px-4 py-2 rounded-full mb-6 border border-jaryq-border-warm shadow-sm"
+            className="inline-flex max-w-full items-center gap-2 bg-white/80 backdrop-blur-sm text-jaryq-primary text-xs sm:text-sm font-semibold px-4 py-2 rounded-full mb-6 border border-jaryq-border-warm shadow-sm"
           >
             <Headphones size={14} aria-hidden="true" />
             Қазақстанның аудиокітап платформасы
@@ -44,7 +44,7 @@ export function Hero() {
           >
             Кітапты
             <br />
-            <span className="text-jaryq-primary-strong italic">тыңдаудың</span>
+            <span className="text-jaryq-primary italic">тыңдаудың</span>
             <br />
             уақыты келді
           </h1>
@@ -53,9 +53,8 @@ export function Hero() {
             data-reveal-style="slide-right"
             className="text-lg text-jaryq-text-secondary leading-relaxed mb-8 max-w-md"
           >
-            JARYQ — қазақ тіліндегі аудиокітаптардың ең үлкен платформасы.
-            Мыңдаған кітапты тыңдаңыз, прогрессіңізді сақтаңыз,
-            таңдаулыларыңызды жинаңыз.
+            JARYQ — қазақ тіліндегі аудиокітаптар платформасы. Тыңдаңыз,
+            прогрессіңізді сақтаңыз, таңдаулыларыңызды жинаңыз.
           </p>
           <div
             data-scroll-reveal="true"
@@ -78,48 +77,13 @@ export function Hero() {
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 bg-white text-jaryq-text-primary font-bold px-8 py-4 rounded-2xl border-2 border-jaryq-border-warm transition-[border-color,color,transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-out hover:border-jaryq-primary hover:text-jaryq-primary-strong hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
+              className="inline-flex items-center gap-2 bg-white text-jaryq-text-primary font-bold px-8 py-4 rounded-2xl border-2 border-jaryq-border-warm transition-[border-color,color,transform,box-shadow] duration-(--duration-jaryq-base) ease-jaryq-out hover:border-jaryq-primary hover:text-jaryq-primary hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2"
               style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
             >
               Кіру
             </Link>
           </div>
 
-          {/* Trust micro-copy */}
-          <p
-            data-scroll-reveal="true"
-            data-reveal-style="lift"
-            className="mt-5 inline-flex items-center gap-2 text-sm text-slate-600"
-          >
-            <Sparkles size={14} className="text-jaryq-primary-strong" aria-hidden="true" />
-            Тегін · Тіркеу 30 секундта · Шексіз
-          </p>
-
-          {/* Honest value props — real, verifiable claims (no fabricated
-              catalog/listener counts while the library is still small). */}
-          <ul
-            data-reveal-group
-            className="flex flex-wrap gap-x-8 gap-y-3 mt-12 pt-8 border-t border-jaryq-border-warm list-none"
-          >
-            {[
-              "Қазақ тілінде",
-              "Прогресс сақталады",
-              "Кез келген құрылғыда",
-            ].map((label) => (
-              <li
-                key={label}
-                data-scroll-reveal="true"
-                data-reveal-style="scale"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-jaryq-text-secondary"
-              >
-                <span
-                  aria-hidden="true"
-                  className="h-1.5 w-1.5 rounded-full bg-jaryq-primary"
-                />
-                {label}
-              </li>
-            ))}
-          </ul>
         </div>
 
         {/* Visual — book-cover collage + waveform */}
@@ -208,7 +172,7 @@ export function Hero() {
               </div>
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-lg">
-                  <Play size={18} className="text-jaryq-primary-strong fill-jaryq-primary ml-0.5" />
+                  <Play size={18} className="text-jaryq-primary fill-jaryq-primary ml-0.5" />
                 </div>
                 <div className="flex-1">
                   <div className="h-1 bg-white/30 rounded-full overflow-hidden">

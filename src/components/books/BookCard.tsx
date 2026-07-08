@@ -66,7 +66,7 @@ export const BookCard = memo(function BookCard({ book, progress }: BookCardProps
         </div>
         <div className="p-3" aria-hidden="true">
           {book.genre && (
-            <p className="text-xs font-semibold text-jaryq-primary-strong uppercase tracking-wide mb-1 truncate">
+            <p className="text-xs font-semibold text-jaryq-primary uppercase tracking-wide mb-1 truncate">
               {book.genre.name}
             </p>
           )}

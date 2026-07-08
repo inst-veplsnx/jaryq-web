@@ -65,7 +65,7 @@ export const MobileNav = forwardRef<HTMLElement, MobileNavProps>(
             className={cn(
               mobileLinkBase,
               active
-                ? "bg-jaryq-primary-soft text-jaryq-primary-strong"
+                ? "bg-jaryq-primary-soft text-jaryq-primary"
                 : "text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary"
             )}
           >

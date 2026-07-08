@@ -80,7 +80,7 @@ export default function ForgotPasswordPage() {
         <>
           <Link
             href="/login"
-            className="rounded font-semibold text-jaryq-primary-strong hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
+            className="rounded font-semibold text-jaryq-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary"
           >
             Кіру бетіне оралу
           </Link>

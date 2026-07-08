@@ -24,16 +24,16 @@ export function CTA() {
           Тегін. Шексіз.
         </h2>
         <p className="text-lg text-white/85 mb-10 max-w-xl mx-auto leading-relaxed">
-          Тіркеліп, мыңдаған аудиокітапқа қол жеткізіңіз. Ешқандай шек жоқ,
+          Тіркеліп, қазақ аудиокітаптарын тыңдай бастаңыз. Ешқандай шек жоқ,
           ешқандай ақы жоқ.
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <Link
             href="/register"
-            className="group/cta inline-flex items-center gap-3 bg-white text-jaryq-primary-strong font-bold px-8 py-4 rounded-2xl transition-[transform,box-shadow,background-color] duration-(--duration-jaryq-base) ease-jaryq-out hover:bg-jaryq-primary-soft hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-jaryq-primary"
+            className="group/cta inline-flex items-center gap-3 bg-white text-jaryq-primary font-bold px-8 py-4 rounded-2xl transition-[transform,box-shadow,background-color] duration-(--duration-jaryq-base) ease-jaryq-out hover:bg-jaryq-primary-soft hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-jaryq-primary"
             style={{ boxShadow: "var(--shadow-jaryq-lg)" }}
           >
-            <Play size={20} className="fill-jaryq-primary-strong" aria-hidden="true" />
+            <Play size={20} className="fill-jaryq-primary" aria-hidden="true" />
             Тіркелу — тегін
             <ArrowRight
               size={16}

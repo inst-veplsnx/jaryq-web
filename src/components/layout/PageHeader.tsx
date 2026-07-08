@@ -34,7 +34,7 @@ export function PageHeader({
             className="shrink-0 w-12 h-12 rounded-xl bg-jaryq-primary-soft ring-1 ring-jaryq-primary/15 flex items-center justify-center"
             style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
           >
-            <Icon className="text-jaryq-primary-strong" size={22} />
+            <Icon className="text-jaryq-primary" size={22} />
           </span>
         )}
         <div className="min-w-0">

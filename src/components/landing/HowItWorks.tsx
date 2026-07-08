@@ -39,9 +39,6 @@ export function HowItWorks() {
           data-reveal-style="lift"
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-jaryq-primary-soft text-jaryq-primary-strong text-sm font-semibold px-4 py-2 rounded-full mb-4 border border-jaryq-border-warm">
-            Қалай жұмыс жасайды?
-          </div>
           <h2 className="font-display text-4xl lg:text-5xl font-black text-jaryq-text-primary mb-4 tracking-tight">
             3 қадамда бастаңыз
           </h2>

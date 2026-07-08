@@ -70,7 +70,7 @@ const ChapterRow = memo(function ChapterRow({
             "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 transition-all duration-150 motion-reduce:transition-none",
             isCurrent
               ? "bg-jaryq-primary text-white shadow-sm"
-              : "bg-jaryq-bg-main text-jaryq-text-muted group-hover:bg-jaryq-primary-soft group-hover:text-jaryq-primary-strong"
+              : "bg-jaryq-bg-main text-jaryq-text-muted group-hover:bg-jaryq-primary-soft group-hover:text-jaryq-primary"
           )}
         >
           {index + 1}
@@ -79,7 +79,7 @@ const ChapterRow = memo(function ChapterRow({
           <p
             className={cn(
               "text-sm font-medium truncate",
-              isCurrent ? "text-jaryq-primary-strong" : "text-jaryq-text-primary"
+              isCurrent ? "text-jaryq-primary" : "text-jaryq-text-primary"
             )}
           >
             {chapter.title}
@@ -87,19 +87,19 @@ const ChapterRow = memo(function ChapterRow({
           <p className="text-xs text-jaryq-text-muted">
             {formatDuration(chapter.duration)}
             {isResume && (
-              <span className="ml-2 text-jaryq-primary-strong">
+              <span className="ml-2 text-jaryq-primary">
                 • {formatTime(resumePosition)} өткен
               </span>
             )}
           </p>
         </div>
         {isCurrentPlaying ? (
-          <Pause size={16} aria-hidden="true" className="text-jaryq-primary-strong" />
+          <Pause size={16} aria-hidden="true" className="text-jaryq-primary" />
         ) : (
           <Play
             size={16}
             aria-hidden="true"
-            className={cn(isCurrent ? "text-jaryq-primary-strong" : "text-jaryq-text-muted")}
+            className={cn(isCurrent ? "text-jaryq-primary" : "text-jaryq-text-muted")}
           />
         )}
       </button>
@@ -261,7 +261,7 @@ export function BookDetail({
             </div>
             <div className="flex-1 min-w-0">
               {book.genre && (
-                <span className="text-xs font-bold text-jaryq-primary-strong uppercase tracking-widest">
+                <span className="text-xs font-bold text-jaryq-primary uppercase tracking-widest">
                   {book.genre.name}
                 </span>
               )}
@@ -341,7 +341,7 @@ export function BookDetail({
                 </button>
                 <button
                   onClick={() => launchPlayer(0, 0)}
-                  className="flex items-center gap-2 bg-jaryq-bg-card text-jaryq-text-primary font-semibold px-5 py-3 rounded-xl border border-jaryq-border-light hover:border-jaryq-primary hover:text-jaryq-primary-strong hover:bg-jaryq-primary-soft active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-(--duration-jaryq-base) ease-jaryq-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                  className="flex items-center gap-2 bg-jaryq-bg-card text-jaryq-text-primary font-semibold px-5 py-3 rounded-xl border border-jaryq-border-light hover:border-jaryq-primary hover:text-jaryq-primary hover:bg-jaryq-primary-soft active:scale-[0.98] transition-[background-color,border-color,color,transform] duration-(--duration-jaryq-base) ease-jaryq-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                   style={{ boxShadow: "var(--shadow-jaryq-xs)" }}
                 >
                   Басынан тыңдау
@@ -413,7 +413,7 @@ export function BookDetail({
       {chapters.length > 0 && (
         <section className="max-w-3xl mx-auto px-4 sm:px-6 pb-8" aria-labelledby="book-chapters-heading">
           <div className="flex items-center gap-2 mb-4">
-            <ListMusic size={18} className="text-jaryq-primary-strong" aria-hidden="true" />
+            <ListMusic size={18} className="text-jaryq-primary" aria-hidden="true" />
             <h2 id="book-chapters-heading" className="font-bold text-jaryq-text-primary">
               Тараулар ({chapters.length})
             </h2>

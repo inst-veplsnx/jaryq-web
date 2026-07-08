@@ -129,7 +129,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
                       linkBase,
                       isCollapsed && collapsedLink,
                       active
-                        ? "bg-jaryq-primary-soft text-jaryq-primary-strong shadow-[inset_0_-1px_0_rgba(249,115,22,0.08)]"
+                        ? "bg-jaryq-primary-soft text-jaryq-primary shadow-[inset_0_-1px_0_rgba(249,115,22,0.08)]"
                         : "text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary"
                     )}
                   >
@@ -192,7 +192,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
                         linkBase,
                         isCollapsed && collapsedLink,
                         active
-                          ? "bg-jaryq-primary-soft text-jaryq-primary-strong"
+                          ? "bg-jaryq-primary-soft text-jaryq-primary"
                           : "text-jaryq-text-secondary hover:bg-jaryq-bg-main hover:text-jaryq-text-primary"
                       )}
                     >

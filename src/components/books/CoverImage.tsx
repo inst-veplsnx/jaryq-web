@@ -34,7 +34,7 @@ export const CoverImage = memo(function CoverImage({
         style={fill ? undefined : { width, height }}
       >
         <BookOpen
-          className="text-jaryq-primary-strong opacity-40"
+          className="text-jaryq-primary opacity-40"
           size={width ? width * 0.35 : 32}
         />
       </div>

@@ -15,7 +15,7 @@ const buttonVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80 aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         subtle:
-          "border-jaryq-border-warm bg-jaryq-bg-cream text-jaryq-text-primary hover:bg-jaryq-primary-soft hover:border-jaryq-primary/30 hover:text-jaryq-primary-strong aria-pressed:bg-jaryq-primary-soft aria-pressed:border-jaryq-primary/40 aria-pressed:text-jaryq-primary-strong",
+          "border-jaryq-border-warm bg-jaryq-bg-cream text-jaryq-text-primary hover:bg-jaryq-primary-soft hover:border-jaryq-primary/30 hover:text-jaryq-primary aria-pressed:bg-jaryq-primary-soft aria-pressed:border-jaryq-primary/40 aria-pressed:text-jaryq-primary",
         ghost:
           "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
         destructive:

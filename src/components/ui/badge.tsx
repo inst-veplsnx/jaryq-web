@@ -13,7 +13,7 @@ const badgeVariants = cva(
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         warm:
-          "bg-jaryq-primary-soft text-jaryq-primary-strong border-jaryq-primary/15",
+          "bg-jaryq-primary-soft text-jaryq-primary border-jaryq-primary/15",
         ink:
           "bg-jaryq-ink-soft text-jaryq-ink border-jaryq-ink/10",
         destructive:
