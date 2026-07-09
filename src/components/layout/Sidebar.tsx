@@ -15,6 +15,7 @@ import {
   Heart,
   Layers,
   LogOut,
+  Shield,
 } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 import { cn } from "@/lib/utils";
@@ -46,10 +47,11 @@ const collapsedLabel = "max-w-0 -translate-x-1 opacity-0";
 interface SidebarProps {
   isCollapsed?: boolean;
   onActivity?: () => void;
+  isAdmin?: boolean;
 }
 
 export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
-  { isCollapsed = false, onActivity },
+  { isCollapsed = false, onActivity, isAdmin = false },
   ref
 ) {
   const pathname = usePathname();
@@ -281,6 +283,33 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(function Sidebar(
               </div>
             </div>
           </div>
+          {/* Admin — only rendered server-side for allowlisted users */}
+          {isAdmin && (
+            <div
+              className={cn(
+                "px-4 pt-1 transition-[padding] duration-(--duration-jaryq-slow) ease-jaryq-out motion-reduce:transition-none",
+                isCollapsed && "px-3"
+              )}
+            >
+              <Link
+                href="/admin"
+                aria-label={isCollapsed ? "Админ панелі" : undefined}
+                title={isCollapsed ? "Админ панелі" : undefined}
+                className={cn(
+                  "flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm font-medium text-jaryq-primary bg-jaryq-primary-soft hover:bg-jaryq-primary-med/40 transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jaryq-primary motion-reduce:transition-none",
+                  isCollapsed && "h-10 justify-center gap-0 px-0"
+                )}
+              >
+                <Shield size={16} aria-hidden="true" />
+                <span
+                  aria-hidden={isCollapsed}
+                  className={cn(navLabel, isCollapsed && collapsedLabel)}
+                >
+                  Админ панелі
+                </span>
+              </Link>
+            </div>
+          )}
           {/* Logout — visually separated destructive action */}
           <div
             className={cn(

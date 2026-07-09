@@ -21,8 +21,15 @@ export default async function EditBookPage({
   if (!book) notFound();
 
   return (
-    <div>
-      <h1 className="mb-4 text-xl font-bold">Өңдеу: {book.title}</h1>
+    <div className="jaryq-reveal space-y-8">
+      <header className="space-y-3">
+        <span className="inline-block rounded-full bg-jaryq-primary-soft px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-jaryq-primary">
+          Өңдеу
+        </span>
+        <h1 className="font-display text-3xl font-bold tracking-tight text-jaryq-text-primary sm:text-4xl">
+          {book.title}
+        </h1>
+      </header>
       <BookForm genres={genres ?? []} book={book} chapters={chapters ?? []} />
     </div>
   );

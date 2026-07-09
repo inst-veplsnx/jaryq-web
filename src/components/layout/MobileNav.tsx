@@ -12,6 +12,7 @@ import {
   Home,
   Layers,
   Search,
+  Shield,
   Sparkles,
   User,
 } from "lucide-react";
@@ -38,10 +39,11 @@ const mobileLinkBase =
 interface MobileNavProps {
   isHidden?: boolean;
   onActivity?: () => void;
+  isAdmin?: boolean;
 }
 
 export const MobileNav = forwardRef<HTMLElement, MobileNavProps>(
-  function MobileNav({ onActivity }, ref) {
+  function MobileNav({ onActivity, isAdmin = false }, ref) {
     const pathname = usePathname();
 
     const renderLink = ({
@@ -123,6 +125,38 @@ export const MobileNav = forwardRef<HTMLElement, MobileNavProps>(
           <nav aria-label="Каталог мәзірі">
             <ul className="space-y-1">{catalogNav.map(renderLink)}</ul>
           </nav>
+
+          {isAdmin && (
+            <>
+              <div
+                className="my-3 h-px bg-jaryq-border-light"
+                aria-hidden="true"
+              />
+              <nav aria-label="Админ мәзірі">
+                <ul className="space-y-1">
+                  <li>
+                    <Link
+                      href="/admin"
+                      aria-current={
+                        pathname.startsWith("/admin") ? "page" : undefined
+                      }
+                      aria-label="Админ панелі"
+                      title="Админ панелі"
+                      className={cn(
+                        mobileLinkBase,
+                        pathname.startsWith("/admin")
+                          ? "bg-jaryq-primary-soft text-jaryq-primary"
+                          : "text-jaryq-primary/80 hover:bg-jaryq-primary-soft hover:text-jaryq-primary"
+                      )}
+                    >
+                      <Shield size={20} aria-hidden="true" />
+                      <span className="sr-only">Админ панелі</span>
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+            </>
+          )}
         </div>
       </nav>
     );

@@ -7,7 +7,13 @@ import { PlayerBar } from "@/components/player/PlayerBar";
 import { MainContent } from "@/components/layout/MainContent";
 import { useAutoHideNavigation } from "@/hooks/useAutoHideNavigation";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({
+  children,
+  isAdmin = false,
+}: {
+  children: React.ReactNode;
+  isAdmin?: boolean;
+}) {
   const sidebarRef = useRef<HTMLElement | null>(null);
   const mobileNavRef = useRef<HTMLElement | null>(null);
   const navigationRefs = useMemo(
@@ -30,6 +36,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         ref={sidebarRef}
         isCollapsed={isNavigationHidden}
         onActivity={revealNavigation}
+        isAdmin={isAdmin}
       />
 
       <MainContent
@@ -43,6 +50,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         ref={mobileNavRef}
         isHidden={isNavigationHidden}
         onActivity={revealNavigation}
+        isAdmin={isAdmin}
       />
 
       <PlayerBar isNavigationCollapsed={isNavigationHidden} />
