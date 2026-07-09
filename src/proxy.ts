@@ -6,6 +6,7 @@ const SUPABASE_URL = requireEnv("NEXT_PUBLIC_SUPABASE_URL");
 const SUPABASE_ANON_KEY = requireEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY");
 
 const PROTECTED_PATHS = [
+  "/admin",
   "/home",
   "/books",
   "/new-arrivals",
